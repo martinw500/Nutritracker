@@ -1,0 +1,288 @@
+/**
+ * Type definitions for the nutrient reference layer (`data/nutrients.json`).
+ *
+ * Two entry shapes, discriminated on `hasReferenceIntake`:
+ *
+ *   Tier 2 (`hasReferenceIntake: true`)  — essential nutrients with an RDA or AI.
+ *                                          Rendered as % of target. Drives streak alerts.
+ *   Tier 3 (`hasReferenceIntake: false`) — phytonutrients with no official requirement.
+ *                                          Rendered as absolute amounts only.
+ *
+ * See CLAUDE.md for the rules governing this data. In particular: a Tier 3
+ * nutrient must never render as a percentage, because there is no target to be
+ * a percentage of.
+ */
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared primitives
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Life-stage group key. Convention: `{group}_{ageLow}_{ageHigh}`, with `plus`
+ * for open-ended upper bounds.
+ *
+ *   "male_19_30" | "female_51_plus" | "child_4_8" | "pregnancy_19_30"
+ *
+ * Child groups are sex-neutral below age 9, matching how the DRI tables are
+ * published.
+ */
+export type LifeStageKey = string;
+
+/** Reference values keyed by life-stage group. Partial — not every nutrient
+ *  publishes a value for every group. */
+export type ReferenceTable = Partial<Record<LifeStageKey, number>>;
+
+/**
+ * Strength of evidence behind a claim. Drives both an expert-mode badge and the
+ * hedging in simple-mode copy. Every entry in `benefits[]` must carry one.
+ */
+export type EvidenceTier =
+  /** Consistent RCT evidence, or established physiological necessity. */
+  | "strong"
+  /** Multiple RCTs with mixed effect sizes, or agreeing mechanism + cohort data. */
+  | "moderate"
+  /** Small, unreplicated, or methodologically weak trials. */
+  | "limited"
+  /** Observational or mechanistic only; no interventional support. */
+  | "preliminary";
+
+/**
+ * How long the body holds a reserve. Determines the alert window — this is what
+ * keeps deficiency alerts from becoming noise.
+ *
+ *   none     → not stored (water-soluble). 3-day streak triggers.
+ *   moderate → days-to-weeks of reserve.   7-day rolling average.
+ *   high     → months-to-years of reserve. 14–30 day rolling average.
+ */
+export type StorageClass = "none" | "moderate" | "high";
+
+export type NutrientCategory =
+  | "macronutrient"
+  | "vitamin"
+  | "mineral"
+  | "phytonutrient"
+  | "other";
+
+export type Essentiality =
+  | "essential"
+  /** Required only under specific conditions (illness, life stage, genotype). */
+  | "conditionally-essential"
+  /** Beneficial but not required — the phytonutrients. */
+  | "non-essential";
+
+export interface Citation {
+  label: string;
+  url: string;
+}
+
+/** A claimed benefit. `evidence` is mandatory — see CLAUDE.md rule 2. */
+export interface Benefit {
+  claim: string;
+  evidence: EvidenceTier;
+  /** Where the tier comes from: trial names, effect sizes, contradictory results. */
+  note: string;
+}
+
+export interface FoodSource {
+  /**
+   * FoodData Central ID, so the UI can deep-link to the real record.
+   *
+   * Null until resolved against the local FDC mirror during Phase 0 import.
+   * Hand-written IDs are a trap — a wrong one silently links to the wrong food,
+   * which is worse than no link. Leave null and let the importer fill it in.
+   */
+  fdcId: number | null;
+  name: string;
+  /**
+   * Amount per 100 g, in the nutrient's own `unit`.
+   *
+   * Values authored by hand are approximate and flagged in the database's
+   * `notes`. The Phase 0 importer overwrites them with exact FDC figures.
+   */
+  per100g: number;
+  /** Realistic serving, for "one handful covers 45% of the gap" style copy. */
+  typicalServing: string;
+}
+
+export interface NutrientInteraction {
+  /** `id` of another nutrient in this file. */
+  with: string;
+  direction: "competes" | "synergy" | "depletes" | "requires";
+  effect: string;
+}
+
+export interface AbsorptionInfo {
+  /** Human-readable range, e.g. "30–40% of intake". */
+  typicalRate: string;
+  enhancers: string[];
+  inhibitors: string[];
+  notes: string;
+}
+
+export interface DeficiencyInfo {
+  /** Clinical term, where one exists. */
+  clinicalName: string | null;
+  /** Population prevalence with its source, e.g. NHANES. */
+  prevalence: string;
+  earlySigns: string[];
+  advancedSigns: string[];
+  riskGroups: string[];
+}
+
+export interface ExcessInfo {
+  /** Almost always "not observed from food" — say so explicitly. */
+  fromFood: string;
+  fromSupplements: string[];
+  clinicalName: string | null;
+  severeRisk: string | null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reference intakes (Tier 2 only)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface UpperLimit {
+  value: number;
+  /**
+   * Some ULs apply only to supplemental forms — magnesium's 350 mg ceiling is
+   * supplements-only, and dietary magnesium has no UL at all. Applying a
+   * supplemental UL to food intake generates false excess alerts.
+   */
+  appliesTo: "total" | "supplemental" | "fortified-and-supplemental";
+  note: string | null;
+  /** Per-life-stage overrides where the UL varies by age. */
+  byLifeStage?: ReferenceTable;
+}
+
+export interface ReferenceIntakes {
+  /** Estimated Average Requirement — meets 50% of the group. Expert mode only. */
+  ear: ReferenceTable | null;
+  /** Recommended Dietary Allowance — meets ~97.5%. The primary target. */
+  rda: ReferenceTable | null;
+  /** Adequate Intake — used where evidence is too thin for an RDA. */
+  ai: ReferenceTable | null;
+  /** Tolerable Upper Intake Level. Drives excess alerts. */
+  ul: UpperLimit | null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Intake context (Tier 3 only)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface IntakeAmount {
+  value: number;
+  unit: string;
+  source: string;
+}
+
+export interface StudiedRange {
+  low: number;
+  high: number;
+  unit: string;
+  /** Which trials, and what outcome the range relates to. */
+  note: string;
+}
+
+/**
+ * Replaces `ReferenceIntakes` for phytonutrients. Deliberately not called
+ * "target" — these are descriptive figures for context, and the UI must present
+ * them as such.
+ */
+export interface IntakeContext {
+  /** What people actually consume, so a user can situate their own intake. */
+  populationMedian: IntakeAmount;
+  /** Range used in studies that found an effect. Not a recommendation. */
+  studiedRange: StudiedRange | null;
+  /** Disclaimer rendered alongside the figures. Required. */
+  framing: string;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Nutrient entries
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface NutrientBase {
+  /** Stable kebab-case identifier. Used as a foreign key across the app. */
+  id: string;
+  name: string;
+  /** Chemical symbol or common abbreviation. Null where none applies. */
+  symbol: string | null;
+  /** Unit all amounts for this nutrient are expressed in: "mg" | "mcg" | "g" | "IU". */
+  unit: string;
+  category: NutrientCategory;
+  subcategory: string | null;
+  /** FoodData Central nutrient number, for joining to composition data. */
+  fdcNutrientId: number | null;
+  essentiality: Essentiality;
+  storage: StorageClass;
+  /**
+   * True for nutrients with a recognized antioxidant role. Lets the Antioxidants
+   * view gather across tiers WITHOUT computing a composite score — see CLAUDE.md
+   * rule 4.
+   */
+  antioxidantRole: boolean;
+
+  // ── Simple mode ──
+  /** One sentence, no jargon. Shown under the nutrient name on the dashboard. */
+  oneLiner: string;
+  /** 2–4 sentences a non-specialist can act on. */
+  simpleExplanation: string;
+
+  // ── Expert mode ──
+  /** Technical summary. Assumes biochemistry vocabulary. */
+  summary: string;
+  /** Concrete physiological roles, one per line. */
+  whatItDoes: string[];
+  benefits: Benefit[];
+
+  deficiency: DeficiencyInfo;
+  excess: ExcessInfo;
+  absorption: AbsorptionInfo;
+  interactions: NutrientInteraction[];
+  topSources: FoodSource[];
+
+  citations: Citation[];
+  /** ISO date. Bump whenever content changes — see CLAUDE.md rule 6. */
+  lastReviewed: string;
+}
+
+/** Essential nutrient with an official reference intake. */
+export interface ReferenceNutrient extends NutrientBase {
+  hasReferenceIntake: true;
+  reference: ReferenceIntakes;
+  intakeContext?: never;
+}
+
+/** Phytonutrient with no official requirement. Never rendered as a percentage. */
+export interface ContextualNutrient extends NutrientBase {
+  hasReferenceIntake: false;
+  reference: null;
+  intakeContext: IntakeContext;
+}
+
+export type Nutrient = ReferenceNutrient | ContextualNutrient;
+
+export interface NutrientDatabase {
+  /** Schema version, for migrating the data file. */
+  version: string;
+  lastUpdated: string;
+  /** Caveats about the current state of the data — provenance, known gaps. */
+  notes: string[];
+  nutrients: Nutrient[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Guards
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Narrows to a nutrient that can legitimately be shown as a percentage of a
+ * target. Gate every progress-bar render on this — see CLAUDE.md rule 3.
+ */
+export function hasTarget(n: Nutrient): n is ReferenceNutrient {
+  return n.hasReferenceIntake;
+}
+
+export function isPhytonutrient(n: Nutrient): n is ContextualNutrient {
+  return !n.hasReferenceIntake;
+}

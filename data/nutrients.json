@@ -1,0 +1,855 @@
+{
+  "version": "0.1.0",
+  "lastUpdated": "2026-08-11",
+  "notes": [
+    "Seed file: 5 of ~45 planned entries. These five were chosen to exercise every branch of the schema — storage classes none/moderate/high, vitamin/mineral/phytonutrient categories, Tier 2 vs Tier 3, and ULs that are total / supplemental-only / absent entirely.",
+    "topSources[].fdcId is null throughout. IDs are resolved by the Phase 0 FoodData Central importer — hand-written IDs silently link to the wrong food, which is worse than no link at all.",
+    "topSources[].per100g values are approximate, authored from published composition data. The Phase 0 importer overwrites them with exact FDC figures.",
+    "Reference intakes are transcribed from the NIH Office of Dietary Supplements Health Professional fact sheets, which restate the IOM/NASEM Dietary Reference Intakes. Verify against the linked citation before shipping.",
+    "Infant life-stage groups (0-12 months) are deliberately omitted. This app does not serve that population, and their values are Adequate Intakes derived from breast-milk composition rather than requirements."
+  ],
+
+  "nutrients": [
+    {
+      "id": "magnesium",
+      "name": "Magnesium",
+      "symbol": "Mg",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "major-mineral",
+      "fdcNutrientId": 1090,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": false,
+
+      "oneLiner": "Powers muscles and nerves, and helps you wind down at night.",
+      "simpleExplanation": "Your body uses magnesium in hundreds of everyday processes — turning food into energy, letting muscles relax after they contract, and settling your nervous system down for sleep. Roughly half of people don't get quite enough, and the signs are easy to miss: cramps, poor sleep, feeling wired but tired. Seeds, nuts, beans, and leafy greens are the richest sources.",
+
+      "summary": "Cofactor in over 300 enzymatic reactions, most notably as the counter-ion that stabilizes ATP. Mg-ATP, not free ATP, is the biologically active substrate for essentially all kinases. Also acts as a physiological calcium antagonist at NMDA receptors and in excitation-contraction coupling.",
+      "whatItDoes": [
+        "Stabilizes ATP — the active intracellular form is the Mg-ATP complex",
+        "Required cofactor for all kinases, DNA and RNA polymerases, and the ribosome",
+        "Antagonizes calcium at NMDA receptors and in smooth and skeletal muscle contraction",
+        "Required for the hepatic and renal hydroxylation steps that activate vitamin D",
+        "Modulates parathyroid hormone secretion and skeletal calcium handling"
+      ],
+      "benefits": [
+        {
+          "claim": "Reduces the frequency of migraine attacks",
+          "evidence": "moderate",
+          "note": "Several RCTs at 400–600 mg/day show reduced attack frequency; effect sizes are modest and trial quality is mixed. The American Headache Society rates it Level B."
+        },
+        {
+          "claim": "Modestly lowers blood pressure",
+          "evidence": "moderate",
+          "note": "Meta-analyses of supplementation trials find reductions on the order of 2 mmHg systolic — real but small, and larger in people who were deficient to begin with."
+        },
+        {
+          "claim": "Improves subjective sleep quality",
+          "evidence": "limited",
+          "note": "Small trials in older adults with insomnia report improvement, but samples are tiny and results have not been replicated at scale. Widely marketed well beyond what the evidence supports."
+        },
+        {
+          "claim": "Reduces exercise-associated muscle cramps",
+          "evidence": "preliminary",
+          "note": "Mechanistically plausible and popular, but trials in athletes and in pregnancy have been largely null. Cramping has many causes unrelated to magnesium status."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "hypomagnesemia",
+        "prevalence": "Around 48% of the US population consumes less than the EAR from food (NHANES). Frank clinical hypomagnesemia is much rarer, because the kidney conserves magnesium efficiently.",
+        "earlySigns": [
+          "muscle cramps and twitching",
+          "fatigue and general weakness",
+          "poor sleep quality",
+          "irritability or low mood",
+          "loss of appetite"
+        ],
+        "advancedSigns": [
+          "numbness and tingling",
+          "abnormal heart rhythms",
+          "coronary spasm",
+          "personality changes",
+          "seizures (severe cases)"
+        ],
+        "riskGroups": [
+          "type 2 diabetes (urinary losses rise with glycosuria)",
+          "chronic alcohol use",
+          "long-term proton pump inhibitor use",
+          "Crohn's disease, celiac disease, and other malabsorptive conditions",
+          "older adults (lower intake plus reduced absorption)",
+          "people taking loop or thiazide diuretics"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "Not observed in people with normal kidney function. Excess dietary magnesium is simply excreted, which is why the UL applies to supplements only.",
+        "fromSupplements": [
+          "diarrhea (the classic first sign, and the basis of magnesium's use as a laxative)",
+          "nausea",
+          "abdominal cramping"
+        ],
+        "clinicalName": "hypermagnesemia",
+        "severeRisk": "At extreme doses: hypotension, respiratory depression, and cardiac arrest. Essentially confined to renal impairment or massive supplemental overdose."
+      },
+
+      "absorption": {
+        "typicalRate": "30–40% of intake",
+        "enhancers": [
+          "adequate vitamin D status",
+          "fermentable fiber and inulin (increase colonic absorption)",
+          "spreading intake across several meals"
+        ],
+        "inhibitors": [
+          "phytates in whole grains and legumes",
+          "very high supplemental calcium doses",
+          "high alcohol intake (increases urinary loss)",
+          "excess zinc supplementation"
+        ],
+        "notes": "Fractional absorption falls as intake rises, so several modest doses beat one large one. Soaking, sprouting, or fermenting legumes and grains reduces phytate and improves availability. Magnesium oxide — the cheapest and most common supplemental form — is poorly absorbed; citrate and glycinate are substantially better."
+      },
+
+      "interactions": [
+        {
+          "with": "calcium",
+          "direction": "competes",
+          "effect": "High-dose calcium supplements reduce magnesium absorption through shared transport. Calcium from food does not meaningfully interfere."
+        },
+        {
+          "with": "vitamin-d",
+          "direction": "requires",
+          "effect": "Magnesium is a required cofactor for the enzymes that activate vitamin D. Low magnesium blunts the response to vitamin D supplementation."
+        },
+        {
+          "with": "zinc",
+          "direction": "competes",
+          "effect": "Zinc doses above roughly 140 mg/day interfere with magnesium absorption. Dietary amounts are not a concern."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Pumpkin seeds, roasted", "per100g": 592, "typicalServing": "30 g (small handful)" },
+        { "fdcId": null, "name": "Chia seeds", "per100g": 335, "typicalServing": "28 g (2 tbsp)" },
+        { "fdcId": null, "name": "Almonds", "per100g": 270, "typicalServing": "28 g (23 almonds)" },
+        { "fdcId": null, "name": "Dark chocolate, 70–85% cacao", "per100g": 228, "typicalServing": "30 g" },
+        { "fdcId": null, "name": "Spinach, boiled", "per100g": 87, "typicalServing": "180 g (1 cup)" },
+        { "fdcId": null, "name": "Black beans, cooked", "per100g": 70, "typicalServing": "172 g (1 cup)" }
+      ],
+
+      "reference": {
+        "ear": {
+          "child_1_3": 65,
+          "child_4_8": 110,
+          "child_9_13": 200,
+          "male_14_18": 340,
+          "male_19_30": 330,
+          "male_31_plus": 350,
+          "female_14_18": 300,
+          "female_19_30": 255,
+          "female_31_plus": 265
+        },
+        "rda": {
+          "child_1_3": 80,
+          "child_4_8": 130,
+          "child_9_13": 240,
+          "male_14_18": 410,
+          "male_19_30": 400,
+          "male_31_plus": 420,
+          "female_14_18": 360,
+          "female_19_30": 310,
+          "female_31_plus": 320,
+          "pregnancy_14_18": 400,
+          "pregnancy_19_30": 350,
+          "pregnancy_31_50": 360,
+          "lactation_14_18": 360,
+          "lactation_19_30": 310,
+          "lactation_31_50": 320
+        },
+        "ai": null,
+        "ul": {
+          "value": 350,
+          "appliesTo": "supplemental",
+          "note": "Applies only to magnesium from supplements and medications. There is no upper limit for magnesium from food — do not raise an excess alert on dietary intake alone.",
+          "byLifeStage": {
+            "child_1_3": 65,
+            "child_4_8": 110,
+            "child_9_13": 350
+          }
+        }
+      },
+
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Magnesium (Health Professional)",
+          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "vitamin-d",
+      "name": "Vitamin D",
+      "symbol": "D",
+      "unit": "mcg",
+      "category": "vitamin",
+      "subcategory": "fat-soluble",
+      "fdcNutrientId": 1114,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+
+      "oneLiner": "Lets your body absorb calcium, and behaves more like a hormone than a vitamin.",
+      "simpleExplanation": "Vitamin D controls how much calcium you absorb from food, which makes it essential for bones. Your skin makes it from sunlight, so how much you need from food depends on where you live, your skin tone, and how much time you spend outside. Very few foods contain much of it — oily fish and fortified milk are the main ones — so a lot of people are low in winter. It's stored in body fat for months, which is why a single low day means nothing.",
+
+      "summary": "A secosteroid prohormone rather than a true vitamin. Cutaneous synthesis from 7-dehydrocholesterol under UVB dominates in most people; dietary intake is secondary. Sequential 25-hydroxylation in the liver and 1α-hydroxylation in the kidney yield calcitriol, which acts through the nuclear vitamin D receptor to regulate several hundred genes. Status is assessed by serum 25(OH)D, not intake.",
+      "whatItDoes": [
+        "Upregulates intestinal calcium and phosphate absorption — the primary and best-established role",
+        "Regulates osteoblast and osteoclast activity in bone remodeling",
+        "Suppresses parathyroid hormone secretion",
+        "Modulates innate and adaptive immune function via VDR expression on immune cells",
+        "Influences skeletal muscle function, particularly in older adults"
+      ],
+      "benefits": [
+        {
+          "claim": "Prevents rickets in children and osteomalacia in adults",
+          "evidence": "strong",
+          "note": "Established physiological necessity. This is what vitamin D is for; the causal relationship is not in question."
+        },
+        {
+          "claim": "Reduces fracture risk when combined with calcium in older adults",
+          "evidence": "moderate",
+          "note": "Effect is consistent for combined calcium plus vitamin D in institutionalized and deficient populations. Vitamin D alone in replete community-dwelling adults has been largely null."
+        },
+        {
+          "claim": "Reduces the risk of acute respiratory infection",
+          "evidence": "limited",
+          "note": "A 2017 individual-participant meta-analysis found a small protective effect concentrated in people who were deficient at baseline. Subsequent large trials have been inconsistent."
+        },
+        {
+          "claim": "Prevents cancer or cardiovascular disease",
+          "evidence": "preliminary",
+          "note": "Strong observational associations were not borne out. VITAL — 25,871 participants, 2,000 IU/day, 5.3 years — found no reduction in cancer incidence or major cardiovascular events. Treat as unsupported for primary prevention."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "vitamin D deficiency (rickets in children, osteomalacia in adults)",
+        "prevalence": "Roughly 18% of the US population has serum 25(OH)D below 40 nmol/L (at risk of inadequacy), with markedly higher rates in people with darker skin, at higher latitudes, and in winter.",
+        "earlySigns": [
+          "fatigue",
+          "bone aching, especially in the lower back and hips",
+          "muscle weakness, particularly proximal",
+          "low mood"
+        ],
+        "advancedSigns": [
+          "osteomalacia — soft, painful bones",
+          "rickets in children: bowed legs, delayed growth, skeletal deformity",
+          "secondary hyperparathyroidism",
+          "increased fracture risk"
+        ],
+        "riskGroups": [
+          "people with darker skin (melanin reduces cutaneous synthesis)",
+          "residents above roughly 37° latitude in winter",
+          "people with limited sun exposure — housebound, veiled, night-shift workers",
+          "older adults (skin synthesis declines markedly with age)",
+          "obesity (sequestration in adipose tissue lowers circulating levels)",
+          "fat malabsorption: celiac, Crohn's, cystic fibrosis, post-bariatric surgery",
+          "exclusively breastfed infants without supplementation"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "Not achievable from unfortified food. Reported toxicity is essentially always from supplements or from manufacturing errors in fortified products.",
+        "fromSupplements": [
+          "hypercalcemia",
+          "nausea and vomiting",
+          "excessive thirst and urination",
+          "confusion",
+          "kidney stones"
+        ],
+        "clinicalName": "vitamin D toxicity (hypervitaminosis D)",
+        "severeRisk": "Sustained hypercalcemia causes vascular and soft-tissue calcification and renal failure. Typically requires prolonged intake well above 10,000 IU/day; sunlight alone cannot cause it, because excess previtamin D is photodegraded in the skin."
+      },
+
+      "absorption": {
+        "typicalRate": "~50% of dietary intake; cutaneous synthesis is the dominant source for most people",
+        "enhancers": [
+          "consumption with a fat-containing meal",
+          "adequate magnesium status (required for the activating hydroxylases)",
+          "UVB exposure to skin — the main source, not food"
+        ],
+        "inhibitors": [
+          "fat malabsorption of any cause",
+          "obesity (sequestration in adipose tissue)",
+          "sunscreen, clothing, glass, and darker skin pigmentation (all reduce synthesis)",
+          "corticosteroids and some anticonvulsants (accelerate catabolism)"
+        ],
+        "notes": "Because storage is measured in months, day-to-day intake is a poor guide to status — serum 25(OH)D is the meaningful measure. D3 (cholecalciferol) raises and maintains serum levels more effectively than D2 (ergocalciferol). Latitude and season dominate: above roughly 37°N, cutaneous synthesis is negligible from November to February regardless of time spent outdoors."
+      },
+
+      "interactions": [
+        {
+          "with": "magnesium",
+          "direction": "requires",
+          "effect": "The hepatic and renal hydroxylases that activate vitamin D are magnesium-dependent. Correcting low magnesium can improve vitamin D status without any change in vitamin D intake."
+        },
+        {
+          "with": "calcium",
+          "direction": "synergy",
+          "effect": "Vitamin D's principal function is enabling calcium absorption. Fracture-prevention benefit is seen for the pair, not for vitamin D alone."
+        },
+        {
+          "with": "vitamin-k",
+          "direction": "synergy",
+          "effect": "Vitamin K-dependent proteins direct the calcium that vitamin D makes available toward bone rather than vasculature. Clinically suggestive; not yet established."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Cod liver oil", "per100g": 250, "typicalServing": "5 mL (1 tsp)" },
+        { "fdcId": null, "name": "Rainbow trout, farmed, cooked", "per100g": 16.2, "typicalServing": "85 g fillet" },
+        { "fdcId": null, "name": "Salmon, sockeye, cooked", "per100g": 14.2, "typicalServing": "85 g fillet" },
+        { "fdcId": null, "name": "Mushrooms, UV-exposed", "per100g": 28.1, "typicalServing": "70 g (1 cup)" },
+        { "fdcId": null, "name": "Egg yolk", "per100g": 5.4, "typicalServing": "17 g (1 yolk)" },
+        { "fdcId": null, "name": "Milk, fortified", "per100g": 1.3, "typicalServing": "240 mL (1 cup)" }
+      ],
+
+      "reference": {
+        "ear": {
+          "child_1_3": 10,
+          "child_4_8": 10,
+          "child_9_13": 10,
+          "male_14_18": 10,
+          "male_19_30": 10,
+          "male_31_50": 10,
+          "male_51_70": 10,
+          "male_71_plus": 10,
+          "female_14_18": 10,
+          "female_19_30": 10,
+          "female_31_50": 10,
+          "female_51_70": 10,
+          "female_71_plus": 10
+        },
+        "rda": {
+          "child_1_3": 15,
+          "child_4_8": 15,
+          "child_9_13": 15,
+          "male_14_18": 15,
+          "male_19_30": 15,
+          "male_31_50": 15,
+          "male_51_70": 15,
+          "male_71_plus": 20,
+          "female_14_18": 15,
+          "female_19_30": 15,
+          "female_31_50": 15,
+          "female_51_70": 15,
+          "female_71_plus": 20,
+          "pregnancy_14_18": 15,
+          "pregnancy_19_50": 15,
+          "lactation_14_18": 15,
+          "lactation_19_50": 15
+        },
+        "ai": null,
+        "ul": {
+          "value": 100,
+          "appliesTo": "total",
+          "note": "100 mcg equals 4,000 IU. Sunlight cannot push intake past this — excess previtamin D3 is photodegraded in the skin — so the UL is effectively a limit on supplements and fortified foods.",
+          "byLifeStage": {
+            "child_1_3": 63,
+            "child_4_8": 75,
+            "child_9_13": 100
+          }
+        }
+      },
+
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin D (Health Professional)",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+        },
+        {
+          "label": "VITAL trial — Vitamin D supplements and prevention of cancer and cardiovascular disease (NEJM 2019)",
+          "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa1809944"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "vitamin-b12",
+      "name": "Vitamin B12",
+      "symbol": "B12",
+      "unit": "mcg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": 1178,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+
+      "oneLiner": "Builds red blood cells and protects your nerves. Only found in animal foods.",
+      "simpleExplanation": "B12 is needed to make red blood cells and to maintain the insulating sheath around your nerves. It occurs naturally only in animal foods, so anyone eating plant-based needs fortified foods or a supplement — this is not optional. Your liver stores several years' worth, which is why deficiency takes a long time to appear and why one low day means nothing. The catch is that nerve damage from prolonged deficiency can be permanent, so it's worth not finding out the slow way.",
+
+      "summary": "A cobalt-containing corrinoid, the largest and most structurally complex vitamin. Functions as a cofactor for exactly two mammalian enzymes: methionine synthase (cytosolic, remethylating homocysteine to methionine) and methylmalonyl-CoA mutase (mitochondrial, in odd-chain fatty acid and branched-chain amino acid catabolism). Absorption requires gastric intrinsic factor and an intact terminal ileum, making it uniquely vulnerable to gastrointestinal pathology.",
+      "whatItDoes": [
+        "Cofactor for methionine synthase — regenerates methionine and releases folate from the 5-methyl-THF trap",
+        "Cofactor for methylmalonyl-CoA mutase in propionate metabolism",
+        "Required for myelin synthesis and maintenance",
+        "Required for DNA synthesis in rapidly dividing cells, notably erythroid precursors"
+      ],
+      "benefits": [
+        {
+          "claim": "Prevents megaloblastic anemia",
+          "evidence": "strong",
+          "note": "Established physiological necessity. Deficiency causes it; repletion resolves it."
+        },
+        {
+          "claim": "Prevents irreversible peripheral and central neuropathy",
+          "evidence": "strong",
+          "note": "Subacute combined degeneration of the spinal cord is a well-characterized consequence of prolonged deficiency. Early repletion reverses it; late repletion does not."
+        },
+        {
+          "claim": "Lowers plasma homocysteine",
+          "evidence": "strong",
+          "note": "The biochemical effect is reliable and dose-dependent. Whether lowering homocysteine improves clinical outcomes is a separate question — see below."
+        },
+        {
+          "claim": "Reduces cardiovascular events or slows cognitive decline",
+          "evidence": "preliminary",
+          "note": "Despite reliable homocysteine lowering, large RCTs (HOPE-2, SEARCH, VITATOPS) have not shown reductions in cardiovascular events. Cognitive trials in people who are B12-replete have likewise been null. Benefit appears confined to correcting actual deficiency."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "vitamin B12 deficiency; pernicious anemia when caused by loss of intrinsic factor",
+        "prevalence": "Approximately 6% of adults under 60 and closer to 20% of adults over 60 in the US and UK, driven mainly by absorptive failure rather than low intake. Rates among people eating strictly plant-based without supplementation are far higher.",
+        "earlySigns": [
+          "fatigue and weakness",
+          "pins and needles in hands and feet",
+          "sore or smooth red tongue (glossitis)",
+          "difficulty concentrating",
+          "mild mood change"
+        ],
+        "advancedSigns": [
+          "megaloblastic anemia",
+          "subacute combined degeneration of the spinal cord",
+          "loss of proprioception and balance",
+          "memory loss and confusion",
+          "irreversible peripheral neuropathy"
+        ],
+        "riskGroups": [
+          "people eating vegan or strict vegetarian diets without supplementation",
+          "adults over 60 (atrophic gastritis reduces the acid needed to free B12 from food protein)",
+          "long-term metformin use",
+          "long-term proton pump inhibitor or H2 blocker use",
+          "pernicious anemia (autoimmune loss of intrinsic factor)",
+          "post-gastrectomy or ileal resection",
+          "Crohn's disease affecting the terminal ileum"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No adverse effects have been associated with excess B12 intake from food or supplements in healthy people.",
+        "fromSupplements": [
+          "no established toxicity",
+          "acneiform eruptions and rosacea flares reported at very high supplemental doses, uncommonly"
+        ],
+        "clinicalName": null,
+        "severeRisk": null
+      },
+
+      "absorption": {
+        "typicalRate": "~50% of a small dose; falls sharply as dose rises because intrinsic-factor-mediated uptake saturates near 1.5–2 mcg per meal",
+        "enhancers": [
+          "adequate gastric acid (frees B12 from food protein)",
+          "intact intrinsic factor production",
+          "splitting intake across meals rather than one large dose",
+          "crystalline B12 in fortified foods and supplements — does not require gastric acid to be released"
+        ],
+        "inhibitors": [
+          "atrophic gastritis and reduced gastric acid",
+          "proton pump inhibitors and H2 blockers",
+          "metformin (interferes with ileal uptake)",
+          "loss of intrinsic factor (pernicious anemia)",
+          "terminal ileal disease or resection",
+          "heavy alcohol use"
+        ],
+        "notes": "The receptor-mediated pathway saturates at roughly 1.5–2 mcg per meal, so total daily absorption is bounded by meal frequency rather than dose size. A separate passive diffusion route absorbs about 1% of any dose regardless of intrinsic factor — which is why high-dose oral supplementation (1,000 mcg) works even in pernicious anemia, where the active pathway is absent entirely."
+      },
+
+      "interactions": [
+        {
+          "with": "folate",
+          "direction": "synergy",
+          "effect": "The two are tightly coupled through methionine synthase. Critically, high folate intake can correct B12-deficiency anemia on a blood count while neurological damage continues to progress unnoticed — the reason folic acid fortification levels are capped."
+        },
+        {
+          "with": "vitamin-c",
+          "direction": "depletes",
+          "effect": "Large vitamin C doses taken with a meal may degrade B12 in vitro. Clinical relevance is doubtful; separating them by a couple of hours resolves any concern."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Clams, cooked", "per100g": 98.9, "typicalServing": "85 g" },
+        { "fdcId": null, "name": "Beef liver, cooked", "per100g": 70.6, "typicalServing": "85 g" },
+        { "fdcId": null, "name": "Nutritional yeast, fortified", "per100g": 50.0, "typicalServing": "16 g (2 tbsp)" },
+        { "fdcId": null, "name": "Sardines, canned in oil", "per100g": 8.9, "typicalServing": "92 g (1 can)" },
+        { "fdcId": null, "name": "Beef, ground, cooked", "per100g": 2.6, "typicalServing": "85 g" },
+        { "fdcId": null, "name": "Egg, whole, cooked", "per100g": 1.1, "typicalServing": "50 g (1 large egg)" }
+      ],
+
+      "reference": {
+        "ear": {
+          "child_1_3": 0.7,
+          "child_4_8": 1.0,
+          "child_9_13": 1.5,
+          "male_14_18": 2.0,
+          "male_19_plus": 2.0,
+          "female_14_18": 2.0,
+          "female_19_plus": 2.0
+        },
+        "rda": {
+          "child_1_3": 0.9,
+          "child_4_8": 1.2,
+          "child_9_13": 1.8,
+          "male_14_18": 2.4,
+          "male_19_plus": 2.4,
+          "female_14_18": 2.4,
+          "female_19_plus": 2.4,
+          "pregnancy_14_50": 2.6,
+          "lactation_14_50": 2.8
+        },
+        "ai": null,
+        "ul": null
+      },
+
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin B12 (Health Professional)",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "vitamin-c",
+      "name": "Vitamin C",
+      "symbol": "C",
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": 1162,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": true,
+
+      "oneLiner": "Builds collagen, and dramatically boosts iron absorption from plant foods.",
+      "simpleExplanation": "Vitamin C is what your body uses to build collagen — the protein holding skin, blood vessels, and gums together — and it makes iron from plant foods far easier to absorb. Your body doesn't store it, so you need some most days. The good news is it's easy to get: one red pepper or one kiwi covers a full day. It does not prevent colds, despite the reputation, though it does shorten them slightly.",
+
+      "summary": "A water-soluble reducing agent and essential cofactor for a family of copper- and iron-containing enzymes. Humans, other primates, and guinea pigs cannot synthesize it due to loss of L-gulonolactone oxidase. Serves as the electron donor for the prolyl and lysyl hydroxylases that stabilize the collagen triple helix, and for dopamine β-hydroxylase in catecholamine synthesis. Plasma levels are tightly controlled by renal reabsorption, which saturates near 400 mg/day intake.",
+      "whatItDoes": [
+        "Cofactor for prolyl and lysyl hydroxylase in collagen cross-linking",
+        "Reduces dietary non-heme iron from Fe3+ to the absorbable Fe2+ form",
+        "Cofactor for dopamine β-hydroxylase in noradrenaline synthesis",
+        "Cofactor for carnitine biosynthesis",
+        "Regenerates oxidized vitamin E back to its active form",
+        "Scavenges aqueous-phase reactive oxygen species"
+      ],
+      "benefits": [
+        {
+          "claim": "Prevents scurvy",
+          "evidence": "strong",
+          "note": "Established physiological necessity. Roughly 10 mg/day prevents it — far below the RDA, which targets tissue saturation rather than bare adequacy."
+        },
+        {
+          "claim": "Substantially increases non-heme iron absorption",
+          "evidence": "strong",
+          "note": "Consistent and large: 50 mg of vitamin C taken alongside a plant-based iron source can multiply absorption several-fold. One of the most practically useful nutrient interactions there is."
+        },
+        {
+          "claim": "Shortens the duration of the common cold",
+          "evidence": "moderate",
+          "note": "Cochrane review of regular supplementation: about 8% shorter in adults, 14% in children. Real, consistent, and small — roughly half a day."
+        },
+        {
+          "claim": "Prevents the common cold",
+          "evidence": "preliminary",
+          "note": "Explicitly NOT supported in the general population — the same Cochrane review found no reduction in incidence. The one exception is people under extreme physical stress (marathon runners, soldiers in subarctic conditions), where incidence roughly halved. Worth stating plainly given how widely the opposite is believed."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "scurvy",
+        "prevalence": "Roughly 7% of the US population has serum levels indicating deficiency (NHANES), concentrated among smokers and people with low fruit and vegetable intake. Frank scurvy is rare but persistently under-diagnosed in people with restrictive diets, alcohol dependence, or severe mental illness.",
+        "earlySigns": [
+          "fatigue and lethargy",
+          "irritability",
+          "muscle and joint aching",
+          "easy bruising",
+          "slow wound healing"
+        ],
+        "advancedSigns": [
+          "bleeding, swollen gums and loosening teeth",
+          "perifollicular hemorrhage and corkscrew hairs",
+          "poor wound healing and reopening of old scars",
+          "anemia",
+          "joint effusions"
+        ],
+        "riskGroups": [
+          "smokers (need an additional 35 mg/day due to oxidative turnover)",
+          "people with very limited dietary variety",
+          "alcohol dependence",
+          "people on dialysis",
+          "severe malabsorptive conditions",
+          "infants fed exclusively on boiled or evaporated milk"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No adverse effects from food sources. Renal excretion handles any dietary excess.",
+        "fromSupplements": [
+          "diarrhea and abdominal cramping",
+          "nausea",
+          "increased urinary oxalate, relevant to kidney stone formers",
+          "false readings on some blood glucose meters"
+        ],
+        "clinicalName": null,
+        "severeRisk": "Doses above roughly 1,000 mg/day may raise oxalate stone risk in susceptible people. In hereditary hemochromatosis, high doses can worsen iron overload by increasing absorption."
+      },
+
+      "absorption": {
+        "typicalRate": "70–90% at typical intakes; falls below 50% above 1,000 mg in a single dose",
+        "enhancers": [
+          "splitting intake across the day",
+          "consuming from whole foods, where it arrives with flavonoids"
+        ],
+        "inhibitors": [
+          "smoking (increases metabolic turnover rather than blocking absorption)",
+          "heat — vitamin C is among the most cooking-labile nutrients",
+          "prolonged storage and exposure to air",
+          "boiling, which leaches it into the water"
+        ],
+        "notes": "Active transport saturates, so absorption efficiency falls steeply with dose — 200 mg taken twice beats 400 mg taken once. Cooking losses are substantial: boiling can destroy over half the vitamin C in a vegetable, while steaming, microwaving, and raw consumption preserve much more. Storage matters too; a cut pepper loses vitamin C over days in the fridge."
+      },
+
+      "interactions": [
+        {
+          "with": "iron",
+          "direction": "synergy",
+          "effect": "Reduces Fe3+ to absorbable Fe2+ and forms a soluble chelate. The single most effective dietary lever for improving iron status on a plant-based diet."
+        },
+        {
+          "with": "vitamin-e",
+          "direction": "synergy",
+          "effect": "Regenerates the oxidized tocopheroxyl radical back to active vitamin E, letting each vitamin E molecule work repeatedly."
+        },
+        {
+          "with": "copper",
+          "direction": "competes",
+          "effect": "Very high supplemental doses may impair copper status. Not a concern at dietary intakes."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Guava", "per100g": 228, "typicalServing": "55 g (1 fruit)" },
+        { "fdcId": null, "name": "Bell pepper, red, raw", "per100g": 128, "typicalServing": "119 g (1 medium)" },
+        { "fdcId": null, "name": "Kiwifruit", "per100g": 93, "typicalServing": "69 g (1 fruit)" },
+        { "fdcId": null, "name": "Broccoli, raw", "per100g": 89, "typicalServing": "91 g (1 cup)" },
+        { "fdcId": null, "name": "Strawberries", "per100g": 59, "typicalServing": "152 g (1 cup)" },
+        { "fdcId": null, "name": "Orange", "per100g": 53, "typicalServing": "131 g (1 medium)" }
+      ],
+
+      "reference": {
+        "ear": {
+          "child_1_3": 13,
+          "child_4_8": 22,
+          "child_9_13": 39,
+          "male_14_18": 63,
+          "male_19_plus": 75,
+          "female_14_18": 56,
+          "female_19_plus": 60
+        },
+        "rda": {
+          "child_1_3": 15,
+          "child_4_8": 25,
+          "child_9_13": 45,
+          "male_14_18": 75,
+          "male_19_plus": 90,
+          "female_14_18": 65,
+          "female_19_plus": 75,
+          "pregnancy_14_18": 80,
+          "pregnancy_19_50": 85,
+          "lactation_14_18": 115,
+          "lactation_19_50": 120
+        },
+        "ai": null,
+        "ul": {
+          "value": 2000,
+          "appliesTo": "total",
+          "note": "Smokers require an additional 35 mg/day above the RDA. The UL is set by gastrointestinal tolerance, not systemic toxicity.",
+          "byLifeStage": {
+            "child_1_3": 400,
+            "child_4_8": 650,
+            "child_9_13": 1200,
+            "male_14_18": 1800,
+            "female_14_18": 1800
+          }
+        }
+      },
+
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin C (Health Professional)",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
+        },
+        {
+          "label": "Cochrane Review — Vitamin C for preventing and treating the common cold",
+          "url": "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD000980.pub4/full"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "lutein-zeaxanthin",
+      "name": "Lutein + Zeaxanthin",
+      "symbol": null,
+      "unit": "mg",
+      "category": "phytonutrient",
+      "subcategory": "carotenoid",
+      "fdcNutrientId": 1122,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "moderate",
+      "antioxidantRole": true,
+
+      "oneLiner": "Yellow pigments that concentrate in the retina and filter blue light.",
+      "simpleExplanation": "These two pigments come from leafy greens, egg yolks, and corn, and your body sends them straight to the centre of the retina, where they form a yellow filter that absorbs blue light. Eating more of them measurably thickens that filter. There's no official daily requirement — nobody gets a deficiency disease from lacking them — but higher intakes are linked to slower age-related macular degeneration.",
+
+      "summary": "Xanthophyll carotenoids, and the only two dietary carotenoids selectively accumulated in the primate macula, where they constitute macular pigment. Zeaxanthin dominates the foveal center, lutein the periphery. Both absorb strongly in the blue region (~450 nm) and quench singlet oxygen. Macular pigment optical density responds measurably to dietary and supplemental intake, making this one of the few phytonutrients with a validated tissue-level biomarker.",
+      "whatItDoes": [
+        "Forms macular pigment, filtering blue light before it reaches photoreceptors",
+        "Quenches singlet oxygen and peroxyl radicals in the retina, a uniquely high-oxidative-stress tissue",
+        "Reduces chromatic aberration and light scatter, improving contrast sensitivity",
+        "Accumulates in brain tissue, where concentrations correlate with cognitive measures"
+      ],
+      "benefits": [
+        {
+          "claim": "Slows progression of age-related macular degeneration in people who already have it",
+          "evidence": "moderate",
+          "note": "AREDS2 (n=4,203) found lutein + zeaxanthin an effective and safer replacement for beta-carotene in the AREDS formulation. Benefit was clearest in participants with the lowest baseline dietary intake. This is progression in existing AMD, not prevention in healthy eyes."
+        },
+        {
+          "claim": "Increases macular pigment optical density",
+          "evidence": "strong",
+          "note": "A reliable, dose-dependent biomarker response, consistently reproduced. Note this is a tissue measurement, not a clinical outcome — pigment density rising is not the same as vision improving."
+        },
+        {
+          "claim": "Improves contrast sensitivity and glare recovery",
+          "evidence": "limited",
+          "note": "Several small trials in healthy adults report improvement; samples are small and outcome measures vary between studies."
+        },
+        {
+          "claim": "Supports cognitive function in older adults",
+          "evidence": "preliminary",
+          "note": "Observational associations between macular pigment density and cognitive scores, plus small pilot trials. Mechanistically interesting, not established."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": null,
+        "prevalence": "Not applicable — there is no deficiency state. US median intake is roughly 1–2 mg/day, well below the 10 mg used in intervention trials.",
+        "earlySigns": [],
+        "advancedSigns": [],
+        "riskGroups": [
+          "people with very low vegetable intake (low macular pigment density is a risk marker, not a deficiency)",
+          "smokers (lower circulating carotenoid levels overall)"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No toxicity reported from food. Extremely high intakes of yellow-orange vegetables can produce carotenodermia — harmless yellowing of the skin that resolves on reduction.",
+        "fromSupplements": [
+          "carotenodermia at very high sustained doses",
+          "no established toxicity at doses used in trials (up to 20 mg/day)"
+        ],
+        "clinicalName": null,
+        "severeRisk": null
+      },
+
+      "absorption": {
+        "typicalRate": "Highly variable, roughly 5–60% depending on the food matrix",
+        "enhancers": [
+          "dietary fat consumed in the same meal — these are fat-soluble and absorption is poor without it",
+          "cooking and chopping (disrupts plant cell walls)",
+          "egg yolk matrix, which is unusually bioavailable despite modest absolute content"
+        ],
+        "inhibitors": [
+          "very low-fat meals",
+          "intact raw plant cell walls",
+          "high doses of beta-carotene, which competes for the same absorption pathway",
+          "plant sterol supplements and fat-blocking medications"
+        ],
+        "notes": "Food matrix matters more than absolute content here. Egg yolk delivers only about 1 mg per 100 g against spinach's 11 mg, but its lipid matrix makes it far more bioavailable — a fair comparison has to weight for that. Adding oil to a salad is not optional for carotenoid absorption; a fat-free dressing substantially reduces uptake."
+      },
+
+      "interactions": [
+        {
+          "with": "beta-carotene",
+          "direction": "competes",
+          "effect": "Shares intestinal absorption pathways. High-dose beta-carotene supplementation lowers serum lutein — one of the findings that motivated the AREDS2 substitution."
+        },
+        {
+          "with": "vitamin-e",
+          "direction": "synergy",
+          "effect": "Both are lipid-phase antioxidants concentrated in retinal membranes and appear to act complementarily."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Spinach, boiled", "per100g": 11.3, "typicalServing": "180 g (1 cup)" },
+        { "fdcId": null, "name": "Kale, boiled", "per100g": 8.2, "typicalServing": "130 g (1 cup)" },
+        { "fdcId": null, "name": "Pistachios", "per100g": 1.4, "typicalServing": "28 g" },
+        { "fdcId": null, "name": "Egg yolk", "per100g": 1.1, "typicalServing": "17 g (1 yolk)" },
+        { "fdcId": null, "name": "Corn, sweet, cooked", "per100g": 0.9, "typicalServing": "164 g (1 cup)" },
+        { "fdcId": null, "name": "Peas, green, cooked", "per100g": 1.9, "typicalServing": "160 g (1 cup)" }
+      ],
+
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 1.7,
+          "unit": "mg/day",
+          "source": "NHANES, US adults — combined lutein and zeaxanthin"
+        },
+        "studiedRange": {
+          "low": 6,
+          "high": 20,
+          "unit": "mg/day",
+          "note": "AREDS2 used 10 mg lutein plus 2 mg zeaxanthin daily. Observational studies associating higher intake with lower AMD risk generally compare quintiles around 6 mg/day and above."
+        },
+        "framing": "No official requirement exists for lutein or zeaxanthin, and no deficiency disease has ever been described. These figures show what people typically eat and what amounts have been studied — they are context, not a target to hit."
+      },
+
+      "citations": [
+        {
+          "label": "AREDS2 — Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration (JAMA 2013)",
+          "url": "https://jamanetwork.com/journals/jama/fullarticle/1684847"
+        },
+        {
+          "label": "Linus Pauling Institute — Carotenoids",
+          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/carotenoids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    }
+  ]
+}

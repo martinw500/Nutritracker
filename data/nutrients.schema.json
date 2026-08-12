@@ -1,0 +1,354 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nutritracker.local/schemas/nutrients.schema.json",
+  "title": "Nutrient Reference Database",
+  "description": "Schema for data/nutrients.json. Enforces the data-integrity rules in CLAUDE.md — in particular that every benefit claim carries an evidence tier, and that phytonutrients carry intake context instead of a reference intake so they can never be rendered as a percentage of a target.",
+  "type": "object",
+  "required": ["version", "lastUpdated", "notes", "nutrients"],
+  "additionalProperties": false,
+
+  "properties": {
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "lastUpdated": { "$ref": "#/definitions/isoDate" },
+    "notes": {
+      "description": "Caveats about the data's current state — provenance, known gaps.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "nutrients": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/nutrient" }
+    }
+  },
+
+  "definitions": {
+    "isoDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+
+    "referenceTable": {
+      "description": "Values keyed by life-stage group: {group}_{ageLow}_{ageHigh}, e.g. male_19_30, female_51_plus, child_4_8, pregnancy_19_30.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^(male|female|child|infant|pregnancy|lactation)_(\\d+)_(\\d+|plus)$"
+      },
+      "additionalProperties": { "type": "number", "minimum": 0 },
+      "minProperties": 1
+    },
+
+    "citation": {
+      "type": "object",
+      "required": ["label", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "benefit": {
+      "description": "A claimed benefit. CLAUDE.md rule 2: evidence tier is mandatory.",
+      "type": "object",
+      "required": ["claim", "evidence", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "claim": { "type": "string", "minLength": 1 },
+        "evidence": {
+          "type": "string",
+          "enum": ["strong", "moderate", "limited", "preliminary"]
+        },
+        "note": {
+          "description": "Why this tier: trial names, effect sizes, contradictory findings.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+
+    "foodSource": {
+      "type": "object",
+      "required": ["fdcId", "name", "per100g", "typicalServing"],
+      "additionalProperties": false,
+      "properties": {
+        "fdcId": {
+          "description": "Null until resolved by the Phase 0 FDC importer. Hand-written IDs silently link to the wrong food.",
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "per100g": { "type": "number", "minimum": 0 },
+        "typicalServing": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "interaction": {
+      "type": "object",
+      "required": ["with", "direction", "effect"],
+      "additionalProperties": false,
+      "properties": {
+        "with": {
+          "description": "id of another nutrient in this file.",
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["competes", "synergy", "depletes", "requires"]
+        },
+        "effect": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "absorption": {
+      "type": "object",
+      "required": ["typicalRate", "enhancers", "inhibitors", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "typicalRate": { "type": "string" },
+        "enhancers": { "type": "array", "items": { "type": "string" } },
+        "inhibitors": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "deficiency": {
+      "type": "object",
+      "required": [
+        "clinicalName",
+        "prevalence",
+        "earlySigns",
+        "advancedSigns",
+        "riskGroups"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "clinicalName": { "type": ["string", "null"] },
+        "prevalence": { "type": "string" },
+        "earlySigns": { "type": "array", "items": { "type": "string" } },
+        "advancedSigns": { "type": "array", "items": { "type": "string" } },
+        "riskGroups": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "excess": {
+      "type": "object",
+      "required": ["fromFood", "fromSupplements", "clinicalName", "severeRisk"],
+      "additionalProperties": false,
+      "properties": {
+        "fromFood": { "type": "string", "minLength": 1 },
+        "fromSupplements": { "type": "array", "items": { "type": "string" } },
+        "clinicalName": { "type": ["string", "null"] },
+        "severeRisk": { "type": ["string", "null"] }
+      }
+    },
+
+    "upperLimit": {
+      "type": "object",
+      "required": ["value", "appliesTo", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "number", "minimum": 0 },
+        "appliesTo": {
+          "description": "Applying a supplemental-only UL to food intake produces false excess alerts.",
+          "type": "string",
+          "enum": ["total", "supplemental", "fortified-and-supplemental"]
+        },
+        "note": { "type": ["string", "null"] },
+        "byLifeStage": { "$ref": "#/definitions/referenceTable" }
+      }
+    },
+
+    "referenceIntakes": {
+      "type": "object",
+      "required": ["ear", "rda", "ai", "ul"],
+      "additionalProperties": false,
+      "properties": {
+        "ear": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
+        "rda": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
+        "ai": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
+        "ul": { "oneOf": [{ "$ref": "#/definitions/upperLimit" }, { "type": "null" }] }
+      },
+      "anyOf": [
+        { "properties": { "rda": { "$ref": "#/definitions/referenceTable" } }, "required": ["rda"] },
+        { "properties": { "ai": { "$ref": "#/definitions/referenceTable" } }, "required": ["ai"] }
+      ]
+    },
+
+    "intakeContext": {
+      "description": "Replaces referenceIntakes for phytonutrients. Descriptive figures for context, never a target.",
+      "type": "object",
+      "required": ["populationMedian", "studiedRange", "framing"],
+      "additionalProperties": false,
+      "properties": {
+        "populationMedian": {
+          "type": "object",
+          "required": ["value", "unit", "source"],
+          "additionalProperties": false,
+          "properties": {
+            "value": { "type": "number", "minimum": 0 },
+            "unit": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "studiedRange": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["low", "high", "unit", "note"],
+              "additionalProperties": false,
+              "properties": {
+                "low": { "type": "number", "minimum": 0 },
+                "high": { "type": "number", "minimum": 0 },
+                "unit": { "type": "string" },
+                "note": { "type": "string" }
+              }
+            },
+            { "type": "null" }
+          ]
+        },
+        "framing": {
+          "description": "Disclaimer rendered alongside the figures. Required — this is what stops a context number reading as a target.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+
+    "nutrient": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "symbol",
+        "unit",
+        "category",
+        "subcategory",
+        "fdcNutrientId",
+        "hasReferenceIntake",
+        "essentiality",
+        "storage",
+        "antioxidantRole",
+        "oneLiner",
+        "simpleExplanation",
+        "summary",
+        "whatItDoes",
+        "benefits",
+        "deficiency",
+        "excess",
+        "absorption",
+        "interactions",
+        "topSources",
+        "citations",
+        "lastReviewed"
+      ],
+      "additionalProperties": false,
+
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "symbol": { "type": ["string", "null"] },
+        "unit": { "type": "string", "enum": ["g", "mg", "mcg", "IU", "kcal", "mL"] },
+        "category": {
+          "type": "string",
+          "enum": ["macronutrient", "vitamin", "mineral", "phytonutrient", "other"]
+        },
+        "subcategory": { "type": ["string", "null"] },
+        "fdcNutrientId": { "type": ["integer", "null"], "minimum": 1 },
+        "hasReferenceIntake": { "type": "boolean" },
+        "essentiality": {
+          "type": "string",
+          "enum": ["essential", "conditionally-essential", "non-essential"]
+        },
+        "storage": {
+          "description": "Drives the alert window: none = 3 days, moderate = 7 days, high = 14-30 days.",
+          "type": "string",
+          "enum": ["none", "moderate", "high"]
+        },
+        "antioxidantRole": { "type": "boolean" },
+
+        "oneLiner": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "simpleExplanation": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "whatItDoes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "benefits": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/benefit" }
+        },
+
+        "deficiency": { "$ref": "#/definitions/deficiency" },
+        "excess": { "$ref": "#/definitions/excess" },
+        "absorption": { "$ref": "#/definitions/absorption" },
+        "interactions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/interaction" }
+        },
+        "topSources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/foodSource" }
+        },
+
+        "reference": {},
+        "intakeContext": {},
+
+        "citations": {
+          "description": "CLAUDE.md rule 6: at least one citation per entry.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/citation" }
+        },
+        "lastReviewed": { "$ref": "#/definitions/isoDate" }
+      },
+
+      "allOf": [
+        {
+          "description": "Tier 2 — essential nutrient. Must carry reference intakes and must NOT carry intake context.",
+          "if": {
+            "properties": { "hasReferenceIntake": { "const": true } },
+            "required": ["hasReferenceIntake"]
+          },
+          "then": {
+            "required": ["reference"],
+            "properties": {
+              "reference": { "$ref": "#/definitions/referenceIntakes" },
+              "intakeContext": false
+            }
+          }
+        },
+        {
+          "description": "Tier 3 — phytonutrient. reference MUST be null so nothing downstream can render a percentage of a nonexistent target.",
+          "if": {
+            "properties": { "hasReferenceIntake": { "const": false } },
+            "required": ["hasReferenceIntake"]
+          },
+          "then": {
+            "required": ["reference", "intakeContext"],
+            "properties": {
+              "reference": { "type": "null" },
+              "intakeContext": { "$ref": "#/definitions/intakeContext" }
+            }
+          }
+        },
+        {
+          "description": "Phytonutrients are by definition non-essential and have no reference intake.",
+          "if": {
+            "properties": { "category": { "const": "phytonutrient" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "hasReferenceIntake": { "const": false },
+              "essentiality": { "const": "non-essential" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
