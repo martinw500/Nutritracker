@@ -44,6 +44,7 @@ Nothing in flight.
 
 ## Recently changed
 
+- **2026-08-11** — Fixed a hydration error: `FlagChip` rendered a `<button>` and sat inside the expander `<button>` in `FoodFlagsCard`. Nested interactive elements are invalid HTML — the browser closes the outer one early, the trees diverge, and React discards the subtree. Chips are now spans; whatever wraps one owns the interaction. Guarded by a test that walks the rendered DOM for interactive nesting.
 - **2026-08-11** — Filled the data layer. 47 of 59 entries now written (10 full, 37 brief) against 10 before, so every vitamin and mineral on the dashboard has a real, personalised, cited target. Introduced `depth: brief | full` (D16).
 - **2026-08-11** — Replaced the dot grid with a dense labelled table. The grid borrowed a contribution-graph layout, where a tile's *position* is its label; here position labelled nothing, so every mark was anonymous and a legend could not fix it. Every row is now named, with its own bar, number and status in words.
 - **2026-08-11** — Added the food-flag layer (D17): processed meat, red meat, alcohol, ultra-processed, glycemic, cardiometabolic, and positive flags. Each carries an evidence tier and citations, and derived flags are computed from composition so they cannot drift from the numbers.
@@ -58,7 +59,7 @@ Nothing in flight.
 
 ```bash
 npm run validate:data   # schema, cross-file agreement, every flag cited
-npm test                # 119 unit and render tests
+npm test                # 128 unit and render tests
 npm run typecheck
 npm run dev             # every route works with no .env.local
 ```

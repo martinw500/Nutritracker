@@ -70,7 +70,7 @@ No `.env.local` and no database needed — every screen runs off `data/demo/`, a
 
 ```bash
 npm run validate:data  # data layer
-npm test               # 119 unit and render tests
+npm test               # 128 unit and render tests
 ```
 
 **Read in this order:** [CLAUDE.md](CLAUDE.md) → [docs/DECISIONS.md](docs/DECISIONS.md) → [docs/PLAN.md](docs/PLAN.md) → [docs/STATUS.md](docs/STATUS.md). What you may not break, why, what to build, where it stands.

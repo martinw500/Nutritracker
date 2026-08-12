@@ -22,26 +22,25 @@ import { Card, CardHeader } from "@/components/ui";
 import type { AttributeTally, FoodAttribute } from "@/lib/nutrition/attributes";
 import { cn } from "@/lib/utils";
 
-export function FlagChip({
-  attribute,
-  onClick,
-}: {
-  attribute: FoodAttribute;
-  onClick?: () => void;
-}) {
+/**
+ * Presentational only — a `<span>`, never a `<button>`.
+ *
+ * It is rendered inside the expander button in `FoodFlagsCard`, and a button
+ * inside a button is invalid HTML: the browser closes the outer one early, so
+ * the server and client trees disagree and hydration fails. Whatever wraps a
+ * chip owns the interaction; the chip is a label.
+ */
+export function FlagChip({ attribute }: { attribute: FoodAttribute }) {
   const caution = attribute.polarity === "caution";
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
+    <span
       title={attribute.oneLiner}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors",
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium",
         caution
-          ? "border-transparent bg-low-soft text-low hover:brightness-95"
-          : "border-transparent bg-met-soft text-met hover:brightness-95",
-        !onClick && "cursor-default",
+          ? "border-transparent bg-low-soft text-low"
+          : "border-transparent bg-met-soft text-met",
       )}
     >
       {caution ? (
@@ -50,7 +49,7 @@ export function FlagChip({
         <Leaf className="size-3" strokeWidth={2.25} />
       )}
       {attribute.label}
-    </button>
+    </span>
   );
 }
 
