@@ -2,13 +2,13 @@
 
 A nutrition tracker that treats micronutrients, phytonutrients, and glycemic load as first-class data — not an afterthought behind a paywall.
 
-Most trackers stop at calories and macros. This one tracks ~35 nutrients against personalized reference intakes, explains what each one actually does, notices when you've been short on something for a week, and adapts what it emphasizes based on what you're trying to achieve.
+Most trackers stop at calories and macros. This one tracks 59 values against personalized reference intakes, explains what each one actually does, notices when you've been short on something for a week, and adapts what it emphasizes based on what you're trying to achieve.
 
 Logging is done by photographing your meal. You bring your own AI access, so there's no subscription and no per-user cost to run.
 
 ## What makes it different
 
-- **~57 values tracked** — 16 macronutrients, 29 micronutrients with reference intakes, and 12 phytonutrients — each with a written reference panel: what it does, what deficiency looks like, what excess looks like, absorption notes, interactions, and food sources ranked against your own eating patterns.
+- **59 values tracked** — 18 macronutrients, 29 micronutrients with reference intakes, and 12 phytonutrients — each with a written reference panel: what it does, what deficiency looks like, what excess looks like, absorption notes, interactions, and food sources ranked against your own eating patterns.
 - **Streak detection** — "you've run low on magnesium for 8 days" — with alert windows tuned per nutrient. Daily shortfall matters for vitamin C; it's meaningless for B12, which your liver stores for years.
 - **Works for both audiences.** One interface, simple by default. An expert toggle reveals EAR/AI/UL alongside RDA, exact values, evidence tiers, per-food data provenance, and CSV export. Expert mode is a strict superset — it reveals detail, never contradicts.
 - **Goal modes** — high protein, low bloat, lower glycemic — that re-weight the dashboard and recommendations without hiding data.
@@ -35,6 +35,7 @@ Manual logging works fully without any AI configured, so the app is useful befor
 | Document | Contents |
 |---|---|
 | [CLAUDE.md](CLAUDE.md) | Data-integrity rules that bind implementation. Read before changing anything. |
+| [docs/STATUS.md](docs/STATUS.md) | Where things actually stand — what's next, what's broken, what changed |
 | [docs/PLAN.md](docs/PLAN.md) | Architecture, nutrient roster, data model, feature specs, build phases |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | What's settled and why, plus what's still open |
 | [docs/RESEARCH.md](docs/RESEARCH.md) | Data sources, licenses, AI provider auth findings, accuracy research |
@@ -43,36 +44,34 @@ Manual logging works fully without any AI configured, so the app is useful befor
 
 | File | Contents |
 |---|---|
-| [data/nutrients.json](data/nutrients.json) | Nutrient reference data — 5 of ~45 entries written |
+| [data/roster.json](data/roster.json) | The index of all 59 tracked values — metadata only |
+| [data/nutrients.json](data/nutrients.json) | Reference panels — 5 of 59 written |
 | [data/nutrients.schema.json](data/nutrients.schema.json) | JSON Schema enforcing the integrity rules |
 | [lib/nutrition/types.ts](lib/nutrition/types.ts) | TypeScript types for the reference layer |
+| [data/demo/](data/demo/) | Fixtures standing in for the database. Importable only through `lib/demo`. |
 
-The schema makes the important rules structural rather than advisory: a benefit claim without an evidence tier fails validation, and a phytonutrient is *unable* to carry a reference intake, so nothing downstream can render it as a percentage of a target that doesn't exist.
+The schema makes the important rules structural rather than advisory: a benefit claim without an evidence tier fails validation, and a phytonutrient is *unable* to carry a reference intake, so nothing downstream can render it as a percentage of a target that doesn't exist. `npm run validate:data` adds the checks a schema can't express — that the roster and the reference entries agree, and that every cross-reference resolves.
 
 ## Status
 
-**Phase 0, in progress.** The nutrient reference layer is designed and seeded; the app itself isn't scaffolded yet.
-
-- [x] Data-integrity rules, schema, and types
-- [x] 5 seed nutrient entries (magnesium, vitamin D, B12, vitamin C, lutein+zeaxanthin) chosen to exercise every schema branch
-- [ ] Next.js + Postgres + Drizzle scaffold
-- [ ] Remaining ~40 nutrient entries
-- [ ] FoodData Central mirror
-
-See [docs/PLAN.md](docs/PLAN.md) for the full sequence.
+**Phase 0, part-built.** The UI is complete and runnable against fixtures; there's no database and no AI yet. Current state, next steps and known issues: [docs/STATUS.md](docs/STATUS.md).
 
 ## Start here
-
-Nothing is scaffolded yet, so a fresh clone needs no install step — there's no `package.json` to run against.
 
 ```bash
 git clone https://github.com/martinw500/Nutritracker
 cd Nutritracker
-cp .env.example .env.local     # nothing to fill in yet; see the file for what's coming
+npm install
+npm run dev            # http://localhost:3000
 ```
 
-**Read in this order:** [CLAUDE.md](CLAUDE.md) → [docs/DECISIONS.md](docs/DECISIONS.md) → [docs/PLAN.md](docs/PLAN.md). The first tells you what you may not break, the second why, the third what to build.
+No `.env.local` and no database needed — every screen runs off `data/demo/`, and a banner says so on every page.
 
-**The next task** is the first unchecked box above: scaffold Next.js + Postgres + Drizzle, then wire `data/nutrients.schema.json` validation into CI so the remaining ~40 nutrient entries are checked as they're written.
+```bash
+npm run validate:data  # data layer
+npm test               # 61 unit and render tests
+```
+
+**Read in this order:** [CLAUDE.md](CLAUDE.md) → [docs/DECISIONS.md](docs/DECISIONS.md) → [docs/PLAN.md](docs/PLAN.md) → [docs/STATUS.md](docs/STATUS.md). What you may not break, why, what to build, where it stands.
 
 You'll need a free [FoodData Central API key](https://fdc.nal.usda.gov/api-key-signup.html) and a Postgres database (Supabase and Neon both have free tiers) before Phase 0 finishes — see [.env.example](.env.example) for everything and where it comes from.

@@ -4,7 +4,7 @@ Guidance for Claude Code when working in this repository.
 
 ## What this is
 
-NutriTracker is a nutrition tracker that treats micronutrients, phytonutrients, and glycemic load as first-class data. It tracks ~57 values against personalized reference intakes, explains what each one does in plain language *and* at research depth, detects multi-day deficiency and excess streaks, and logs meals from photographs. Users supply their own AI access (OpenRouter OAuth or a pasted API key), so there is no per-user inference cost.
+NutriTracker is a nutrition tracker that treats micronutrients, phytonutrients, and glycemic load as first-class data. It tracks 59 values against personalized reference intakes, explains what each one does in plain language *and* at research depth, detects multi-day deficiency and excess streaks, and logs meals from photographs. Users supply their own AI access (OpenRouter OAuth or a pasted API key), so there is no per-user inference cost.
 
 Full detail: [docs/PLAN.md](docs/PLAN.md). Sources and their caveats: [docs/RESEARCH.md](docs/RESEARCH.md).
 
@@ -59,13 +59,37 @@ Expert mode is a **strict superset** of simple mode. It reveals detail; it never
 ## Layout
 
 ```
-data/          Reference data. nutrients.json, its schema, DRI tables, GI mappings.
+data/          Reference data. nutrients.json + schema, roster.json, DRI tables, GI mappings.
+data/demo/     Fixtures. Fabricated, temporary, and importable ONLY through lib/demo.
 lib/nutrition/ Calculation: scaling, daily rollups, RDA personalization, streak detection.
+lib/demo/      The single import site for data/demo. Deleted when the database lands.
 lib/ai/        Provider abstraction, OAuth flows, vision prompts, food-name resolver.
 lib/db/        Drizzle schema and migrations.
-app/           Next.js App Router routes and UI.
-docs/          PLAN.md, RESEARCH.md.
+app/           Next.js App Router routes.
+components/    UI. One component per job — see "Progressive disclosure" above.
+docs/          STATUS.md, PLAN.md, DECISIONS.md, RESEARCH.md.
 ```
+
+`data/roster.json` is the index of every tracked value and carries **metadata only** — no reference intakes, no copy. Those live in `nutrients.json`. A value in the roster with no entry in `nutrients.json` is undocumented, not broken: the UI renders an explicit "no reference yet" state, and writing the entry lights it up with no code change.
+
+---
+
+## Closing the loop
+
+**A change is not finished until the docs match it.** Do this at the end of every change, without being asked:
+
+1. **`docs/STATUS.md`** — move the item out of *Next up*, log anything you found in *Known issues*, add a dated line to *Recently changed*. This is the file that tells the next person where things actually stand.
+2. **`docs/PLAN.md`** — tick the phase box if a phase item completed.
+3. **`docs/DECISIONS.md`** — add an entry only when something was *decided* and would otherwise get relitigated. Not a changelog.
+4. **`README.md`** — only when user-visible behaviour or the setup steps changed.
+5. **Data edits bump `lastReviewed`** on the entry (integrity rule 6).
+
+**Then prune.** Docs that only grow stop being read, and an unread doc is worse than no doc because it is trusted.
+
+- **Delete resolved issues and superseded entries.** Do not archive them, do not strike them through, do not keep a "history" section. Git has the history.
+- **Soft caps:** `PLAN.md` ~400 lines · `DECISIONS.md` / `RESEARCH.md` ~250 · `STATUS.md` ~120 · `README.md` ~90 · this file ~200.
+- **Over the cap, cut before you add.** If a section is longer than its value, compress it. If two files say the same thing, one of them links to the other — duplication is how they drift.
+- Fix contradictions the moment you notice one. A number quoted differently in two files means at least one is wrong.
 
 ---
 
@@ -88,3 +112,13 @@ This app competes on trustworthiness. Copy should read like a well-written refer
 - Name the uncertainty when it exists. A `limited` evidence tier with an honest note is more valuable than a confident sentence.
 - Include negative findings where they matter — vitamin C does not prevent colds, and saying so builds more trust than omitting it.
 - No scare copy on excess alerts. State the actual risk and the actual threshold.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

@@ -43,11 +43,11 @@ Keep the backend platform-agnostic behind a clean API. Add an Expo client later 
 
 ## The complete nutrient roster
 
-**~57 tracked values**, in three tiers that behave differently.
+**59 tracked values**, in three tiers that behave differently. The authoritative list is [`data/roster.json`](../data/roster.json); this section is the reasoning behind it.
 
-### Tier 1 — Energy & macronutrients (16)
+### Tier 1 — Energy & macronutrients (18)
 
-Energy (kcal) · Protein · Total carbohydrate · Fiber (total, soluble, insoluble) · Total sugars · Added sugars · Total fat · Saturated fat · Monounsaturated fat · Polyunsaturated fat · Omega-3 ALA · Omega-3 EPA+DHA · Omega-6 linoleic acid · Trans fat · Cholesterol · Water
+Energy (kcal) · Protein · Total carbohydrate · Fiber total · Fiber soluble · Fiber insoluble · Total sugars · Added sugars · Total fat · Saturated fat · Monounsaturated fat · Polyunsaturated fat · Omega-3 ALA · Omega-3 EPA+DHA · Omega-6 linoleic acid · Trans fat · Cholesterol · Water
 
 ### Tier 2 — Micronutrients with reference intakes (29)
 
@@ -114,7 +114,9 @@ Full detail, licenses, and caveats in [RESEARCH.md](RESEARCH.md).
 
 ## The nutrient reference layer
 
-Lives in [`data/nutrients.json`](../data/nutrients.json), typed by [`lib/nutrition/types.ts`](../lib/nutrition/types.ts) and validated against [`data/nutrients.schema.json`](../data/nutrients.schema.json). ~45 entries when complete; **5 written so far.**
+Lives in [`data/nutrients.json`](../data/nutrients.json), typed by [`lib/nutrition/types.ts`](../lib/nutrition/types.ts) and validated against [`data/nutrients.schema.json`](../data/nutrients.schema.json). One entry per tracked value — 59 when complete; **5 written so far.**
+
+Values in [`data/roster.json`](../data/roster.json) with no entry here are tracked and totalled, but render an explicit "no reference yet" state rather than a blank or a target. Writing the entry lights the row and its detail page up with no code change.
 
 Two entry shapes, discriminated on `hasReferenceIntake`:
 
@@ -164,7 +166,7 @@ One interface, one codebase. `users.detail_level` = `simple` | `expert`, default
 
 | | Simple | Expert |
 |---|---|---|
-| Nutrients shown | ~20 headline | All ~57 |
+| Nutrients shown | ~24 headline | All 59 |
 | Reference values | RDA only, as % | EAR / RDA / AI / UL side by side, absolute + % |
 | Units | Rounded | Exact |
 | Nutrient copy | `oneLiner` + `simpleExplanation` | `summary`, `whatItDoes`, `absorption`, `interactions` |
@@ -294,36 +296,44 @@ Modes re-weight; they never hide data. **Each ships an evidence note.** Low-GI a
 
 ## Build phases
 
+Day-to-day state, current issues, and what changed most recently live in [STATUS.md](STATUS.md). These boxes track the arc.
+
 ### Phase 0 — Data foundation
 - [x] `CLAUDE.md`
 - [x] TypeScript types + JSON Schema for the nutrient reference layer
 - [x] 5 seed reference entries exercising every schema branch
-- [ ] Scaffold Next.js + Postgres + Drizzle; schema migrations
-- [ ] Wire schema validation into CI
-- [ ] Remaining ~40 reference entries
+- [x] `data/roster.json` — the 59-value index
+- [x] Scaffold Next.js + TypeScript + Tailwind
+- [x] `npm run validate:data` — schema plus cross-file agreement
+- [ ] Postgres + Drizzle; schema migrations
+- [ ] Run `validate:data` in CI
+- [ ] Remaining 54 reference entries
 - [ ] FDC client + local mirror of Foundation Foods and SR Legacy; resolve `topSources[].fdcId`
 - [ ] Import USDA flavonoid / isoflavone / proanthocyanidin DBs; import GI tables
 
 ### Phase 1 — Manual logging + dashboard *(useful with zero AI)*
+- [x] Dashboard + nutrient detail panels *(against fixtures)*
+- [x] Simple/expert toggle
 - [ ] Auth; profile (sex/age/weight → personalized RDA)
-- [ ] Food search + manual entry; daily totals rollup
-- [ ] Dashboard + nutrient detail panels
-- [ ] Simple/expert toggle
+- [ ] Food search + manual entry; daily totals rollup *(UI built, nothing persists)*
+- [ ] Unit conversion — ml / cup / tbsp / piece → g
 
 **Ship this and use it for two weeks.** It'll teach more about the data model than further planning will.
 
 ### Phase 2 — AI logging
+- [x] Draft review UI *(static)*
 - [ ] OpenRouter OAuth PKCE + encrypted credential storage
 - [ ] Key paste fallback; local-model endpoint
 - [ ] Vision call, structured outputs, prompt caching, provider abstraction
-- [ ] Resolver with alias cache; draft review UI
+- [ ] Resolver with alias cache
 
 ### Phase 3 — Streaks + alerts
-- [ ] Nightly rolling-average job; per-storage-class detection
+- [x] Per-storage-class detection + streak cards *(against fixture history)*
+- [ ] Nightly rolling-average job
 - [ ] Web push + in-app cards; rate limiting, snooze, dismiss
 
 ### Phase 4 — Goal modes + recommendations
-- [ ] Mode configs, re-weighting, evidence notes
+- [ ] Mode configs, re-weighting, evidence notes *(modes and their evidence notes exist; nothing re-weights yet)*
 - [ ] Rule-based recommendation engine
 - [ ] Barcode scanning via Open Food Facts
 
@@ -349,6 +359,6 @@ Modes re-weight; they never hide data. **Each ships an evidence note.** Low-GI a
 
 1. **Portion estimation is the accuracy ceiling**, not identification. The slider/reference-object UX matters more than model choice.
 2. **BYOK is a signup cliff.** Even one-click OAuth needs an OpenRouter account with credit. Manual logging staying fully functional without AI is what stops this being fatal.
-3. **~45 reference entries is the moat and the grind.** Writing 5 first validated the schema before the bulk work — that ordering is the risk control, and it already caught two schema gaps (nullable `fdcId`, database-level `notes`).
+3. **59 reference entries is the moat and the grind.** Writing 5 first validated the schema before the bulk work — that ordering is the risk control, and it already caught two schema gaps (nullable `fdcId`, database-level `notes`).
 4. **Health-claim framing.** Evidence tiers and visible disclaimers on the acne/bloating modes. "Associated with," never "cures."
 5. **⚠️ Tier 3 data coverage.** USDA's flavonoid databases cover ~500 foods against FDC's 600,000. Most logged meals will have *no* flavonoid data. The UI must distinguish "you ate none" from "we don't have data" — conflating them produces alarming, wrong charts. Surface a per-day coverage percentage.

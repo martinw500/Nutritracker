@@ -1,0 +1,68 @@
+{
+  "version": "0.1.0",
+  "notes": [
+    "DEMO DATA standing in for one vision call's structured output plus the resolver's result. Nothing outside lib/demo may import this file.",
+    "Note what the model produced and what it did not. `description`, `quantity`, `unit`, `preparation`, `confidence`, `portionBasis` and `sceneNotes` are ALL of it — the model was never asked for a nutrient value, and there is nowhere in this file for one to appear. Every number on the review screen comes from the resolved food's row in foods.json. See CLAUDE.md, the inviolable rule.",
+    "`resolvedFoodId` and `resolverMethod` are the resolver's output, not the model's. Keeping them visibly separate on screen is what makes the perception/database split legible to the user."
+  ],
+
+  "draft": {
+    "id": "draft-001",
+    "capturedAt": "2026-08-11T12:48:00",
+    "model": "google/gemini-flash",
+    "promptCached": true,
+    "costUsd": 0.0021,
+    "sceneNotes": "The left edge of the plate is out of frame, so the rice portion is likely underestimated. Warm overhead lighting makes the greens read darker than they are.",
+
+    "items": [
+      {
+        "id": "d1",
+        "description": "grilled chicken breast",
+        "quantity": 150,
+        "unit": "g",
+        "preparation": "grilled",
+        "confidence": 0.91,
+        "portionBasis": "roughly deck-of-cards sized, judged against the fork beside it",
+        "resolvedFoodId": "chicken-breast-grilled",
+        "resolverMethod": "alias-cache",
+        "alternatives": []
+      },
+      {
+        "id": "d2",
+        "description": "white rice, cooked",
+        "quantity": 180,
+        "unit": "g",
+        "preparation": "boiled",
+        "confidence": 0.83,
+        "portionBasis": "about one cup, judged against the rim of the bowl",
+        "resolvedFoodId": "rice-white-cooked",
+        "resolverMethod": "fdc-search",
+        "alternatives": ["Rice, brown, long-grain, cooked", "Rice, jasmine, cooked"]
+      },
+      {
+        "id": "d3",
+        "description": "steamed spinach",
+        "quantity": 100,
+        "unit": "g",
+        "preparation": "boiled",
+        "confidence": 0.62,
+        "portionBasis": "small side portion, partly hidden behind the chicken",
+        "resolvedFoodId": "spinach-boiled",
+        "resolverMethod": "fdc-search",
+        "alternatives": ["Kale, boiled, drained", "Chard, swiss, cooked"]
+      },
+      {
+        "id": "d4",
+        "description": "olive oil drizzle",
+        "quantity": 10,
+        "unit": "g",
+        "preparation": "raw",
+        "confidence": 0.41,
+        "portionBasis": "visible sheen on the vegetables only — the amount is a guess",
+        "resolvedFoodId": "olive-oil-evoo",
+        "resolverMethod": "fdc-search",
+        "alternatives": ["Butter, salted", "Oil, canola"]
+      }
+    ]
+  }
+}

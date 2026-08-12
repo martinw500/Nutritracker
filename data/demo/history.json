@@ -1,0 +1,41 @@
+{
+  "version": "0.1.0",
+  "notes": [
+    "DEMO DATA standing in for the daily_totals table. Nothing outside lib/demo may import this file.",
+    "Covers the 29 days BEFORE the demo day. Today's row is not stored here — lib/demo computes it from day.json and foods.json and appends it, so the dashboard and the trend charts can never disagree.",
+    "Composed to exercise all three storage-class alert windows at once: vitamin C (storage 'none', 3-day window) dips below 70% of the RDA for the last three days and fires; magnesium (storage 'moderate', 7-day window) stays adequate throughout and does not fire; vitamin D (storage 'high', 30-day window) never looks alarming on any single day but averages around half the RDA across the month, which is exactly the pattern a daily alert would miss.",
+    "coverage is the fraction of that day's entries that had any phytonutrient data. It hovers around a third, which is realistic — USDA's flavonoid databases cover ~500 foods against FoodData Central's 600,000."
+  ],
+
+  "days": [
+    { "date": "2026-07-13", "energy": 2180, "protein": 118, "fiber": 27, "vitamin-c": 96,  "vitamin-d": 4.2,  "magnesium": 430, "vitamin-b12": 5.1, "lutein-zeaxanthin": 2.4,  "plantSpecies": 6, "coverage": 0.33, "entryCount": 12 },
+    { "date": "2026-07-14", "energy": 2340, "protein": 131, "fiber": 31, "vitamin-c": 112, "vitamin-d": 3.1,  "magnesium": 465, "vitamin-b12": 4.4, "lutein-zeaxanthin": 5.8,  "plantSpecies": 8, "coverage": 0.42, "entryCount": 12 },
+    { "date": "2026-07-15", "energy": 1980, "protein": 104, "fiber": 22, "vitamin-c": 78,  "vitamin-d": 2.4,  "magnesium": 388, "vitamin-b12": 3.2, "lutein-zeaxanthin": 0.9,  "plantSpecies": 5, "coverage": 0.27, "entryCount": 11 },
+    { "date": "2026-07-16", "energy": 2410, "protein": 126, "fiber": 29, "vitamin-c": 134, "vitamin-d": 17.8, "magnesium": 502, "vitamin-b12": 8.9, "lutein-zeaxanthin": 11.1, "plantSpecies": 9, "coverage": 0.46, "entryCount": 13 },
+    { "date": "2026-07-17", "energy": 2050, "protein": 112, "fiber": 24, "vitamin-c": 88,  "vitamin-d": 3.6,  "magnesium": 411, "vitamin-b12": 4.0, "lutein-zeaxanthin": 1.6,  "plantSpecies": 6, "coverage": 0.30, "entryCount": 10 },
+    { "date": "2026-07-18", "energy": 2620, "protein": 108, "fiber": 19, "vitamin-c": 64,  "vitamin-d": 2.9,  "magnesium": 372, "vitamin-b12": 3.7, "lutein-zeaxanthin": 0.4,  "plantSpecies": 4, "coverage": 0.18, "entryCount": 11 },
+    { "date": "2026-07-19", "energy": 2290, "protein": 121, "fiber": 26, "vitamin-c": 101, "vitamin-d": 5.2,  "magnesium": 448, "vitamin-b12": 6.3, "lutein-zeaxanthin": 4.2,  "plantSpecies": 7, "coverage": 0.38, "entryCount": 12 },
+    { "date": "2026-07-20", "energy": 2140, "protein": 115, "fiber": 28, "vitamin-c": 93,  "vitamin-d": 4.8,  "magnesium": 421, "vitamin-b12": 4.8, "lutein-zeaxanthin": 3.1,  "plantSpecies": 7, "coverage": 0.36, "entryCount": 11 },
+    { "date": "2026-07-21", "energy": 2380, "protein": 129, "fiber": 33, "vitamin-c": 121, "vitamin-d": 3.3,  "magnesium": 487, "vitamin-b12": 4.1, "lutein-zeaxanthin": 8.7,  "plantSpecies": 9, "coverage": 0.50, "entryCount": 14 },
+    { "date": "2026-07-22", "energy": 1890, "protein": 98,  "fiber": 21, "vitamin-c": 71,  "vitamin-d": 2.1,  "magnesium": 396, "vitamin-b12": 2.9, "lutein-zeaxanthin": 1.2,  "plantSpecies": 5, "coverage": 0.25, "entryCount": 10 },
+    { "date": "2026-07-23", "energy": 2470, "protein": 133, "fiber": 30, "vitamin-c": 108, "vitamin-d": 16.4, "magnesium": 512, "vitamin-b12": 9.4, "lutein-zeaxanthin": 9.8,  "plantSpecies": 8, "coverage": 0.44, "entryCount": 13 },
+    { "date": "2026-07-24", "energy": 2210, "protein": 119, "fiber": 25, "vitamin-c": 84,  "vitamin-d": 4.0,  "magnesium": 438, "vitamin-b12": 4.6, "lutein-zeaxanthin": 2.8,  "plantSpecies": 6, "coverage": 0.33, "entryCount": 12 },
+    { "date": "2026-07-25", "energy": 2560, "protein": 111, "fiber": 18, "vitamin-c": 68,  "vitamin-d": 2.7,  "magnesium": 381, "vitamin-b12": 3.4, "lutein-zeaxanthin": 0.6,  "plantSpecies": 4, "coverage": 0.20, "entryCount": 11 },
+    { "date": "2026-07-26", "energy": 2320, "protein": 124, "fiber": 32, "vitamin-c": 117, "vitamin-d": 5.9,  "magnesium": 494, "vitamin-b12": 5.7, "lutein-zeaxanthin": 7.3,  "plantSpecies": 9, "coverage": 0.47, "entryCount": 13 },
+    { "date": "2026-07-27", "energy": 2090, "protein": 107, "fiber": 23, "vitamin-c": 79,  "vitamin-d": 3.4,  "magnesium": 405, "vitamin-b12": 3.9, "lutein-zeaxanthin": 1.9,  "plantSpecies": 6, "coverage": 0.31, "entryCount": 11 },
+    { "date": "2026-07-28", "energy": 2440, "protein": 128, "fiber": 29, "vitamin-c": 105, "vitamin-d": 4.5,  "magnesium": 471, "vitamin-b12": 5.2, "lutein-zeaxanthin": 5.4,  "plantSpecies": 8, "coverage": 0.40, "entryCount": 12 },
+    { "date": "2026-07-29", "energy": 1960, "protein": 101, "fiber": 20, "vitamin-c": 74,  "vitamin-d": 2.6,  "magnesium": 389, "vitamin-b12": 3.1, "lutein-zeaxanthin": 0.8,  "plantSpecies": 5, "coverage": 0.22, "entryCount": 10 },
+    { "date": "2026-07-30", "energy": 2280, "protein": 122, "fiber": 27, "vitamin-c": 99,  "vitamin-d": 18.2, "magnesium": 456, "vitamin-b12": 9.1, "lutein-zeaxanthin": 10.4, "plantSpecies": 8, "coverage": 0.45, "entryCount": 13 },
+    { "date": "2026-07-31", "energy": 2170, "protein": 116, "fiber": 26, "vitamin-c": 91,  "vitamin-d": 3.8,  "magnesium": 427, "vitamin-b12": 4.3, "lutein-zeaxanthin": 3.6,  "plantSpecies": 7, "coverage": 0.35, "entryCount": 12 },
+    { "date": "2026-08-01", "energy": 2510, "protein": 135, "fiber": 34, "vitamin-c": 128, "vitamin-d": 6.1,  "magnesium": 519, "vitamin-b12": 6.0, "lutein-zeaxanthin": 12.2, "plantSpecies": 10, "coverage": 0.52, "entryCount": 14 },
+    { "date": "2026-08-02", "energy": 2030, "protein": 105, "fiber": 22, "vitamin-c": 76,  "vitamin-d": 2.8,  "magnesium": 398, "vitamin-b12": 3.5, "lutein-zeaxanthin": 1.4,  "plantSpecies": 5, "coverage": 0.26, "entryCount": 11 },
+    { "date": "2026-08-03", "energy": 2350, "protein": 125, "fiber": 28, "vitamin-c": 103, "vitamin-d": 4.9,  "magnesium": 462, "vitamin-b12": 5.4, "lutein-zeaxanthin": 4.9,  "plantSpecies": 8, "coverage": 0.39, "entryCount": 12 },
+    { "date": "2026-08-04", "energy": 2600, "protein": 113, "fiber": 17, "vitamin-c": 66,  "vitamin-d": 2.2,  "magnesium": 376, "vitamin-b12": 3.0, "lutein-zeaxanthin": 0.5,  "plantSpecies": 4, "coverage": 0.17, "entryCount": 12 },
+    { "date": "2026-08-05", "energy": 2260, "protein": 120, "fiber": 30, "vitamin-c": 114, "vitamin-d": 15.9, "magnesium": 483, "vitamin-b12": 8.6, "lutein-zeaxanthin": 8.1,  "plantSpecies": 9, "coverage": 0.48, "entryCount": 13 },
+    { "date": "2026-08-06", "energy": 2120, "protein": 109, "fiber": 24, "vitamin-c": 87,  "vitamin-d": 3.5,  "magnesium": 415, "vitamin-b12": 4.2, "lutein-zeaxanthin": 2.2,  "plantSpecies": 6, "coverage": 0.32, "entryCount": 11 },
+    { "date": "2026-08-07", "energy": 2400, "protein": 127, "fiber": 29, "vitamin-c": 96,  "vitamin-d": 5.4,  "magnesium": 476, "vitamin-b12": 5.8, "lutein-zeaxanthin": 6.7,  "plantSpecies": 8, "coverage": 0.43, "entryCount": 12 },
+    { "date": "2026-08-08", "energy": 1940, "protein": 102, "fiber": 21, "vitamin-c": 72,  "vitamin-d": 2.5,  "magnesium": 402, "vitamin-b12": 3.3, "lutein-zeaxanthin": 1.1,  "plantSpecies": 5, "coverage": 0.24, "entryCount": 10 },
+    { "date": "2026-08-09", "energy": 2580, "protein": 118, "fiber": 16, "vitamin-c": 48,  "vitamin-d": 3.0,  "magnesium": 441, "vitamin-b12": 4.7, "lutein-zeaxanthin": 0.7,  "plantSpecies": 4, "coverage": 0.19, "entryCount": 12 },
+    { "date": "2026-08-10", "energy": 2490, "protein": 122, "fiber": 18, "vitamin-c": 55,  "vitamin-d": 3.7,  "magnesium": 458, "vitamin-b12": 5.0, "lutein-zeaxanthin": 1.3,  "plantSpecies": 5, "coverage": 0.21, "entryCount": 11 }
+  ]
+}

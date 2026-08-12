@@ -38,6 +38,9 @@ data/*.zip
 # Downloaded and converted by the import script.
 data/usda-flavonoids/
 
+# TypeScript incremental build info
+*.tsbuildinfo
+
 # Test artifacts
 coverage/
 /test-results/

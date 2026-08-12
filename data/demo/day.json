@@ -1,0 +1,28 @@
+{
+  "version": "0.1.0",
+  "notes": [
+    "DEMO DATA. One day of log entries, standing in for the log_entries table. Nothing outside lib/demo may import this file.",
+    "Quantities are all in grams. Unit conversion (ml, cup, tbsp, piece) is not built yet — see docs/STATUS.md.",
+    "The day is composed so the dashboard exercises every state: vitamin C lands below 70% of the RDA (low band, and a 3-day streak because its storage class is 'none'), magnesium lands well above the RDA but must NOT raise an excess alert because its UL is supplemental-only, and 7 of 12 entries have no phytonutrient data at all."
+  ],
+
+  "date": "2026-08-11",
+
+  "entries": [
+    { "id": "e01", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "oats-rolled-dry", "quantity": 60, "unit": "g", "source": "photo", "aiConfidence": 0.94, "userEdited": false },
+    { "id": "e02", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "blueberries-raw", "quantity": 80, "unit": "g", "source": "photo", "aiConfidence": 0.88, "userEdited": true },
+    { "id": "e03", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "milk-2pct", "quantity": 200, "unit": "g", "source": "photo", "aiConfidence": 0.71, "userEdited": true },
+
+    { "id": "e04", "meal": "lunch", "loggedAt": "2026-08-11T12:50:00", "foodId": "chicken-breast-grilled", "quantity": 150, "unit": "g", "source": "photo", "aiConfidence": 0.91, "userEdited": false },
+    { "id": "e05", "meal": "lunch", "loggedAt": "2026-08-11T12:50:00", "foodId": "rice-white-cooked", "quantity": 180, "unit": "g", "source": "photo", "aiConfidence": 0.83, "userEdited": true },
+    { "id": "e06", "meal": "lunch", "loggedAt": "2026-08-11T12:50:00", "foodId": "spinach-boiled", "quantity": 100, "unit": "g", "source": "photo", "aiConfidence": 0.79, "userEdited": false },
+    { "id": "e07", "meal": "lunch", "loggedAt": "2026-08-11T12:50:00", "foodId": "olive-oil-evoo", "quantity": 10, "unit": "g", "source": "manual", "aiConfidence": null, "userEdited": false },
+
+    { "id": "e08", "meal": "snack", "loggedAt": "2026-08-11T15:30:00", "foodId": "almonds-raw", "quantity": 30, "unit": "g", "source": "manual", "aiConfidence": null, "userEdited": false },
+    { "id": "e09", "meal": "snack", "loggedAt": "2026-08-11T15:30:00", "foodId": "banana-raw", "quantity": 118, "unit": "g", "source": "manual", "aiConfidence": null, "userEdited": false },
+
+    { "id": "e10", "meal": "dinner", "loggedAt": "2026-08-11T19:15:00", "foodId": "salmon-atlantic-baked", "quantity": 120, "unit": "g", "source": "photo", "aiConfidence": 0.96, "userEdited": false },
+    { "id": "e11", "meal": "dinner", "loggedAt": "2026-08-11T19:15:00", "foodId": "sweet-potato-baked", "quantity": 150, "unit": "g", "source": "photo", "aiConfidence": 0.87, "userEdited": false },
+    { "id": "e12", "meal": "dinner", "loggedAt": "2026-08-11T19:15:00", "foodId": "greek-yogurt-nonfat", "quantity": 150, "unit": "g", "source": "search", "aiConfidence": null, "userEdited": false }
+  ]
+}

@@ -100,7 +100,7 @@ Tier 3 entries carry `reference: null` and an `intakeContext` block instead.
 ### D9 — Write 5 nutrient entries, then the other 40
 **Status:** settled · already paid off
 
-**Why:** ~45 richly-written entries is the largest single chunk of work in the project. Validating the schema against five entries chosen to hit every branch costs a day; discovering a schema flaw at entry 45 costs a week.
+**Why:** 59 richly-written entries is the largest single chunk of work in the project. Validating the schema against five entries chosen to hit every branch costs a day; discovering a schema flaw at entry 45 costs a week.
 
 **It already caught two gaps:** `fdcId` had to become nullable (hand-written FDC IDs silently link to the wrong food), and the database needed a root-level `notes` array to record that `per100g` values are approximate.
 
@@ -123,6 +123,19 @@ Next.js installable PWA, not React Native.
 Phase 1 is a complete, useful app with no AI in it.
 
 **Why:** two reasons. It de-risks D2's onboarding wall (the app is useful before anyone connects a key), and two weeks of actually using it will teach more about the data model than further planning will.
+
+---
+
+### D12 — Demo fixtures are data, quarantined behind one import
+**Status:** settled · temporary by design
+
+The UI was built before the database and the FoodData Central mirror, against fabricated fixtures in `data/demo/`. Only `lib/demo/index.ts` may import them.
+
+**Why:** an unlabelled fixture eventually gets quoted as a real figure. Three things keep that from happening — the values live in a data file rather than in component code, there is exactly one import site to delete when real data arrives, and every screen carries a visible "demo data" banner.
+
+**Consequence:** the fixtures are composed to exercise the states that are easy to get wrong — a food with no phytonutrient coverage, a genuine measured zero, an intake above a supplements-only UL that must *not* be flagged, and a shortfall visible only on a 30-day mean. Verifying those by eye is the point of them existing.
+
+**Forecloses:** demo values leaking into a production path, and any temptation to "just keep" the fixture foods once the mirror lands.
 
 ---
 

@@ -1,0 +1,309 @@
+{
+  "version": "0.1.0",
+  "lastUpdated": "2026-08-11",
+  "notes": [
+    "DEMO DATA. Not a nutrition data source. These twelve foods exist so the UI has something to render before the FoodData Central mirror is built, and nothing outside lib/demo may import this file.",
+    "per-100g values are transcribed by hand from published USDA composition data and are approximate. They will be deleted, not corrected, once the FDC mirror lands.",
+    "fdcId is null throughout, following the convention in nutrients.json: a hand-written FDC ID silently links to the wrong food, which is worse than no link at all.",
+    "phytonutrients: null means NO DATA — the food is not in USDA's flavonoid, isoflavone, or proanthocyanidin databases. That is the honest state for most foods (~500 covered against FoodData Central's 600,000) and the UI must render it as 'no data', never as 0. See CLAUDE.md rule 5.",
+    "A key of 0 inside a phytonutrients block is a MEASURED zero and is different from an absent key. Blueberries genuinely contain no flavones; sweet potato genuinely contains no lutein. Both are real zeros and render as 0.",
+    "Nutrient keys absent from a nutrients block are also 'no data', not zero. Real FDC rows are full of gaps."
+  ],
+
+  "foods": [
+    {
+      "id": "oats-rolled-dry",
+      "name": "Oats, rolled, dry",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Avena sativa",
+      "gi": 55,
+      "glPer100g": 30.6,
+      "nutrients": {
+        "energy": 389, "protein": 16.9, "carbohydrate": 66.3, "fiber": 10.6,
+        "sugars-total": 0.99, "sugars-added": 0, "fat-total": 6.9, "fat-saturated": 1.22,
+        "fat-monounsaturated": 2.18, "fat-polyunsaturated": 2.54, "omega-6-linoleic": 2.42,
+        "omega-3-ala": 0.11, "fat-trans": 0, "cholesterol": 0, "water": 8.2,
+        "thiamin": 0.76, "riboflavin": 0.14, "niacin": 0.96, "pantothenic-acid": 1.35,
+        "vitamin-b6": 0.12, "folate": 56,
+        "calcium": 54, "phosphorus": 523, "magnesium": 177, "sodium": 2, "potassium": 429,
+        "iron": 4.72, "zinc": 3.97, "copper": 0.63, "manganese": 4.92, "selenium": 34.4
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "blueberries-raw",
+      "name": "Blueberries, raw",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Vaccinium corymbosum",
+      "gi": 53,
+      "glPer100g": 6.4,
+      "nutrients": {
+        "energy": 57, "protein": 0.74, "carbohydrate": 14.5, "fiber": 2.4,
+        "sugars-total": 9.96, "sugars-added": 0, "fat-total": 0.33, "fat-saturated": 0.03,
+        "cholesterol": 0, "water": 84.2,
+        "vitamin-c": 9.7, "vitamin-k": 19.3, "vitamin-e": 0.57, "thiamin": 0.037,
+        "riboflavin": 0.041, "niacin": 0.418, "vitamin-b6": 0.052, "folate": 6,
+        "calcium": 6, "phosphorus": 12, "magnesium": 6, "sodium": 1, "potassium": 77,
+        "iron": 0.28, "zinc": 0.16, "copper": 0.057, "manganese": 0.336
+      },
+      "phytonutrients": {
+        "anthocyanidins": 163.5,
+        "flavonols": 7.7,
+        "flavan-3-ols": 12.1,
+        "flavones": 0,
+        "proanthocyanidins": 179.8,
+        "beta-carotene": 32,
+        "lutein-zeaxanthin": 0.08
+      }
+    },
+
+    {
+      "id": "milk-2pct",
+      "name": "Milk, 2% fat",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": null,
+      "gi": 30,
+      "glPer100g": 1.4,
+      "nutrients": {
+        "energy": 50, "protein": 3.3, "carbohydrate": 4.8, "fiber": 0,
+        "sugars-total": 4.8, "sugars-added": 0, "fat-total": 1.97, "fat-saturated": 1.26,
+        "fat-monounsaturated": 0.51, "fat-polyunsaturated": 0.12, "cholesterol": 8, "water": 89.2,
+        "vitamin-a": 58, "vitamin-d": 1.3, "riboflavin": 0.197, "vitamin-b12": 0.54,
+        "pantothenic-acid": 0.39, "thiamin": 0.045,
+        "calcium": 120, "phosphorus": 94, "magnesium": 11, "sodium": 47, "potassium": 150,
+        "zinc": 0.42, "selenium": 3.3, "iodine": 30, "choline": 16
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "chicken-breast-grilled",
+      "name": "Chicken breast, grilled, skinless",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": null,
+      "gi": 0,
+      "glPer100g": 0,
+      "nutrients": {
+        "energy": 165, "protein": 31, "carbohydrate": 0, "fiber": 0,
+        "sugars-total": 0, "fat-total": 3.6, "fat-saturated": 1.01,
+        "fat-monounsaturated": 1.24, "fat-polyunsaturated": 0.77, "cholesterol": 85, "water": 65,
+        "thiamin": 0.07, "riboflavin": 0.114, "niacin": 13.7, "pantothenic-acid": 1.0,
+        "vitamin-b6": 0.6, "vitamin-b12": 0.34,
+        "phosphorus": 228, "potassium": 256, "sodium": 74, "magnesium": 29,
+        "zinc": 1.0, "selenium": 27.6, "iron": 1.04, "choline": 85
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "rice-white-cooked",
+      "name": "Rice, white, long-grain, cooked",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Oryza sativa",
+      "gi": 73,
+      "glPer100g": 20.3,
+      "nutrients": {
+        "energy": 130, "protein": 2.69, "carbohydrate": 28.2, "fiber": 0.4,
+        "sugars-total": 0.05, "sugars-added": 0, "fat-total": 0.28, "fat-saturated": 0.08,
+        "cholesterol": 0, "water": 68.4,
+        "thiamin": 0.163, "niacin": 1.48, "folate": 58, "vitamin-b6": 0.093,
+        "calcium": 10, "phosphorus": 43, "magnesium": 12, "sodium": 1, "potassium": 35,
+        "iron": 1.2, "zinc": 0.49, "selenium": 7.5, "manganese": 0.472
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "spinach-boiled",
+      "name": "Spinach, boiled, drained",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Spinacia oleracea",
+      "gi": 15,
+      "glPer100g": 0.2,
+      "nutrients": {
+        "energy": 23, "protein": 2.97, "carbohydrate": 3.75, "fiber": 2.4,
+        "sugars-total": 0.43, "fat-total": 0.26, "fat-saturated": 0.04,
+        "cholesterol": 0, "water": 91.2,
+        "vitamin-a": 524, "vitamin-c": 9.8, "vitamin-e": 2.08, "vitamin-k": 493.6,
+        "thiamin": 0.095, "riboflavin": 0.236, "niacin": 0.49, "vitamin-b6": 0.242, "folate": 146,
+        "calcium": 136, "phosphorus": 56, "magnesium": 87, "sodium": 70, "potassium": 466,
+        "iron": 3.57, "zinc": 0.76, "copper": 0.174, "manganese": 0.935, "selenium": 1.5
+      },
+      "phytonutrients": {
+        "lutein-zeaxanthin": 11.3,
+        "beta-carotene": 5626,
+        "alpha-carotene": 0,
+        "beta-cryptoxanthin": 0,
+        "flavonols": 6.5
+      }
+    },
+
+    {
+      "id": "olive-oil-evoo",
+      "name": "Olive oil, extra virgin",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Olea europaea",
+      "gi": 0,
+      "glPer100g": 0,
+      "nutrients": {
+        "energy": 884, "protein": 0, "carbohydrate": 0, "fiber": 0,
+        "fat-total": 100, "fat-saturated": 13.8, "fat-monounsaturated": 73,
+        "fat-polyunsaturated": 10.5, "omega-6-linoleic": 9.76, "omega-3-ala": 0.76,
+        "fat-trans": 0, "cholesterol": 0, "water": 0,
+        "vitamin-e": 14.35, "vitamin-k": 60.2
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "almonds-raw",
+      "name": "Almonds, raw",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Prunus dulcis",
+      "gi": 15,
+      "glPer100g": 1.4,
+      "nutrients": {
+        "energy": 579, "protein": 21.2, "carbohydrate": 21.6, "fiber": 12.5,
+        "sugars-total": 4.35, "sugars-added": 0, "fat-total": 49.9, "fat-saturated": 3.8,
+        "fat-monounsaturated": 31.6, "fat-polyunsaturated": 12.3, "omega-6-linoleic": 12.3,
+        "cholesterol": 0, "water": 4.4,
+        "vitamin-e": 25.6, "thiamin": 0.205, "riboflavin": 1.14, "niacin": 3.62,
+        "pantothenic-acid": 0.47, "vitamin-b6": 0.137, "folate": 44,
+        "calcium": 269, "phosphorus": 481, "magnesium": 270, "sodium": 1, "potassium": 733,
+        "iron": 3.71, "zinc": 3.12, "copper": 1.03, "manganese": 2.18, "selenium": 4.1
+      },
+      "phytonutrients": {
+        "flavan-3-ols": 1.4,
+        "flavonols": 0.4,
+        "proanthocyanidins": 184
+      }
+    },
+
+    {
+      "id": "banana-raw",
+      "name": "Banana, raw",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Musa acuminata",
+      "gi": 51,
+      "glPer100g": 10.3,
+      "nutrients": {
+        "energy": 89, "protein": 1.09, "carbohydrate": 22.8, "fiber": 2.6,
+        "sugars-total": 12.2, "sugars-added": 0, "fat-total": 0.33, "fat-saturated": 0.11,
+        "cholesterol": 0, "water": 74.9,
+        "vitamin-a": 3, "vitamin-c": 8.7, "vitamin-e": 0.1, "vitamin-k": 0.5,
+        "thiamin": 0.031, "riboflavin": 0.073, "niacin": 0.665, "pantothenic-acid": 0.334,
+        "vitamin-b6": 0.367, "folate": 20,
+        "calcium": 5, "phosphorus": 22, "magnesium": 27, "sodium": 1, "potassium": 358,
+        "iron": 0.26, "zinc": 0.15, "copper": 0.078, "manganese": 0.27, "selenium": 1
+      },
+      "phytonutrients": {
+        "flavan-3-ols": 0.7,
+        "flavonols": 0.1,
+        "beta-carotene": 26,
+        "alpha-carotene": 25,
+        "lutein-zeaxanthin": 0.022
+      }
+    },
+
+    {
+      "id": "salmon-atlantic-baked",
+      "name": "Salmon, Atlantic, farmed, baked",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": null,
+      "gi": 0,
+      "glPer100g": 0,
+      "nutrients": {
+        "energy": 206, "protein": 22.1, "carbohydrate": 0, "fiber": 0,
+        "fat-total": 12.3, "fat-saturated": 3.05, "fat-monounsaturated": 3.77,
+        "fat-polyunsaturated": 3.89, "omega-3-epa-dha": 2260, "omega-3-ala": 0.1,
+        "cholesterol": 63, "water": 64.9,
+        "vitamin-a": 17, "vitamin-d": 13.1, "vitamin-e": 3.55, "thiamin": 0.29,
+        "riboflavin": 0.155, "niacin": 8.67, "pantothenic-acid": 1.55, "vitamin-b6": 0.65,
+        "vitamin-b12": 3.18,
+        "phosphorus": 252, "potassium": 384, "sodium": 61, "magnesium": 31,
+        "selenium": 41.4, "zinc": 0.43, "iron": 0.34, "iodine": 20, "choline": 90
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "sweet-potato-baked",
+      "name": "Sweet potato, baked, flesh only",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Ipomoea batatas",
+      "gi": 63,
+      "glPer100g": 11.0,
+      "nutrients": {
+        "energy": 90, "protein": 2.01, "carbohydrate": 20.7, "fiber": 3.3,
+        "sugars-total": 6.5, "sugars-added": 0, "fat-total": 0.15, "fat-saturated": 0.05,
+        "cholesterol": 0, "water": 75.8,
+        "vitamin-a": 961, "vitamin-c": 19.6, "vitamin-e": 0.71, "vitamin-k": 2.3,
+        "thiamin": 0.107, "riboflavin": 0.106, "niacin": 1.487, "pantothenic-acid": 0.884,
+        "vitamin-b6": 0.286, "folate": 6,
+        "calcium": 38, "phosphorus": 54, "magnesium": 27, "sodium": 36, "potassium": 475,
+        "iron": 0.69, "zinc": 0.32, "copper": 0.161, "manganese": 0.497, "selenium": 0.2
+      },
+      "phytonutrients": {
+        "beta-carotene": 11509,
+        "alpha-carotene": 43,
+        "beta-cryptoxanthin": 0,
+        "lutein-zeaxanthin": 0
+      }
+    },
+
+    {
+      "id": "greek-yogurt-nonfat",
+      "name": "Greek yogurt, plain, nonfat",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": null,
+      "gi": 11,
+      "glPer100g": 0.4,
+      "nutrients": {
+        "energy": 59, "protein": 10.2, "carbohydrate": 3.6, "fiber": 0,
+        "sugars-total": 3.24, "sugars-added": 0, "fat-total": 0.39, "fat-saturated": 0.11,
+        "cholesterol": 5, "water": 85.1,
+        "vitamin-a": 1, "riboflavin": 0.278, "pantothenic-acid": 0.331, "vitamin-b12": 0.75,
+        "calcium": 110, "phosphorus": 135, "magnesium": 11, "sodium": 36, "potassium": 141,
+        "zinc": 0.52, "selenium": 9.7, "iodine": 22, "choline": 15
+      },
+      "phytonutrients": null
+    }
+  ]
+}

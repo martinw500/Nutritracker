@@ -1,0 +1,55 @@
+{
+  "version": "0.1.0",
+  "notes": [
+    "DEMO DATA standing in for the users row. Nothing outside lib/demo may import this file.",
+    "sex + birthDate resolve to a life-stage key, which is what selects the RDA/AI/UL column out of nutrients.json. Changing them on the settings screen visibly re-personalises every target."
+  ],
+
+  "profile": {
+    "id": "demo-user",
+    "email": "demo@example.com",
+    "sex": "male",
+    "birthDate": "1998-04-12",
+    "weightKg": 74,
+    "heightCm": 179,
+    "activityLevel": "moderate",
+    "pregnancyStatus": "none",
+    "detailLevel": "simple",
+    "activeGoalMode": "general-health"
+  },
+
+  "goalModes": [
+    {
+      "id": "general-health",
+      "name": "General health",
+      "description": "Balanced targets with an emphasis on plant diversity. The default.",
+      "emphasises": ["fiber", "plant diversity", "omega-3 EPA+DHA", "potassium"],
+      "flags": [],
+      "evidenceNote": "Dietary-pattern evidence (Mediterranean and DASH trials) is among the strongest in nutrition. The plant-diversity target of 30 species per week comes from the American Gut Project, which is observational — it is a reasonable heuristic, not a proven threshold."
+    },
+    {
+      "id": "high-protein",
+      "name": "High protein",
+      "description": "Targets 1.6–2.2 g protein per kg bodyweight and surfaces per-meal distribution.",
+      "emphasises": ["protein", "leucine", "per-meal protein distribution"],
+      "flags": [],
+      "evidenceNote": "Good trial evidence. Meta-analyses of resistance-training studies find added benefit up to roughly 1.6 g/kg/day, with diminishing returns above that; 2.2 g/kg is the upper bound of what trials have tested, not a requirement."
+    },
+    {
+      "id": "low-bloat",
+      "name": "Low bloat",
+      "description": "Flags high-FODMAP foods, sugar alcohols, carbonation, and high sodium; tracks how fast fiber intake is ramping.",
+      "emphasises": ["fiber ramp rate", "sodium", "water"],
+      "flags": ["high-FODMAP", "sugar alcohols", "carbonation", "high sodium"],
+      "evidenceNote": "FODMAP restriction has good randomised-trial evidence for bloating in IBS, with roughly 70% of participants improving. It is designed as a short elimination followed by structured reintroduction, not a permanent diet — long-term restriction reduces beneficial gut bacteria."
+    },
+    {
+      "id": "lower-glycemic",
+      "name": "Lower glycemic / skin",
+      "description": "Surfaces glycemic load per meal, flags high-GL meals, and emphasises zinc and omega-3.",
+      "emphasises": ["glycemic load", "zinc", "omega-3 EPA+DHA"],
+      "flags": ["high-GL meals", "dairy (optional)"],
+      "evidenceNote": "The link between low-glycemic-load diets and acne rests on a small number of randomised trials plus consistent observational data — associated, not established. The dairy association is observational only, and the dairy flag is off by default for that reason."
+    }
+  ]
+}
