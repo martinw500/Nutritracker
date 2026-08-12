@@ -117,11 +117,17 @@ export function estimateEnergyNeed(inputs: EnergyInputs): EnergyEstimate {
 // Macronutrient ranges
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Energy yield per gram. Atwater factors — physical constants, not intakes. */
+/**
+ * Energy yield per gram. Atwater factors — physical constants, not intakes.
+ * Present for every value whose reference is a percentage of energy, since
+ * that is what turns the percentage into grams.
+ */
 export const KCAL_PER_GRAM: Record<string, number> = {
   protein: 4,
   carbohydrate: 4,
+  "sugars-added": 4,
   "fat-total": 9,
+  "fat-saturated": 9,
 };
 
 export interface MacroRange {

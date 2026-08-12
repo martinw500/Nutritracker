@@ -304,6 +304,131 @@
         "zinc": 0.52, "selenium": 9.7, "iodine": 22, "choline": 15
       },
       "phytonutrients": null
+    },
+
+    {
+      "id": "bacon-cooked",
+      "name": "Bacon, pork, cooked",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": null,
+      "gi": 0,
+      "glPer100g": 0,
+      "attributes": ["processed-meat", "red-meat", "ultra-processed"],
+      "nutrients": {
+        "energy": 541, "protein": 37, "carbohydrate": 1.4, "fiber": 0,
+        "sugars-total": 0, "sugars-added": 0, "fat-total": 41.8, "fat-saturated": 13.7,
+        "fat-monounsaturated": 18.5, "fat-polyunsaturated": 4.4, "fat-trans": 0.1,
+        "cholesterol": 110, "water": 12.3,
+        "thiamin": 0.44, "riboflavin": 0.24, "niacin": 10.6, "vitamin-b6": 0.42,
+        "vitamin-b12": 0.9, "pantothenic-acid": 0.66,
+        "phosphorus": 396, "potassium": 565, "sodium": 1717, "magnesium": 33,
+        "zinc": 3.5, "selenium": 46.7, "iron": 1.4, "choline": 90
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "bread-white",
+      "name": "Bread, white, commercial",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Triticum aestivum",
+      "gi": 75,
+      "glPer100g": 36.2,
+      "attributes": ["refined-grain", "ultra-processed"],
+      "nutrients": {
+        "energy": 270, "protein": 9.4, "carbohydrate": 49.2, "fiber": 2.7,
+        "sugars-total": 5.7, "sugars-added": 4.3, "fat-total": 3.6, "fat-saturated": 0.78,
+        "fat-monounsaturated": 0.72, "fat-polyunsaturated": 1.5, "cholesterol": 0,
+        "water": 35.7,
+        "thiamin": 0.53, "riboflavin": 0.32, "niacin": 4.6, "folate": 168,
+        "calcium": 144, "phosphorus": 99, "magnesium": 24, "sodium": 490,
+        "potassium": 117, "iron": 3.6, "zinc": 0.83, "selenium": 22.5, "manganese": 0.47
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "cola-regular",
+      "name": "Cola, regular",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": null,
+      "gi": 63,
+      "glPer100g": 6.6,
+      "attributes": ["ultra-processed"],
+      "nutrients": {
+        "energy": 42, "protein": 0, "carbohydrate": 10.6, "fiber": 0,
+        "sugars-total": 8.8, "sugars-added": 8.8, "fat-total": 0, "fat-saturated": 0,
+        "cholesterol": 0, "water": 89.4,
+        "phosphorus": 11, "sodium": 4, "potassium": 2, "calcium": 2, "magnesium": 1
+      },
+      "phytonutrients": null
+    },
+
+    {
+      "id": "lentils-cooked",
+      "name": "Lentils, cooked",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Lens culinaris",
+      "gi": 32,
+      "glPer100g": 3.9,
+      "attributes": ["legume"],
+      "nutrients": {
+        "energy": 116, "protein": 9.02, "carbohydrate": 20.1, "fiber": 7.9,
+        "sugars-total": 1.8, "sugars-added": 0, "fat-total": 0.38, "fat-saturated": 0.05,
+        "cholesterol": 0, "water": 69.6,
+        "thiamin": 0.169, "riboflavin": 0.073, "niacin": 1.06, "vitamin-b6": 0.178,
+        "folate": 181, "pantothenic-acid": 0.638, "vitamin-c": 1.5,
+        "calcium": 19, "phosphorus": 180, "magnesium": 36, "sodium": 2, "potassium": 369,
+        "iron": 3.33, "zinc": 1.27, "copper": 0.251, "manganese": 0.494, "selenium": 2.8
+      },
+      "phytonutrients": {
+        "flavan-3-ols": 0,
+        "flavonols": 0.3,
+        "proanthocyanidins": 42
+      }
+    },
+
+    {
+      "id": "broccoli-steamed",
+      "name": "Broccoli, steamed",
+      "brand": null,
+      "source": "demo",
+      "fdcId": null,
+      "fdcDataType": "sr_legacy_food",
+      "plantSpecies": "Brassica oleracea",
+      "gi": 15,
+      "glPer100g": 0.5,
+      "attributes": ["cruciferous"],
+      "nutrients": {
+        "energy": 35, "protein": 2.38, "carbohydrate": 7.18, "fiber": 3.3,
+        "sugars-total": 1.39, "fat-total": 0.41, "fat-saturated": 0.11,
+        "cholesterol": 0, "water": 89.3,
+        "vitamin-a": 77, "vitamin-c": 64.9, "vitamin-e": 1.45, "vitamin-k": 141.1,
+        "thiamin": 0.063, "riboflavin": 0.123, "niacin": 0.553, "vitamin-b6": 0.2,
+        "folate": 108, "pantothenic-acid": 0.616,
+        "calcium": 40, "phosphorus": 67, "magnesium": 21, "sodium": 41, "potassium": 293,
+        "iron": 0.67, "zinc": 0.45, "copper": 0.061, "manganese": 0.194, "selenium": 1.6,
+        "choline": 40
+      },
+      "phytonutrients": {
+        "lutein-zeaxanthin": 1.08,
+        "beta-carotene": 929,
+        "alpha-carotene": 0,
+        "flavonols": 4.9,
+        "flavones": 0
+      }
     }
   ]
 }

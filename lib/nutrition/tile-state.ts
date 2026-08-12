@@ -103,6 +103,16 @@ export function resolveTile(
 
   const status = computeStatus(entry, amount, person);
 
+  // Nutrients you steer AWAY from rather than toward. Sodium's AI is 1,500 mg
+  // and its CDRR is 2,300; reporting "84% of target" to someone eating 1,266 mg
+  // reads as a nudge to add salt. The ceiling is the guidance, so the ceiling is
+  // what the tile reports.
+  if (entry.reference.primaryGuide === "limit" && status.ul !== null) {
+    return amount > status.ul
+      ? { state: "over-ul", label: "Over the recommended limit", status }
+      : { state: "met", label: "Under the recommended limit", status };
+  }
+
   // Macronutrients carrying an AMDR are judged on the band, not on the RDA.
   // The RDA is a floor — 130 g of carbohydrate keeps the brain supplied — while
   // the band is what the day's composition is actually assessed against. Judging

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { Aperture, Plus, Search } from "lucide-react";
 import { ExpertOnly, useDetailLevel } from "@/components/detail-level";
+import { FlagChips } from "@/components/food-flags";
+import { resolveFoodAttributes } from "@/lib/nutrition/attributes";
 import { PageHeader } from "@/components/page-header";
 import { Badge, Card, CardHeader, Empty, Note } from "@/components/ui";
 import {
@@ -129,6 +131,10 @@ function MealCard({
                     no phyto data
                   </Badge>
                 ) : null}
+              </div>
+
+              <div className="mt-1">
+                <FlagChips attributes={resolveFoodAttributes(entry.food)} />
               </div>
               <ExpertOnly>
                 <p className="numeric mt-0.5 text-[11px] text-faint">

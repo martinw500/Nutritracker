@@ -181,7 +181,12 @@
         "rda": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
         "ai": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
         "ul": { "oneOf": [{ "$ref": "#/definitions/upperLimit" }, { "type": "null" }] },
-        "amdr": { "oneOf": [{ "$ref": "#/definitions/acceptableRange" }, { "type": "null" }] }
+        "amdr": { "oneOf": [{ "$ref": "#/definitions/acceptableRange" }, { "type": "null" }] },
+        "primaryGuide": {
+          "description": "Which reference the user should actually be steering by. Defaults to `target` — reach the RDA or AI. `limit` means the ceiling is the point and the RDA/AI is close to irrelevant in practice: sodium has an AI of 1,500 mg, but nobody needs help reaching it, and rendering '84% of target' to someone eating 1,266 mg reads as encouragement to eat more salt. Exactly backwards.",
+          "type": "string",
+          "enum": ["target", "limit"]
+        }
       },
       "anyOf": [
         { "properties": { "rda": { "$ref": "#/definitions/referenceTable" } }, "required": ["rda"] },
@@ -244,22 +249,19 @@
         "essentiality",
         "storage",
         "antioxidantRole",
+        "depth",
         "oneLiner",
-        "simpleExplanation",
-        "summary",
-        "whatItDoes",
-        "benefits",
-        "deficiency",
-        "excess",
-        "absorption",
-        "interactions",
-        "topSources",
         "citations",
         "lastReviewed"
       ],
       "additionalProperties": false,
 
       "properties": {
+        "depth": {
+          "description": "How complete this entry is. `brief` carries a real, cited reference intake and a one-liner, and may omit the prose blocks; `full` requires all of them. Making this explicit means 'we have a target but haven't written it up' is a stated state rather than a silent gap, and the UI badges it. The prose requirements for `full` are enforced in the allOf below.",
+          "type": "string",
+          "enum": ["brief", "full"]
+        },
         "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
         "name": { "type": "string", "minLength": 1 },
         "symbol": { "type": ["string", "null"] },
@@ -321,6 +323,26 @@
       },
 
       "allOf": [
+        {
+          "description": "A full entry must carry the whole reference panel. A brief entry may omit these — it is a real, cited target waiting on its write-up, not a placeholder. Nothing here is ever allowed to be an empty string or an empty required array; the field is absent or it is written.",
+          "if": {
+            "properties": { "depth": { "const": "full" } },
+            "required": ["depth"]
+          },
+          "then": {
+            "required": [
+              "simpleExplanation",
+              "summary",
+              "whatItDoes",
+              "benefits",
+              "deficiency",
+              "excess",
+              "absorption",
+              "interactions",
+              "topSources"
+            ]
+          }
+        },
         {
           "description": "Tier 2 — essential nutrient. Must carry reference intakes and must NOT carry intake context.",
           "if": {

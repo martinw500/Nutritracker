@@ -176,6 +176,48 @@ Values the log genuinely cannot assess are marked as such and carry no status, i
 
 ---
 
+### D16 — Entries have a depth: `brief` or `full`
+**Status:** settled
+
+A `brief` entry carries a real, cited reference intake and a one-liner, and may omit the prose blocks. A `full` entry requires all of them. The schema enforces which fields each may skip, and the UI badges a brief entry.
+
+**Why:** requiring a complete write-up before a nutrient could show a target left 49 of 59 rendering as blanks. That read as broken software rather than as unfinished content, and it made the dashboard useless for the thing it exists to do. Splitting the two lets the target ship with its citation while the prose follows.
+
+**Consequences:**
+- A brief entry never renders an empty section. It is absent or it is written — `validate:data` rejects a present-but-empty prose field.
+- Citations render at *both* depths. A brief entry is defined by having a cited target; hiding the citation would remove the only thing making it trustworthy.
+- 47 of 59 entries now exist, 10 full and 37 brief. The remaining 12 are the Tier 3 phytonutrients, which have no reference intake by definition, and energy (D13).
+
+**Forecloses:** treating "not yet documented" as equivalent to "no data". They are different states and the UI says which.
+
+---
+
+### D17 — Foods carry flags, not just nutrient amounts
+**Status:** settled
+
+`data/food-attributes.json` describes properties of foods — processed meat, ultra-processed, high-GI, whole grain, legume — each with an evidence tier and citations, under the same rule that binds `benefits[]`.
+
+**Why:** the per-nutrient view misses what people actually decide by. "This is cured meat" is more actionable than any milligram figure, and a tracker that cannot say it is missing the more legible half of nutrition.
+
+**The tone rule, which is the hard part:** IARC groups describe *how confident* the evidence is, not *how large* the risk is. "Processed meat is in the same category as tobacco" is the most misreported fact in the field. Every cancer flag states the actual effect size (+18% colorectal cancer risk per 50 g/day), states that classification is about confidence, and states that no safe threshold was established.
+
+**Consequences:**
+- Derived flags (high sodium, high saturated fat, added sugar, high GI) are computed from composition, so a flag cannot drift away from the number behind it. `validate:data` rejects a food that declares one by hand.
+- Positive flags exist and render identically. A feature that only ever warns gets ignored.
+
+---
+
+### D18 — Some nutrients are a ceiling, not a target
+**Status:** settled
+
+`reference.primaryGuide: "limit"` marks nutrients where the upper limit is the guidance and the RDA or AI is not. Sodium is the case that forced it.
+
+**Why:** sodium's AI is 1,500 mg and its CDRR is 2,300 mg. Rendering "84% of target" to someone eating 1,266 mg reads as a nudge to add salt — the exact opposite of every piece of advice on the subject. The bug is not the arithmetic, it is assuming every reference is something to reach.
+
+**Consequence:** a `limit` nutrient reports "under the recommended limit" or "over" it, and never a percentage of an intake nobody needs help achieving.
+
+---
+
 ## Still open
 
 These have **not** been decided. Don't assume an answer.

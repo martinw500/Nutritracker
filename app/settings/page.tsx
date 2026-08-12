@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { DetailLevelToggle, useDetailLevel } from "@/components/detail-level";
 import { PageHeader } from "@/components/page-header";
 import { Badge, Card, CardHeader, Note } from "@/components/ui";
-import { getActiveGoalMode, getGoalModes, getProfile } from "@/lib/demo";
+import { getActiveGoalModes, getGoalModes, getProfile } from "@/lib/demo";
 import { formatAmount } from "@/lib/nutrition/format";
 import {
   ageFromBirthDate,
@@ -25,7 +25,7 @@ export default function SettingsPage() {
   const [pregnancyStatus, setPregnancyStatus] = useState<PregnancyStatus>(
     profile.pregnancyStatus,
   );
-  const [goalMode, setGoalMode] = useState(getActiveGoalMode().id);
+  const [goalModeIds, setGoalModeIds] = useState<string[]>(getActiveGoalModes().map((m) => m.id));
 
   const person = { sex, ageYears: age, pregnancyStatus };
   const { detail } = useDetailLevel();
@@ -145,24 +145,32 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader
-          title="Goal mode"
-          subtitle="Modes re-weight what the dashboard emphasises. None of them hide data, and each ships the honest strength of its evidence."
+          title="Goal modes"
+          subtitle="Pick as many as apply. They are mostly independent — wanting more protein says nothing about wanting a lower glycemic load — and they only re-weight what gets emphasised. None of them hides data, so combining them cannot hide anything either."
         />
         <div className="space-y-3">
-          {getGoalModes().map((mode) => (
+          {getGoalModes().map((mode) => {
+            const active = goalModeIds.includes(mode.id);
+            return (
             <button
               key={mode.id}
-              onClick={() => setGoalMode(mode.id)}
+              role="checkbox"
+              aria-checked={active}
+              onClick={() =>
+                setGoalModeIds((current) =>
+                  current.includes(mode.id)
+                    ? current.filter((id) => id !== mode.id)
+                    : [...current, mode.id],
+                )
+              }
               className={cn(
-                "w-full rounded-lg border p-4 text-left transition-colors",
-                goalMode === mode.id
-                  ? "border-accent bg-accent-soft/40"
-                  : "border-border hover:bg-sunken",
+                "w-full rounded-xl border p-4 text-left transition-colors",
+                active ? "border-accent bg-accent-soft/40" : "border-border hover:bg-sunken",
               )}
             >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-ink">{mode.name}</span>
-                {goalMode === mode.id ? <Badge tone="accent">active</Badge> : null}
+                {active ? <Badge tone="accent">on</Badge> : null}
               </div>
               <p className="mt-1 text-xs leading-relaxed text-muted">{mode.description}</p>
 
@@ -181,8 +189,15 @@ export default function SettingsPage() {
                 {mode.evidenceNote}
               </p>
             </button>
-          ))}
+            );
+          })}
         </div>
+
+        {goalModeIds.length === 0 ? (
+          <p className="mt-3 text-xs text-faint">
+            With none selected the dashboard falls back to general health.
+          </p>
+        ) : null}
       </Card>
 
       <Card>

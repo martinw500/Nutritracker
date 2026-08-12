@@ -181,6 +181,15 @@ export interface ReferenceIntakes {
   ul: UpperLimit | null;
   /** Percent-of-energy band. Macronutrients only; absent elsewhere. */
   amdr?: AcceptableRange | null;
+  /**
+   * Which reference the user should steer by. Defaults to `target`.
+   *
+   * `limit` marks the nutrients where more is not better and the ceiling is the
+   * whole point. Sodium is the case: its AI is 1,500 mg, but showing "84% of
+   * target" to someone eating 1,266 mg reads as a nudge to eat more salt, which
+   * is the opposite of every piece of advice on the subject.
+   */
+  primaryGuide?: "target" | "limit";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -219,7 +228,44 @@ export interface IntakeContext {
 // Nutrient entries
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface NutrientBase {
+/**
+ * How complete an entry is.
+ *
+ *   full  — the whole reference panel is written.
+ *   brief — a real, cited reference intake and a one-liner, with the prose
+ *           still to come.
+ *
+ * `brief` exists because the alternative was worse. Writing 59 full panels
+ * before any of them can show a target left 49 nutrients rendering as blanks,
+ * which read as broken rather than as unfinished. A brief entry gives a
+ * personalised, cited target today and is badged so nobody mistakes it for a
+ * complete write-up. It is a stated state, not a silent gap.
+ */
+export type EntryDepth = "brief" | "full";
+
+/**
+ * The prose half of a reference panel. Present on every `full` entry, absent
+ * on `brief` ones — absent, never blank. An empty string here would render as
+ * a heading with nothing under it, which is exactly the impression `brief` is
+ * meant to avoid.
+ */
+export interface NutrientContent {
+  /** 2–4 sentences a non-specialist can act on. */
+  simpleExplanation: string;
+  /** Technical summary. Assumes biochemistry vocabulary. */
+  summary: string;
+  /** Concrete physiological roles, one per line. */
+  whatItDoes: string[];
+  benefits: Benefit[];
+  deficiency: DeficiencyInfo;
+  excess: ExcessInfo;
+  absorption: AbsorptionInfo;
+  interactions: NutrientInteraction[];
+  topSources: FoodSource[];
+}
+
+interface NutrientBase extends Partial<NutrientContent> {
+  depth: EntryDepth;
   /** Stable kebab-case identifier. Used as a foreign key across the app. */
   id: string;
   name: string;
@@ -240,24 +286,11 @@ interface NutrientBase {
    */
   antioxidantRole: boolean;
 
-  // ── Simple mode ──
-  /** One sentence, no jargon. Shown under the nutrient name on the dashboard. */
+  /**
+   * One sentence, no jargon. Required on every entry at both depths — it is
+   * the minimum a nutrient must say for itself to appear on the dashboard.
+   */
   oneLiner: string;
-  /** 2–4 sentences a non-specialist can act on. */
-  simpleExplanation: string;
-
-  // ── Expert mode ──
-  /** Technical summary. Assumes biochemistry vocabulary. */
-  summary: string;
-  /** Concrete physiological roles, one per line. */
-  whatItDoes: string[];
-  benefits: Benefit[];
-
-  deficiency: DeficiencyInfo;
-  excess: ExcessInfo;
-  absorption: AbsorptionInfo;
-  interactions: NutrientInteraction[];
-  topSources: FoodSource[];
 
   citations: Citation[];
   /** ISO date. Bump whenever content changes — see CLAUDE.md rule 6. */
@@ -303,4 +336,15 @@ export function hasTarget(n: Nutrient): n is ReferenceNutrient {
 
 export function isPhytonutrient(n: Nutrient): n is ContextualNutrient {
   return !n.hasReferenceIntake;
+}
+
+/**
+ * Narrows to an entry whose prose is written.
+ *
+ * Gate every render of `simpleExplanation`, `summary`, `benefits`, `deficiency`
+ * and friends on this. A brief entry has a real target and a one-liner and
+ * nothing else, and the panel must say so rather than showing empty headings.
+ */
+export function isFullEntry(n: Nutrient): n is Nutrient & NutrientContent {
+  return n.depth === "full";
 }

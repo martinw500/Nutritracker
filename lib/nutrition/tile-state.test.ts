@@ -22,7 +22,9 @@ describe("the three states that are not statuses", () => {
   });
 
   it("reports no-reference for a tracked value with no entry written", () => {
-    expect(tile("calcium", 583).state).toBe("no-reference");
+    // Energy is tracked but deliberately has no entry — its target comes from
+    // an equation, not a table. See D13.
+    expect(tile("energy", 1721).state).toBe("no-reference");
   });
 
   it("reports no-target for a phytonutrient, whatever the amount", () => {

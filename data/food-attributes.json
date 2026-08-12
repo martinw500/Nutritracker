@@ -1,0 +1,287 @@
+{
+  "version": "0.1.0",
+  "lastUpdated": "2026-08-11",
+  "notes": [
+    "Food-level flags. These describe the FOOD, not a nutrient amount — the things a person actually thinks about when deciding what to eat, and which no per-nutrient number captures.",
+    "Same rules as benefits[] in nutrients.json: every flag carries an evidence tier and at least one citation, and scripts/validate-data.mjs enforces both.",
+    "Two kinds of flag. `declared` flags are properties of the food that cannot be computed from its composition — whether it is cured, fermented, or a whole grain — and are listed on the food record. `derived` flags are computed from composition at render time by lib/nutrition/attributes.ts, so they cannot drift out of sync with the numbers they are based on.",
+    "Tone rule: state the actual figure and the actual uncertainty. 'Same category as tobacco' is the single most misreported fact in nutrition — IARC groups describe how CONFIDENT we are that something causes cancer, not how much it raises your risk. Every cancer flag says so.",
+    "Positive flags exist so this is not purely a nagging feature. A tracker that only ever warns is one people turn off."
+  ],
+
+  "attributes": [
+    {
+      "id": "processed-meat",
+      "label": "Processed meat",
+      "polarity": "caution",
+      "family": "cancer-and-processing",
+      "source": "declared",
+      "evidence": "strong",
+      "oneLiner": "Classified as carcinogenic to humans. Each 50 g a day raises colorectal cancer risk by about 18%.",
+      "detail": "IARC places processed meat — anything smoked, cured, salted or preserved, so bacon, ham, salami, hot dogs — in Group 1, its highest confidence category. That classification is about how certain the evidence is, NOT how large the risk is. Being in the same group as tobacco does not mean it is as dangerous as tobacco. The figure that matters is the size of the effect: roughly 18% higher relative risk of colorectal cancer per 50 g eaten daily, which is a meaningful but modest increase on a fairly low baseline. No safe threshold was established, so the working advice is less rather than none.",
+      "citations": [
+        {
+          "label": "WHO — Q&A on the carcinogenicity of red meat and processed meat",
+          "url": "https://www.who.int/news-room/questions-and-answers/item/cancer-carcinogenicity-of-the-consumption-of-red-meat-and-processed-meat"
+        },
+        {
+          "label": "IARC Monographs Volume 114 — Red Meat and Processed Meat",
+          "url": "https://publications.iarc.who.int/Book-And-Report-Series/Iarc-Monographs-On-The-Identification-Of-Carcinogenic-Hazards-To-Humans/Red-Meat-And-Processed-Meat-2018"
+        }
+      ]
+    },
+    {
+      "id": "red-meat",
+      "label": "Red meat",
+      "polarity": "caution",
+      "family": "cancer-and-processing",
+      "source": "declared",
+      "evidence": "moderate",
+      "oneLiner": "Probably carcinogenic. Around 17% higher colorectal cancer risk per 100 g a day.",
+      "detail": "IARC Group 2A, meaning the evidence is limited in humans but supported by strong mechanistic data — a step below processed meat's Group 1, and again a statement about confidence rather than magnitude. Unprocessed red meat is also a good source of iron, zinc and B12, which processed meat largely is not. This flag is a nudge toward frequency, not an instruction to avoid.",
+      "citations": [
+        {
+          "label": "WHO — Q&A on the carcinogenicity of red meat and processed meat",
+          "url": "https://www.who.int/news-room/questions-and-answers/item/cancer-carcinogenicity-of-the-consumption-of-red-meat-and-processed-meat"
+        }
+      ]
+    },
+    {
+      "id": "alcohol",
+      "label": "Alcohol",
+      "polarity": "caution",
+      "family": "cancer-and-processing",
+      "source": "declared",
+      "evidence": "strong",
+      "oneLiner": "Group 1 carcinogen, with no level established as free of risk.",
+      "detail": "Ethanol is causally linked to cancers of the mouth, throat, oesophagus, liver, colorectum and breast. Risk rises with intake from low levels upward, and the once-common claim that moderate drinking protects the heart has weakened considerably as studies have better accounted for former drinkers being counted as abstainers.",
+      "citations": [
+        {
+          "label": "IARC Monographs — Alcohol consumption and ethyl carbamate",
+          "url": "https://publications.iarc.who.int/Book-And-Report-Series/Iarc-Monographs-On-The-Identification-Of-Carcinogenic-Hazards-To-Humans/Alcohol-Consumption-And-Ethyl-Carbamate-2010"
+        }
+      ]
+    },
+    {
+      "id": "ultra-processed",
+      "label": "Ultra-processed",
+      "polarity": "caution",
+      "family": "cancer-and-processing",
+      "source": "declared",
+      "evidence": "moderate",
+      "oneLiner": "NOVA group 4. Higher intakes track with worse cardiometabolic outcomes.",
+      "detail": "Industrial formulations built mostly from substances extracted from foods or synthesised, with little or no intact whole food. Large cohorts consistently associate higher intake with obesity, type 2 diabetes, cardiovascular disease and mortality, and a review of 37 cohorts found the association is not fully explained by the poorer nutrient profile — but how much is caused by processing itself, rather than by what ultra-processed foods displace, is genuinely unresolved. Rated moderate for that reason.",
+      "citations": [
+        {
+          "label": "Nova food classification system: a contribution from Brazilian epidemiology",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12129239/"
+        },
+        {
+          "label": "Definitions of ultra-processed foods beyond NOVA: a systematic review and evaluation",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12255158/"
+        }
+      ]
+    },
+
+    {
+      "id": "high-gi",
+      "label": "High glycemic index",
+      "polarity": "caution",
+      "family": "glycemic",
+      "source": "derived",
+      "threshold": "GI of 70 or above",
+      "evidence": "strong",
+      "oneLiner": "Raises blood glucose quickly. Matters most eaten alone rather than in a mixed meal.",
+      "detail": "Glycemic index is measured on the food eaten by itself. Fat, protein, acidity and fibre in the same meal all blunt the response substantially, so a high-GI food inside a mixed meal behaves very differently from the number on its own. Glycemic load — which accounts for how much you actually ate — is the more useful figure, and this app computes it per meal.",
+      "citations": [
+        {
+          "label": "Atkinson, Brand-Miller et al. — International Tables of Glycemic Index and Glycemic Load Values 2021",
+          "url": "https://academic.oup.com/ajcn/article/114/5/1625/6320814"
+        }
+      ]
+    },
+    {
+      "id": "high-gl-meal",
+      "label": "High glycemic load",
+      "polarity": "caution",
+      "family": "glycemic",
+      "source": "derived",
+      "threshold": "Meal glycemic load of 20 or above",
+      "evidence": "moderate",
+      "oneLiner": "This meal's total carbohydrate impact is high.",
+      "detail": "Glycemic load combines a food's glycemic index with how much of it you ate, so it reflects the actual glucose burden rather than a property of the food in isolation. Lower-glycemic-load diets produce modest but consistent improvements in HbA1c in type 2 diabetes.",
+      "citations": [
+        {
+          "label": "Atkinson, Brand-Miller et al. — International Tables of Glycemic Index and Glycemic Load Values 2021",
+          "url": "https://academic.oup.com/ajcn/article/114/5/1625/6320814"
+        }
+      ]
+    },
+    {
+      "id": "refined-grain",
+      "label": "Refined grain",
+      "polarity": "caution",
+      "family": "glycemic",
+      "source": "declared",
+      "evidence": "moderate",
+      "oneLiner": "Bran and germ removed, taking most of the fibre, magnesium and B vitamins with them.",
+      "detail": "Milling strips the fibrous outer layer and the nutrient-dense germ. Enrichment restores some B vitamins and iron but not the fibre, magnesium or the intact structure that slows digestion. Cohort evidence favouring whole over refined grain is consistent; the effect sizes are moderate.",
+      "citations": [
+        {
+          "label": "Reynolds et al. — Carbohydrate quality and human health (The Lancet 2019)",
+          "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31809-9/fulltext"
+        }
+      ]
+    },
+    {
+      "id": "added-sugar",
+      "label": "Contains added sugar",
+      "polarity": "caution",
+      "family": "glycemic",
+      "source": "derived",
+      "threshold": "Any added sugar in the food record",
+      "evidence": "strong",
+      "oneLiner": "Sugar added in manufacturing or preparation, as distinct from what occurs naturally.",
+      "detail": "Both WHO and the US Dietary Guidelines recommend keeping added sugars under 10% of energy, with WHO adding a conditional suggestion of under 5%. The distinction from naturally occurring sugar is real: the sugar in fruit arrives with fibre, water and an intact cell wall, and behaves differently as a result.",
+      "citations": [
+        {
+          "label": "WHO — Guideline: Sugars intake for adults and children (2015)",
+          "url": "https://www.who.int/publications/i/item/9789241549028"
+        }
+      ]
+    },
+
+    {
+      "id": "high-sodium",
+      "label": "High sodium",
+      "polarity": "caution",
+      "family": "cardiometabolic",
+      "source": "derived",
+      "threshold": "460 mg or more per 100 g — 20% of the 2,300 mg daily figure",
+      "evidence": "strong",
+      "oneLiner": "Most dietary sodium comes from processed food rather than the salt shaker.",
+      "detail": "Reducing sodium lowers blood pressure, and the effect is larger in people who are salt-sensitive or already hypertensive. The 2,300 mg figure is a Chronic Disease Risk Reduction intake, not a toxicity threshold — it marks the point above which cutting back is expected to help, not a level at which harm begins.",
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Sodium",
+          "url": "https://ods.od.nih.gov/factsheets/Sodium-HealthProfessional/"
+        }
+      ]
+    },
+    {
+      "id": "high-saturated-fat",
+      "label": "High saturated fat",
+      "polarity": "caution",
+      "family": "cardiometabolic",
+      "source": "derived",
+      "threshold": "5 g or more per 100 g",
+      "evidence": "strong",
+      "oneLiner": "Raises LDL. What replaces it decides whether that translates into risk.",
+      "detail": "Replacing saturated fat with polyunsaturated fat lowers cardiovascular events in randomised trials; replacing it with refined carbohydrate does not. That makes this a flag about substitution rather than avoidance, which is why it appears beside what else you ate rather than on its own.",
+      "citations": [
+        {
+          "label": "Cochrane Review — Reduction in saturated fat intake for cardiovascular disease",
+          "url": "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD011737.pub3/full"
+        }
+      ]
+    },
+    {
+      "id": "trans-fat",
+      "label": "Contains trans fat",
+      "polarity": "caution",
+      "family": "cardiometabolic",
+      "source": "derived",
+      "threshold": "Any industrially produced trans fat",
+      "evidence": "strong",
+      "oneLiner": "The one fat with no safe intake — it raises LDL and lowers HDL at once.",
+      "detail": "WHO has pushed for the elimination of industrially produced trans fat from the food supply, and much of it has now been reformulated out. Small amounts occurring naturally in dairy and beef are not thought to carry the same risk.",
+      "citations": [
+        {
+          "label": "WHO — Countdown to 2023: report on global trans fat elimination",
+          "url": "https://www.who.int/publications/i/item/9789240078840"
+        }
+      ]
+    },
+
+    {
+      "id": "whole-grain",
+      "label": "Whole grain",
+      "polarity": "positive",
+      "family": "positive",
+      "source": "declared",
+      "evidence": "strong",
+      "oneLiner": "Bran and germ intact, which is where the fibre and most of the minerals are.",
+      "detail": "Whole grain intake is among the most consistent findings in nutritional epidemiology, associated with lower cardiovascular disease, type 2 diabetes and colorectal cancer. Intact grains also produce a markedly lower glucose response than flour milled from the same grain.",
+      "citations": [
+        {
+          "label": "Reynolds et al. — Carbohydrate quality and human health (The Lancet 2019)",
+          "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31809-9/fulltext"
+        }
+      ]
+    },
+    {
+      "id": "legume",
+      "label": "Legume",
+      "polarity": "positive",
+      "family": "positive",
+      "source": "declared",
+      "evidence": "moderate",
+      "oneLiner": "Protein, fibre and a very low glycemic response in one food.",
+      "detail": "Beans, lentils, peas and chickpeas combine plant protein with soluble fibre and resistant starch. Trial evidence supports modest LDL and post-meal glucose reductions; cohort data associate regular intake with lower cardiovascular risk.",
+      "citations": [
+        {
+          "label": "Reynolds et al. — Carbohydrate quality and human health (The Lancet 2019)",
+          "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31809-9/fulltext"
+        }
+      ]
+    },
+    {
+      "id": "oily-fish",
+      "label": "Oily fish",
+      "polarity": "positive",
+      "family": "positive",
+      "source": "declared",
+      "evidence": "moderate",
+      "oneLiner": "The only substantial dietary source of EPA and DHA.",
+      "detail": "Two portions of fish a week, one of them oily, is the usual recommendation and supplies roughly the 250–500 mg/day of EPA and DHA that most bodies converge on. Conversion from plant omega-3 is poor — typically under 10% — so this is difficult to replace.",
+      "citations": [
+        {
+          "label": "American Heart Association — Fish and Omega-3 Fatty Acids",
+          "url": "https://www.heart.org/en/healthy-living/healthy-eating/eat-smart/fats/fish-and-omega-3-fatty-acids"
+        }
+      ]
+    },
+    {
+      "id": "cruciferous",
+      "label": "Cruciferous vegetable",
+      "polarity": "positive",
+      "family": "positive",
+      "source": "declared",
+      "evidence": "preliminary",
+      "oneLiner": "Broccoli, kale and their relatives, and the source of sulforaphane.",
+      "detail": "Glucosinolates convert to isothiocyanates including sulforaphane, which has the most convincing mechanism of any phytonutrient and induces the body's own antioxidant defences. The human outcome evidence is still mostly observational, and this app does not yet track those compounds because the composition data is too thin to be honest about.",
+      "citations": [
+        {
+          "label": "Linus Pauling Institute — Isothiocyanates",
+          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/isothiocyanates"
+        }
+      ]
+    },
+    {
+      "id": "fermented",
+      "label": "Fermented",
+      "polarity": "positive",
+      "family": "positive",
+      "source": "declared",
+      "evidence": "limited",
+      "oneLiner": "Live cultures, and fermentation reduces phytate so minerals absorb better.",
+      "detail": "A small randomised trial found a high fermented-food diet increased microbiome diversity and reduced inflammatory markers, where a high-fibre diet did not. It is one trial in a small sample, so the tier is limited — genuinely promising, not established.",
+      "citations": [
+        {
+          "label": "Wastyk et al. — Gut-microbiota-targeted diets modulate human immune status (Cell 2021)",
+          "url": "https://www.cell.com/cell/fulltext/S0092-8674(21)00754-6"
+        }
+      ]
+    }
+  ]
+}

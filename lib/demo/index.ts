@@ -22,6 +22,7 @@ import {
   type ActivityLevel,
   type EnergyEstimate,
 } from "@/lib/nutrition/energy";
+import { tallyAttributes, type AttributeTally } from "@/lib/nutrition/attributes";
 
 export const IS_DEMO_DATA = true;
 
@@ -42,6 +43,12 @@ export interface DemoFood {
   nutrients: NutrientVector;
   /** null means the food has no phytonutrient data — not that it has none. */
   phytonutrients: NutrientVector | null;
+  /**
+   * Flags that cannot be computed from composition — cured, fermented, whole
+   * grain. The derived ones are worked out at render time so they cannot drift
+   * away from the numbers they are based on.
+   */
+  attributes?: string[];
 }
 
 export type MealName = "breakfast" | "lunch" | "snack" | "dinner";
@@ -80,7 +87,8 @@ export interface DemoProfile {
   activityLevel: string;
   pregnancyStatus: PregnancyStatus;
   detailLevel: "simple" | "expert";
-  activeGoalMode: string;
+  /** A list: the modes are orthogonal and combining them is the normal case. */
+  activeGoalModes: string[];
 }
 
 export interface GoalMode {
@@ -153,10 +161,10 @@ export function getGoalModes(): GoalMode[] {
   return (profileFile as unknown as { goalModes: GoalMode[] }).goalModes;
 }
 
-export function getActiveGoalMode(): GoalMode {
-  const profile = getProfile();
-  const modes = getGoalModes();
-  return modes.find((mode) => mode.id === profile.activeGoalMode) ?? modes[0];
+export function getActiveGoalModes(): GoalMode[] {
+  const active = new Set(getProfile().activeGoalModes);
+  const modes = getGoalModes().filter((mode) => active.has(mode.id));
+  return modes.length > 0 ? modes : [getGoalModes()[0]];
 }
 
 export function getPhotoDraft(): PhotoDraft {
@@ -224,6 +232,16 @@ export function getEnergyEstimate(): EnergyEstimate {
     heightCm: profile.heightCm,
     activityLevel: profile.activityLevel as ActivityLevel,
   });
+}
+
+/** Flags across the whole day, with the foods that raised each one. */
+export function getDayAttributes(): AttributeTally[] {
+  return tallyAttributes(
+    getResolvedEntries().map((entry) => ({
+      name: entry.food.name,
+      food: entry.food,
+    })),
+  );
 }
 
 export interface WeightReading {

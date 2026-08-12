@@ -57,6 +57,27 @@ describe("macronutrients are judged on their acceptable range", () => {
   });
 });
 
+describe("nutrients you steer away from rather than toward", () => {
+  it("reports sodium against its limit, not as a percentage of the AI", () => {
+    // Sodium's AI is 1,500 mg and its CDRR is 2,300. Showing "84% of target"
+    // to someone eating 1,266 mg reads as encouragement to add salt.
+    const under = tile("sodium", 1266);
+    expect(under.state).toBe("met");
+    expect(under.label).toBe("Under the recommended limit");
+  });
+
+  it("flags sodium above the limit", () => {
+    const over = tile("sodium", 3200);
+    expect(over.state).toBe("over-ul");
+    expect(over.label).toBe("Over the recommended limit");
+  });
+
+  it("leaves ordinary nutrients steering toward their target", () => {
+    // Calcium has a UL too, but you are meant to reach its RDA.
+    expect(tile("calcium", 583).label).toBe("Low");
+  });
+});
+
 describe("values this log cannot assess", () => {
   it("reports the reason instead of a status", () => {
     const tracked = getTracked("water")!;

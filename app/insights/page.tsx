@@ -132,7 +132,10 @@ function StreakCard({
   const { isExpert } = useDetailLevel();
   const series = getSeries(meta.id);
 
-  const gapClosers = entry?.topSources.slice(0, 3) ?? [];
+  // Brief entries carry a real target but no food sources yet, so an alert on
+  // one names the shortfall without being able to name the fix. Say which,
+  // rather than showing an empty "foods that close the gap" heading.
+  const gapClosers = entry?.topSources?.slice(0, 3) ?? [];
 
   return (
     <Card className={cn(firing && "border-low")}>
@@ -178,7 +181,12 @@ function StreakCard({
             ))}
           </ul>
         </div>
-      ) : null}
+      ) : (
+        <p className="mt-4 border-t border-border pt-4 text-xs leading-relaxed text-faint">
+          Food sources for {meta.name} have not been written yet, so this alert can name
+          the shortfall but not yet the fix.
+        </p>
+      )}
 
       <ExpertOnly>
         <div className="mt-4 border-t border-border pt-4">

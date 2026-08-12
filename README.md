@@ -45,7 +45,8 @@ Manual logging works fully without any AI configured, so the app is useful befor
 | File | Contents |
 |---|---|
 | [data/roster.json](data/roster.json) | The index of all 59 tracked values — metadata only |
-| [data/nutrients.json](data/nutrients.json) | Reference panels — 10 of 59 written |
+| [data/nutrients.json](data/nutrients.json) | Reference panels — 47 of 59 written (10 full, 37 brief)  |
+| [data/food-attributes.json](data/food-attributes.json) | Food-level flags — processed meat, ultra-processed, high-GI, whole grain — each with an evidence tier and citations |
 | [data/nutrients.schema.json](data/nutrients.schema.json) | JSON Schema enforcing the integrity rules |
 | [lib/nutrition/types.ts](lib/nutrition/types.ts) | TypeScript types for the reference layer |
 | [data/demo/](data/demo/) | Fixtures standing in for the database. Importable only through `lib/demo`. |
@@ -69,7 +70,7 @@ No `.env.local` and no database needed — every screen runs off `data/demo/`, a
 
 ```bash
 npm run validate:data  # data layer
-npm test               # 99 unit and render tests
+npm test               # 119 unit and render tests
 ```
 
 **Read in this order:** [CLAUDE.md](CLAUDE.md) → [docs/DECISIONS.md](docs/DECISIONS.md) → [docs/PLAN.md](docs/PLAN.md) → [docs/STATUS.md](docs/STATUS.md). What you may not break, why, what to build, where it stands.

@@ -27,7 +27,7 @@ import {
 import { formatAmount } from "@/lib/nutrition/format";
 import { resolveReference, type Person } from "@/lib/nutrition/personalize";
 import type { TrackedNutrient } from "@/lib/nutrition/roster";
-import { hasTarget, type Nutrient, type ReferenceTable } from "@/lib/nutrition/types";
+import { hasTarget, isFullEntry, type Nutrient, type ReferenceTable } from "@/lib/nutrition/types";
 
 export function NutrientDetail({
   tracked,
@@ -85,23 +85,33 @@ export function NutrientDetail({
 
           <Card>
             <CardHeader title="What it is" />
-            <p className="text-sm leading-relaxed text-ink">{entry.simpleExplanation}</p>
+            <p className="text-sm leading-relaxed text-ink">
+              {isFullEntry(entry) ? entry.simpleExplanation : entry.oneLiner}
+            </p>
 
-            <ExpertOnly>
-              <div className="mt-5 border-t border-border pt-4">
-                <SectionLabel>Technical summary</SectionLabel>
-                <p className="text-sm leading-relaxed text-muted">{entry.summary}</p>
+            {isFullEntry(entry) ? (
+              <ExpertOnly>
+                <div className="mt-5 border-t border-border pt-4">
+                  <SectionLabel>Technical summary</SectionLabel>
+                  <p className="text-sm leading-relaxed text-muted">{entry.summary}</p>
 
-                <div className="mt-4">
-                  <SectionLabel>What it does</SectionLabel>
-                  <BulletList items={entry.whatItDoes} />
+                  <div className="mt-4">
+                    <SectionLabel>What it does</SectionLabel>
+                    <BulletList items={entry.whatItDoes} />
+                  </div>
                 </div>
-              </div>
-            </ExpertOnly>
+              </ExpertOnly>
+            ) : null}
           </Card>
 
           <ReferenceCard entry={entry} unit={meta.unit} person={person} />
 
+          {!isFullEntry(entry) ? <BriefNotice name={meta.name} /> : null}
+        </>
+      )}
+
+      {entry !== null && isFullEntry(entry) ? (
+        <>
           <Card>
             <CardHeader
               title="What the evidence says"
@@ -244,29 +254,57 @@ export function NutrientDetail({
               docs/STATUS.md.
             </p>
           </Card>
-
-          <ExpertOnly>
-            <Card>
-              <CardHeader title="Sources" subtitle={`Last reviewed ${entry.lastReviewed}`} />
-              <ul className="space-y-2">
-                {entry.citations.map((citation) => (
-                  <li key={citation.url}>
-                    <a
-                      href={citation.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-xs text-accent underline-offset-2 hover:underline"
-                    >
-                      {citation.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          </ExpertOnly>
         </>
-      )}
+      ) : null}
+
+      {/* Citations render at BOTH depths. A brief entry is defined by having a
+          cited target — hiding the citation would remove the only thing that
+          makes it trustworthy. */}
+      {entry !== null ? (
+        <Card>
+          <CardHeader title="Sources" subtitle={`Last reviewed ${entry.lastReviewed}`} />
+          <ul className="space-y-2">
+            {entry.citations.map((citation) => (
+              <li key={citation.url}>
+                <a
+                  href={citation.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs text-accent underline-offset-2 hover:underline"
+                >
+                  {citation.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
     </div>
+  );
+}
+
+/**
+ * Shown in place of the prose sections on a brief entry.
+ *
+ * The distinction it draws matters: the target above is real and cited, and
+ * only the write-up is missing. Rendering empty headings instead would suggest
+ * the data itself was thin.
+ */
+function BriefNotice({ name }: { name: string }) {
+  return (
+    <Card>
+      <CardHeader title="Full write-up not finished" />
+      <p className="text-sm leading-relaxed text-muted">
+        The reference intake above is real and cited — {name} is assessed against it
+        exactly like any other nutrient. What is missing is the written panel: what it
+        does in detail, what deficiency and excess look like, absorption, interactions,
+        and food sources ranked against what you eat.
+      </p>
+      <p className="mt-3 text-xs text-faint">
+        Entries live in <code>data/nutrients.json</code>. Filling this one in changes no
+        code.
+      </p>
+    </Card>
   );
 }
 

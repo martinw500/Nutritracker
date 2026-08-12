@@ -3,12 +3,18 @@
   "notes": [
     "DEMO DATA. One day of log entries, standing in for the log_entries table. Nothing outside lib/demo may import this file.",
     "Quantities are all in grams. Unit conversion (ml, cup, tbsp, piece) is not built yet — see docs/STATUS.md.",
-    "The day is composed so the dashboard exercises every state: vitamin C lands below 70% of the RDA (low band, and a 3-day streak because its storage class is 'none'), magnesium lands well above the RDA but must NOT raise an excess alert because its UL is supplemental-only, and 7 of 12 entries have no phytonutrient data at all."
+    "The day is composed so the dashboard exercises every state: vitamin C lands below 70% of the RDA (low band, and a 3-day streak because its storage class is 'none'), magnesium lands well above the RDA but must NOT raise an excess alert because its UL is supplemental-only, and most entries have no phytonutrient data at all.",
+    "It also exercises the food-flag layer, which is why the day is not an idealised one: bacon raises the processed-meat and red-meat flags, white bread raises refined-grain and high-sodium, cola raises added sugar, and lentils raise the legume flag so the feature is not purely a list of warnings."
   ],
 
   "date": "2026-08-11",
 
   "entries": [
+    { "id": "e13", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "bacon-cooked", "quantity": 30, "unit": "g", "source": "photo", "aiConfidence": 0.89, "userEdited": false },
+    { "id": "e14", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "bread-white", "quantity": 56, "unit": "g", "source": "photo", "aiConfidence": 0.85, "userEdited": false },
+    { "id": "e15", "meal": "snack", "loggedAt": "2026-08-11T15:30:00", "foodId": "cola-regular", "quantity": 330, "unit": "g", "source": "manual", "aiConfidence": null, "userEdited": false },
+    { "id": "e16", "meal": "dinner", "loggedAt": "2026-08-11T19:15:00", "foodId": "lentils-cooked", "quantity": 100, "unit": "g", "source": "search", "aiConfidence": null, "userEdited": false },
+
     { "id": "e01", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "oats-rolled-dry", "quantity": 60, "unit": "g", "source": "photo", "aiConfidence": 0.94, "userEdited": false },
     { "id": "e02", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "blueberries-raw", "quantity": 80, "unit": "g", "source": "photo", "aiConfidence": 0.88, "userEdited": true },
     { "id": "e03", "meal": "breakfast", "loggedAt": "2026-08-11T07:40:00", "foodId": "milk-2pct", "quantity": 200, "unit": "g", "source": "photo", "aiConfidence": 0.71, "userEdited": true },

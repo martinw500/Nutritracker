@@ -23,6 +23,7 @@ const schema = read("data/nutrients.schema.json");
 const database = read("data/nutrients.json");
 const roster = read("data/roster.json");
 const foods = read("data/demo/foods.json");
+const foodAttributes = read("data/food-attributes.json");
 const day = read("data/demo/day.json");
 const history = read("data/demo/history.json");
 const draft = read("data/demo/photo-draft.json");
@@ -38,12 +39,41 @@ if (!validate(database)) {
 }
 
 // ── 2. Integrity rules the schema cannot express ────────────────────────────
+/** Prose fields a `full` entry must carry and a `brief` one may omit. */
+const PROSE_FIELDS = [
+  "simpleExplanation",
+  "summary",
+  "whatItDoes",
+  "benefits",
+  "deficiency",
+  "excess",
+  "absorption",
+  "interactions",
+  "topSources",
+];
+
 for (const nutrient of database.nutrients) {
   const where = `nutrients.json[${nutrient.id}]`;
 
   for (const [index, benefit] of (nutrient.benefits ?? []).entries()) {
     if (!benefit.evidence) {
       fail(`${where}.benefits[${index}] has no evidence tier (CLAUDE.md rule 2)`);
+    }
+  }
+
+  // A brief entry omits prose. It must never carry an EMPTY version of it —
+  // a blank string renders as a heading with nothing underneath, which is the
+  // impression `brief` exists to avoid.
+  if (nutrient.depth === "brief") {
+    for (const field of PROSE_FIELDS) {
+      const value = nutrient[field];
+      if (value === undefined) continue;
+      const empty =
+        (typeof value === "string" && value.trim() === "") ||
+        (Array.isArray(value) && value.length === 0 && field !== "benefits" && field !== "interactions");
+      if (empty) {
+        fail(`${where}.${field} is present but empty — omit it instead (depth: brief)`);
+      }
     }
   }
 
@@ -114,13 +144,18 @@ for (const nutrient of database.nutrients) {
     }
   }
 
-  const expectedTier = nutrient.hasReferenceIntake
-    ? nutrient.category === "macronutrient"
-      ? 1
-      : 2
-    : 3;
-  if (meta.tier !== expectedTier) {
-    fail(`${nutrient.id}: roster tier ${meta.tier} disagrees with its entry shape`);
+  // Tier comes from the roster, not from whether a DRI exists. Those are
+  // different questions: omega-3 EPA+DHA and cholesterol are macronutrients
+  // with no reference intake at all, which is legitimate and was previously
+  // unrepresentable because the tier was inferred from `hasReferenceIntake`.
+  if ((meta.tier === 3) !== (nutrient.category === "phytonutrient")) {
+    fail(
+      `${nutrient.id}: tier 3 and category "phytonutrient" must agree — ` +
+        `roster says tier ${meta.tier}, entry says "${nutrient.category}"`,
+    );
+  }
+  if (nutrient.category === "phytonutrient" && nutrient.hasReferenceIntake) {
+    fail(`${nutrient.id} is a phytonutrient with a reference intake (CLAUDE.md rule 3)`);
   }
 
   for (const interaction of nutrient.interactions ?? []) {
@@ -130,10 +165,53 @@ for (const nutrient of database.nutrients) {
   }
 }
 
+// ── 4b. Food attributes carry their evidence, same rule as benefits[] ───────
+const EVIDENCE_TIERS = ["strong", "moderate", "limited", "preliminary"];
+const attributeIds = new Set();
+
+for (const attribute of foodAttributes.attributes) {
+  const where = `food-attributes.json[${attribute.id}]`;
+
+  if (attributeIds.has(attribute.id)) fail(`${where} is a duplicate id`);
+  attributeIds.add(attribute.id);
+
+  if (!EVIDENCE_TIERS.includes(attribute.evidence)) {
+    fail(`${where} has evidence "${attribute.evidence}", which is not a tier`);
+  }
+  if (!attribute.citations?.length) {
+    fail(`${where} has no citations — every health claim carries one`);
+  }
+  if (!["caution", "positive"].includes(attribute.polarity)) {
+    fail(`${where} has invalid polarity "${attribute.polarity}"`);
+  }
+  if (!["declared", "derived"].includes(attribute.source)) {
+    fail(`${where} has invalid source "${attribute.source}"`);
+  }
+  if (attribute.source === "derived" && !attribute.threshold) {
+    fail(`${where} is derived but states no threshold`);
+  }
+  if (!attribute.detail || attribute.detail.length < 40) {
+    fail(`${where} has no meaningful detail text`);
+  }
+}
+
 // ── 5. Demo fixtures resolve ────────────────────────────────────────────────
 const foodIds = new Set();
 for (const food of foods.foods) {
   foodIds.add(food.id);
+
+  for (const id of food.attributes ?? []) {
+    const attribute = foodAttributes.attributes.find((a) => a.id === id);
+    if (!attribute) {
+      fail(`demo/foods.json[${food.id}] declares unknown attribute "${id}"`);
+    } else if (attribute.source !== "declared") {
+      fail(
+        `demo/foods.json[${food.id}] declares "${id}", which is derived from ` +
+          `composition — declaring it by hand lets the flag drift from the numbers`,
+      );
+    }
+  }
+
   const blocks = [
     ["nutrients", food.nutrients],
     ["phytonutrients", food.phytonutrients],
@@ -179,6 +257,7 @@ for (const dayRow of history.days) {
 
 // ── Report ──────────────────────────────────────────────────────────────────
 const written = database.nutrients.length;
+const full = database.nutrients.filter((n) => n.depth === "full").length;
 const total = roster.roster.length;
 
 if (errors.length > 0) {
@@ -189,6 +268,7 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✓ data layer valid — ${written} of ${total} reference entries written, ` +
+  `✓ data layer valid — ${written} of ${total} entries written ` +
+    `(${full} full, ${written - full} brief), ` +
     `${foods.foods.length} demo foods, ${history.days.length} days of history`,
 );

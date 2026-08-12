@@ -114,7 +114,7 @@ Full detail, licenses, and caveats in [RESEARCH.md](RESEARCH.md).
 
 ## The nutrient reference layer
 
-Lives in [`data/nutrients.json`](../data/nutrients.json), typed by [`lib/nutrition/types.ts`](../lib/nutrition/types.ts) and validated against [`data/nutrients.schema.json`](../data/nutrients.schema.json). One entry per tracked value — 59 when complete; **10 written so far.**
+Lives in [`data/nutrients.json`](../data/nutrients.json), typed by [`lib/nutrition/types.ts`](../lib/nutrition/types.ts) and validated against [`data/nutrients.schema.json`](../data/nutrients.schema.json). One entry per tracked value — 59 when complete; **47 written so far** (10 `full`, 37 `brief`). A brief entry carries a real, cited reference intake and a one-liner and may omit the prose; the schema enforces the difference and the UI badges it. See DECISIONS.md (D16).
 
 Values in [`data/roster.json`](../data/roster.json) with no entry here are tracked and totalled, but render an explicit "no reference yet" state rather than a blank or a target. Writing the entry lights the row and its detail page up with no code change.
 
@@ -307,7 +307,7 @@ Day-to-day state, current issues, and what changed most recently live in [STATUS
 - [x] `npm run validate:data` — schema plus cross-file agreement
 - [ ] Postgres + Drizzle; schema migrations
 - [x] Run `validate:data` in CI
-- [ ] Remaining 49 reference entries
+- [ ] Upgrade the 37 brief entries to full; write the 11 remaining Tier 3 phytonutrients
 - [ ] FDC client + local mirror of Foundation Foods and SR Legacy; resolve `topSources[].fdcId`
 - [ ] Import USDA flavonoid / isoflavone / proanthocyanidin DBs; import GI tables
 

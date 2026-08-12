@@ -2,7 +2,11 @@
   "version": "0.1.0",
   "lastUpdated": "2026-08-11",
   "notes": [
-    "10 of the 59 entries in data/roster.json. The first five were chosen to exercise every branch of the schema — storage classes none/moderate/high, vitamin/mineral/phytonutrient categories, Tier 2 vs Tier 3, and ULs that are total / supplemental-only / absent entirely.",
+    "47 of the 59 entries in data/roster.json. Ten are `depth: full` — the whole reference panel. Thirty-seven are `depth: brief`: a real, cited reference intake plus a one-liner, with the prose still to be written. A brief entry is a stated state, not a gap, and the UI badges it as such.",
+    "The twelve still missing are the eleven remaining Tier 3 phytonutrients, which have no reference intake by definition, and energy — see the note below.",
+    "The first five entries were chosen to exercise every branch of the schema — storage classes none/moderate/high, vitamin/mineral/phytonutrient categories, Tier 2 vs Tier 3, and ULs that are total / supplemental-only / absent entirely.",
+    "Several Tier 1 values carry `hasReferenceIntake: false` and an intakeContext rather than a target: total sugars, mono- and polyunsaturated fat, cholesterol, EPA+DHA, trans fat, and the two fibre fractions have no DRI at all. That is not the same as being a phytonutrient — tier comes from data/roster.json, not from whether a DRI exists.",
+    "populationMedian figures on brief entries are approximate NHANES-order values authored by hand. They are context for situating your own intake, not measurements, and want verifying against the source tables before they are quoted anywhere.",
     "The five macronutrients (protein, carbohydrate, total fat, fiber, water) were written next because they drive the headline figures on every screen. Total fat has no EAR, RDA or adult AI — only an AMDR — which is why the schema gained an optional `amdr` block and why a macronutrient renders as an acceptable range band rather than a point target.",
     "Energy is deliberately absent from this file. It has no reference intake to look up: an Estimated Energy Requirement is computed per person from a published equation, which lives in lib/nutrition/energy.ts and is labelled an estimate wherever it appears. See docs/DECISIONS.md (D13).",
     "topSources[].fdcId is null throughout. IDs are resolved by the Phase 0 FoodData Central importer — hand-written IDs silently link to the wrong food, which is worse than no link at all.",
@@ -10,10 +14,10 @@
     "Reference intakes are transcribed from the NIH Office of Dietary Supplements Health Professional fact sheets, which restate the IOM/NASEM Dietary Reference Intakes. Verify against the linked citation before shipping.",
     "Infant life-stage groups (0-12 months) are deliberately omitted. This app does not serve that population, and their values are Adequate Intakes derived from breast-milk composition rather than requirements."
   ],
-
   "nutrients": [
     {
       "id": "magnesium",
+      "depth": "full",
       "name": "Magnesium",
       "symbol": "Mg",
       "unit": "mg",
@@ -24,10 +28,8 @@
       "essentiality": "essential",
       "storage": "moderate",
       "antioxidantRole": false,
-
       "oneLiner": "Powers muscles and nerves, and helps you wind down at night.",
       "simpleExplanation": "Your body uses magnesium in hundreds of everyday processes — turning food into energy, letting muscles relax after they contract, and settling your nervous system down for sleep. Roughly half of people don't get quite enough, and the signs are easy to miss: cramps, poor sleep, feeling wired but tired. Seeds, nuts, beans, and leafy greens are the richest sources.",
-
       "summary": "Cofactor in over 300 enzymatic reactions, most notably as the counter-ion that stabilizes ATP. Mg-ATP, not free ATP, is the biologically active substrate for essentially all kinases. Also acts as a physiological calcium antagonist at NMDA receptors and in excitation-contraction coupling.",
       "whatItDoes": [
         "Stabilizes ATP — the active intracellular form is the Mg-ATP complex",
@@ -58,7 +60,6 @@
           "note": "Mechanistically plausible and popular, but trials in athletes and in pregnancy have been largely null. Cramping has many causes unrelated to magnesium status."
         }
       ],
-
       "deficiency": {
         "clinicalName": "hypomagnesemia",
         "prevalence": "Around 48% of the US population consumes less than the EAR from food (NHANES). Frank clinical hypomagnesemia is much rarer, because the kidney conserves magnesium efficiently.",
@@ -85,7 +86,6 @@
           "people taking loop or thiazide diuretics"
         ]
       },
-
       "excess": {
         "fromFood": "Not observed in people with normal kidney function. Excess dietary magnesium is simply excreted, which is why the UL applies to supplements only.",
         "fromSupplements": [
@@ -96,7 +96,6 @@
         "clinicalName": "hypermagnesemia",
         "severeRisk": "At extreme doses: hypotension, respiratory depression, and cardiac arrest. Essentially confined to renal impairment or massive supplemental overdose."
       },
-
       "absorption": {
         "typicalRate": "30–40% of intake",
         "enhancers": [
@@ -112,7 +111,6 @@
         ],
         "notes": "Fractional absorption falls as intake rises, so several modest doses beat one large one. Soaking, sprouting, or fermenting legumes and grains reduces phytate and improves availability. Magnesium oxide — the cheapest and most common supplemental form — is poorly absorbed; citrate and glycinate are substantially better."
       },
-
       "interactions": [
         {
           "with": "calcium",
@@ -130,16 +128,44 @@
           "effect": "Zinc doses above roughly 140 mg/day interfere with magnesium absorption. Dietary amounts are not a concern."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Pumpkin seeds, roasted", "per100g": 592, "typicalServing": "30 g (small handful)" },
-        { "fdcId": null, "name": "Chia seeds", "per100g": 335, "typicalServing": "28 g (2 tbsp)" },
-        { "fdcId": null, "name": "Almonds", "per100g": 270, "typicalServing": "28 g (23 almonds)" },
-        { "fdcId": null, "name": "Dark chocolate, 70–85% cacao", "per100g": 228, "typicalServing": "30 g" },
-        { "fdcId": null, "name": "Spinach, boiled", "per100g": 87, "typicalServing": "180 g (1 cup)" },
-        { "fdcId": null, "name": "Black beans, cooked", "per100g": 70, "typicalServing": "172 g (1 cup)" }
+        {
+          "fdcId": null,
+          "name": "Pumpkin seeds, roasted",
+          "per100g": 592,
+          "typicalServing": "30 g (small handful)"
+        },
+        {
+          "fdcId": null,
+          "name": "Chia seeds",
+          "per100g": 335,
+          "typicalServing": "28 g (2 tbsp)"
+        },
+        {
+          "fdcId": null,
+          "name": "Almonds",
+          "per100g": 270,
+          "typicalServing": "28 g (23 almonds)"
+        },
+        {
+          "fdcId": null,
+          "name": "Dark chocolate, 70–85% cacao",
+          "per100g": 228,
+          "typicalServing": "30 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Spinach, boiled",
+          "per100g": 87,
+          "typicalServing": "180 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Black beans, cooked",
+          "per100g": 70,
+          "typicalServing": "172 g (1 cup)"
+        }
       ],
-
       "reference": {
         "ear": {
           "child_1_3": 65,
@@ -181,7 +207,6 @@
           }
         }
       },
-
       "citations": [
         {
           "label": "NIH Office of Dietary Supplements — Magnesium (Health Professional)",
@@ -190,9 +215,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "vitamin-d",
+      "depth": "full",
       "name": "Vitamin D",
       "symbol": "D",
       "unit": "mcg",
@@ -203,10 +228,8 @@
       "essentiality": "essential",
       "storage": "high",
       "antioxidantRole": false,
-
       "oneLiner": "Lets your body absorb calcium, and behaves more like a hormone than a vitamin.",
       "simpleExplanation": "Vitamin D controls how much calcium you absorb from food, which makes it essential for bones. Your skin makes it from sunlight, so how much you need from food depends on where you live, your skin tone, and how much time you spend outside. Very few foods contain much of it — oily fish and fortified milk are the main ones — so a lot of people are low in winter. It's stored in body fat for months, which is why a single low day means nothing.",
-
       "summary": "A secosteroid prohormone rather than a true vitamin. Cutaneous synthesis from 7-dehydrocholesterol under UVB dominates in most people; dietary intake is secondary. Sequential 25-hydroxylation in the liver and 1α-hydroxylation in the kidney yield calcitriol, which acts through the nuclear vitamin D receptor to regulate several hundred genes. Status is assessed by serum 25(OH)D, not intake.",
       "whatItDoes": [
         "Upregulates intestinal calcium and phosphate absorption — the primary and best-established role",
@@ -237,7 +260,6 @@
           "note": "Strong observational associations were not borne out. VITAL — 25,871 participants, 2,000 IU/day, 5.3 years — found no reduction in cancer incidence or major cardiovascular events. Treat as unsupported for primary prevention."
         }
       ],
-
       "deficiency": {
         "clinicalName": "vitamin D deficiency (rickets in children, osteomalacia in adults)",
         "prevalence": "Roughly 18% of the US population has serum 25(OH)D below 40 nmol/L (at risk of inadequacy), with markedly higher rates in people with darker skin, at higher latitudes, and in winter.",
@@ -263,7 +285,6 @@
           "exclusively breastfed infants without supplementation"
         ]
       },
-
       "excess": {
         "fromFood": "Not achievable from unfortified food. Reported toxicity is essentially always from supplements or from manufacturing errors in fortified products.",
         "fromSupplements": [
@@ -276,7 +297,6 @@
         "clinicalName": "vitamin D toxicity (hypervitaminosis D)",
         "severeRisk": "Sustained hypercalcemia causes vascular and soft-tissue calcification and renal failure. Typically requires prolonged intake well above 10,000 IU/day; sunlight alone cannot cause it, because excess previtamin D is photodegraded in the skin."
       },
-
       "absorption": {
         "typicalRate": "~50% of dietary intake; cutaneous synthesis is the dominant source for most people",
         "enhancers": [
@@ -292,7 +312,6 @@
         ],
         "notes": "Because storage is measured in months, day-to-day intake is a poor guide to status — serum 25(OH)D is the meaningful measure. D3 (cholecalciferol) raises and maintains serum levels more effectively than D2 (ergocalciferol). Latitude and season dominate: above roughly 37°N, cutaneous synthesis is negligible from November to February regardless of time spent outdoors."
       },
-
       "interactions": [
         {
           "with": "magnesium",
@@ -310,16 +329,44 @@
           "effect": "Vitamin K-dependent proteins direct the calcium that vitamin D makes available toward bone rather than vasculature. Clinically suggestive; not yet established."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Cod liver oil", "per100g": 250, "typicalServing": "5 mL (1 tsp)" },
-        { "fdcId": null, "name": "Rainbow trout, farmed, cooked", "per100g": 16.2, "typicalServing": "85 g fillet" },
-        { "fdcId": null, "name": "Salmon, sockeye, cooked", "per100g": 14.2, "typicalServing": "85 g fillet" },
-        { "fdcId": null, "name": "Mushrooms, UV-exposed", "per100g": 28.1, "typicalServing": "70 g (1 cup)" },
-        { "fdcId": null, "name": "Egg yolk", "per100g": 5.4, "typicalServing": "17 g (1 yolk)" },
-        { "fdcId": null, "name": "Milk, fortified", "per100g": 1.3, "typicalServing": "240 mL (1 cup)" }
+        {
+          "fdcId": null,
+          "name": "Cod liver oil",
+          "per100g": 250,
+          "typicalServing": "5 mL (1 tsp)"
+        },
+        {
+          "fdcId": null,
+          "name": "Rainbow trout, farmed, cooked",
+          "per100g": 16.2,
+          "typicalServing": "85 g fillet"
+        },
+        {
+          "fdcId": null,
+          "name": "Salmon, sockeye, cooked",
+          "per100g": 14.2,
+          "typicalServing": "85 g fillet"
+        },
+        {
+          "fdcId": null,
+          "name": "Mushrooms, UV-exposed",
+          "per100g": 28.1,
+          "typicalServing": "70 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Egg yolk",
+          "per100g": 5.4,
+          "typicalServing": "17 g (1 yolk)"
+        },
+        {
+          "fdcId": null,
+          "name": "Milk, fortified",
+          "per100g": 1.3,
+          "typicalServing": "240 mL (1 cup)"
+        }
       ],
-
       "reference": {
         "ear": {
           "child_1_3": 10,
@@ -367,7 +414,6 @@
           }
         }
       },
-
       "citations": [
         {
           "label": "NIH Office of Dietary Supplements — Vitamin D (Health Professional)",
@@ -380,9 +426,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "vitamin-b12",
+      "depth": "full",
       "name": "Vitamin B12",
       "symbol": "B12",
       "unit": "mcg",
@@ -393,10 +439,8 @@
       "essentiality": "essential",
       "storage": "high",
       "antioxidantRole": false,
-
       "oneLiner": "Builds red blood cells and protects your nerves. Only found in animal foods.",
       "simpleExplanation": "B12 is needed to make red blood cells and to maintain the insulating sheath around your nerves. It occurs naturally only in animal foods, so anyone eating plant-based needs fortified foods or a supplement — this is not optional. Your liver stores several years' worth, which is why deficiency takes a long time to appear and why one low day means nothing. The catch is that nerve damage from prolonged deficiency can be permanent, so it's worth not finding out the slow way.",
-
       "summary": "A cobalt-containing corrinoid, the largest and most structurally complex vitamin. Functions as a cofactor for exactly two mammalian enzymes: methionine synthase (cytosolic, remethylating homocysteine to methionine) and methylmalonyl-CoA mutase (mitochondrial, in odd-chain fatty acid and branched-chain amino acid catabolism). Absorption requires gastric intrinsic factor and an intact terminal ileum, making it uniquely vulnerable to gastrointestinal pathology.",
       "whatItDoes": [
         "Cofactor for methionine synthase — regenerates methionine and releases folate from the 5-methyl-THF trap",
@@ -426,7 +470,6 @@
           "note": "Despite reliable homocysteine lowering, large RCTs (HOPE-2, SEARCH, VITATOPS) have not shown reductions in cardiovascular events. Cognitive trials in people who are B12-replete have likewise been null. Benefit appears confined to correcting actual deficiency."
         }
       ],
-
       "deficiency": {
         "clinicalName": "vitamin B12 deficiency; pernicious anemia when caused by loss of intrinsic factor",
         "prevalence": "Approximately 6% of adults under 60 and closer to 20% of adults over 60 in the US and UK, driven mainly by absorptive failure rather than low intake. Rates among people eating strictly plant-based without supplementation are far higher.",
@@ -454,7 +497,6 @@
           "Crohn's disease affecting the terminal ileum"
         ]
       },
-
       "excess": {
         "fromFood": "No adverse effects have been associated with excess B12 intake from food or supplements in healthy people.",
         "fromSupplements": [
@@ -464,7 +506,6 @@
         "clinicalName": null,
         "severeRisk": null
       },
-
       "absorption": {
         "typicalRate": "~50% of a small dose; falls sharply as dose rises because intrinsic-factor-mediated uptake saturates near 1.5–2 mcg per meal",
         "enhancers": [
@@ -483,7 +524,6 @@
         ],
         "notes": "The receptor-mediated pathway saturates at roughly 1.5–2 mcg per meal, so total daily absorption is bounded by meal frequency rather than dose size. A separate passive diffusion route absorbs about 1% of any dose regardless of intrinsic factor — which is why high-dose oral supplementation (1,000 mcg) works even in pernicious anemia, where the active pathway is absent entirely."
       },
-
       "interactions": [
         {
           "with": "folate",
@@ -496,16 +536,44 @@
           "effect": "Large vitamin C doses taken with a meal may degrade B12 in vitro. Clinical relevance is doubtful; separating them by a couple of hours resolves any concern."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Clams, cooked", "per100g": 98.9, "typicalServing": "85 g" },
-        { "fdcId": null, "name": "Beef liver, cooked", "per100g": 70.6, "typicalServing": "85 g" },
-        { "fdcId": null, "name": "Nutritional yeast, fortified", "per100g": 50.0, "typicalServing": "16 g (2 tbsp)" },
-        { "fdcId": null, "name": "Sardines, canned in oil", "per100g": 8.9, "typicalServing": "92 g (1 can)" },
-        { "fdcId": null, "name": "Beef, ground, cooked", "per100g": 2.6, "typicalServing": "85 g" },
-        { "fdcId": null, "name": "Egg, whole, cooked", "per100g": 1.1, "typicalServing": "50 g (1 large egg)" }
+        {
+          "fdcId": null,
+          "name": "Clams, cooked",
+          "per100g": 98.9,
+          "typicalServing": "85 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Beef liver, cooked",
+          "per100g": 70.6,
+          "typicalServing": "85 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Nutritional yeast, fortified",
+          "per100g": 50.0,
+          "typicalServing": "16 g (2 tbsp)"
+        },
+        {
+          "fdcId": null,
+          "name": "Sardines, canned in oil",
+          "per100g": 8.9,
+          "typicalServing": "92 g (1 can)"
+        },
+        {
+          "fdcId": null,
+          "name": "Beef, ground, cooked",
+          "per100g": 2.6,
+          "typicalServing": "85 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Egg, whole, cooked",
+          "per100g": 1.1,
+          "typicalServing": "50 g (1 large egg)"
+        }
       ],
-
       "reference": {
         "ear": {
           "child_1_3": 0.7,
@@ -530,7 +598,6 @@
         "ai": null,
         "ul": null
       },
-
       "citations": [
         {
           "label": "NIH Office of Dietary Supplements — Vitamin B12 (Health Professional)",
@@ -539,9 +606,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "vitamin-c",
+      "depth": "full",
       "name": "Vitamin C",
       "symbol": "C",
       "unit": "mg",
@@ -552,10 +619,8 @@
       "essentiality": "essential",
       "storage": "none",
       "antioxidantRole": true,
-
       "oneLiner": "Builds collagen, and dramatically boosts iron absorption from plant foods.",
       "simpleExplanation": "Vitamin C is what your body uses to build collagen — the protein holding skin, blood vessels, and gums together — and it makes iron from plant foods far easier to absorb. Your body doesn't store it, so you need some most days. The good news is it's easy to get: one red pepper or one kiwi covers a full day. It does not prevent colds, despite the reputation, though it does shorten them slightly.",
-
       "summary": "A water-soluble reducing agent and essential cofactor for a family of copper- and iron-containing enzymes. Humans, other primates, and guinea pigs cannot synthesize it due to loss of L-gulonolactone oxidase. Serves as the electron donor for the prolyl and lysyl hydroxylases that stabilize the collagen triple helix, and for dopamine β-hydroxylase in catecholamine synthesis. Plasma levels are tightly controlled by renal reabsorption, which saturates near 400 mg/day intake.",
       "whatItDoes": [
         "Cofactor for prolyl and lysyl hydroxylase in collagen cross-linking",
@@ -587,7 +652,6 @@
           "note": "Explicitly NOT supported in the general population — the same Cochrane review found no reduction in incidence. The one exception is people under extreme physical stress (marathon runners, soldiers in subarctic conditions), where incidence roughly halved. Worth stating plainly given how widely the opposite is believed."
         }
       ],
-
       "deficiency": {
         "clinicalName": "scurvy",
         "prevalence": "Roughly 7% of the US population has serum levels indicating deficiency (NHANES), concentrated among smokers and people with low fruit and vegetable intake. Frank scurvy is rare but persistently under-diagnosed in people with restrictive diets, alcohol dependence, or severe mental illness.",
@@ -614,7 +678,6 @@
           "infants fed exclusively on boiled or evaporated milk"
         ]
       },
-
       "excess": {
         "fromFood": "No adverse effects from food sources. Renal excretion handles any dietary excess.",
         "fromSupplements": [
@@ -626,7 +689,6 @@
         "clinicalName": null,
         "severeRisk": "Doses above roughly 1,000 mg/day may raise oxalate stone risk in susceptible people. In hereditary hemochromatosis, high doses can worsen iron overload by increasing absorption."
       },
-
       "absorption": {
         "typicalRate": "70–90% at typical intakes; falls below 50% above 1,000 mg in a single dose",
         "enhancers": [
@@ -641,7 +703,6 @@
         ],
         "notes": "Active transport saturates, so absorption efficiency falls steeply with dose — 200 mg taken twice beats 400 mg taken once. Cooking losses are substantial: boiling can destroy over half the vitamin C in a vegetable, while steaming, microwaving, and raw consumption preserve much more. Storage matters too; a cut pepper loses vitamin C over days in the fridge."
       },
-
       "interactions": [
         {
           "with": "iron",
@@ -659,16 +720,44 @@
           "effect": "Very high supplemental doses may impair copper status. Not a concern at dietary intakes."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Guava", "per100g": 228, "typicalServing": "55 g (1 fruit)" },
-        { "fdcId": null, "name": "Bell pepper, red, raw", "per100g": 128, "typicalServing": "119 g (1 medium)" },
-        { "fdcId": null, "name": "Kiwifruit", "per100g": 93, "typicalServing": "69 g (1 fruit)" },
-        { "fdcId": null, "name": "Broccoli, raw", "per100g": 89, "typicalServing": "91 g (1 cup)" },
-        { "fdcId": null, "name": "Strawberries", "per100g": 59, "typicalServing": "152 g (1 cup)" },
-        { "fdcId": null, "name": "Orange", "per100g": 53, "typicalServing": "131 g (1 medium)" }
+        {
+          "fdcId": null,
+          "name": "Guava",
+          "per100g": 228,
+          "typicalServing": "55 g (1 fruit)"
+        },
+        {
+          "fdcId": null,
+          "name": "Bell pepper, red, raw",
+          "per100g": 128,
+          "typicalServing": "119 g (1 medium)"
+        },
+        {
+          "fdcId": null,
+          "name": "Kiwifruit",
+          "per100g": 93,
+          "typicalServing": "69 g (1 fruit)"
+        },
+        {
+          "fdcId": null,
+          "name": "Broccoli, raw",
+          "per100g": 89,
+          "typicalServing": "91 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Strawberries",
+          "per100g": 59,
+          "typicalServing": "152 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Orange",
+          "per100g": 53,
+          "typicalServing": "131 g (1 medium)"
+        }
       ],
-
       "reference": {
         "ear": {
           "child_1_3": 13,
@@ -706,7 +795,6 @@
           }
         }
       },
-
       "citations": [
         {
           "label": "NIH Office of Dietary Supplements — Vitamin C (Health Professional)",
@@ -719,9 +807,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "lutein-zeaxanthin",
+      "depth": "full",
       "name": "Lutein + Zeaxanthin",
       "symbol": null,
       "unit": "mg",
@@ -732,10 +820,8 @@
       "essentiality": "non-essential",
       "storage": "moderate",
       "antioxidantRole": true,
-
       "oneLiner": "Yellow pigments that concentrate in the retina and filter blue light.",
       "simpleExplanation": "These two pigments come from leafy greens, egg yolks, and corn, and your body sends them straight to the centre of the retina, where they form a yellow filter that absorbs blue light. Eating more of them measurably thickens that filter. There's no official daily requirement — nobody gets a deficiency disease from lacking them — but higher intakes are linked to slower age-related macular degeneration.",
-
       "summary": "Xanthophyll carotenoids, and the only two dietary carotenoids selectively accumulated in the primate macula, where they constitute macular pigment. Zeaxanthin dominates the foveal center, lutein the periphery. Both absorb strongly in the blue region (~450 nm) and quench singlet oxygen. Macular pigment optical density responds measurably to dietary and supplemental intake, making this one of the few phytonutrients with a validated tissue-level biomarker.",
       "whatItDoes": [
         "Forms macular pigment, filtering blue light before it reaches photoreceptors",
@@ -765,7 +851,6 @@
           "note": "Observational associations between macular pigment density and cognitive scores, plus small pilot trials. Mechanistically interesting, not established."
         }
       ],
-
       "deficiency": {
         "clinicalName": null,
         "prevalence": "Not applicable — there is no deficiency state. US median intake is roughly 1–2 mg/day, well below the 10 mg used in intervention trials.",
@@ -776,7 +861,6 @@
           "smokers (lower circulating carotenoid levels overall)"
         ]
       },
-
       "excess": {
         "fromFood": "No toxicity reported from food. Extremely high intakes of yellow-orange vegetables can produce carotenodermia — harmless yellowing of the skin that resolves on reduction.",
         "fromSupplements": [
@@ -786,7 +870,6 @@
         "clinicalName": null,
         "severeRisk": null
       },
-
       "absorption": {
         "typicalRate": "Highly variable, roughly 5–60% depending on the food matrix",
         "enhancers": [
@@ -802,7 +885,6 @@
         ],
         "notes": "Food matrix matters more than absolute content here. Egg yolk delivers only about 1 mg per 100 g against spinach's 11 mg, but its lipid matrix makes it far more bioavailable — a fair comparison has to weight for that. Adding oil to a salad is not optional for carotenoid absorption; a fat-free dressing substantially reduces uptake."
       },
-
       "interactions": [
         {
           "with": "beta-carotene",
@@ -815,16 +897,44 @@
           "effect": "Both are lipid-phase antioxidants concentrated in retinal membranes and appear to act complementarily."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Spinach, boiled", "per100g": 11.3, "typicalServing": "180 g (1 cup)" },
-        { "fdcId": null, "name": "Kale, boiled", "per100g": 8.2, "typicalServing": "130 g (1 cup)" },
-        { "fdcId": null, "name": "Pistachios", "per100g": 1.4, "typicalServing": "28 g" },
-        { "fdcId": null, "name": "Egg yolk", "per100g": 1.1, "typicalServing": "17 g (1 yolk)" },
-        { "fdcId": null, "name": "Corn, sweet, cooked", "per100g": 0.9, "typicalServing": "164 g (1 cup)" },
-        { "fdcId": null, "name": "Peas, green, cooked", "per100g": 1.9, "typicalServing": "160 g (1 cup)" }
+        {
+          "fdcId": null,
+          "name": "Spinach, boiled",
+          "per100g": 11.3,
+          "typicalServing": "180 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Kale, boiled",
+          "per100g": 8.2,
+          "typicalServing": "130 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Pistachios",
+          "per100g": 1.4,
+          "typicalServing": "28 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Egg yolk",
+          "per100g": 1.1,
+          "typicalServing": "17 g (1 yolk)"
+        },
+        {
+          "fdcId": null,
+          "name": "Corn, sweet, cooked",
+          "per100g": 0.9,
+          "typicalServing": "164 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Peas, green, cooked",
+          "per100g": 1.9,
+          "typicalServing": "160 g (1 cup)"
+        }
       ],
-
       "reference": null,
       "intakeContext": {
         "populationMedian": {
@@ -840,7 +950,6 @@
         },
         "framing": "No official requirement exists for lutein or zeaxanthin, and no deficiency disease has ever been described. These figures show what people typically eat and what amounts have been studied — they are context, not a target to hit."
       },
-
       "citations": [
         {
           "label": "AREDS2 — Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration (JAMA 2013)",
@@ -853,9 +962,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "protein",
+      "depth": "full",
       "name": "Protein",
       "symbol": null,
       "unit": "g",
@@ -866,10 +975,8 @@
       "essentiality": "essential",
       "storage": "none",
       "antioxidantRole": false,
-
       "oneLiner": "Supplies the amino acids your body cannot make for itself.",
       "simpleExplanation": "Protein is broken down into amino acids and rebuilt into muscle, enzymes, antibodies and hormones. Nine of those amino acids can't be made by the body at all, so they have to come from food. The official minimum is lower than most people expect — around 56 g a day for an adult man — but that figure is the amount needed to avoid losing tissue, not the amount that is best for building or keeping muscle. Spreading intake across meals works better than eating most of it at dinner.",
-
       "summary": "Nitrogen source and the sole dietary supply of the nine indispensable amino acids. The RDA of 0.8 g/kg/day derives from nitrogen-balance studies and represents the intake at which most adults avoid net protein loss — an avoidance-of-deficiency figure, not an optimum. Muscle protein synthesis is stimulated in a saturable, per-meal manner with leucine as the principal trigger, which is why distribution across meals matters independently of total intake.",
       "whatItDoes": [
         "Supplies the nine indispensable amino acids, which cannot be synthesised endogenously",
@@ -905,7 +1012,6 @@
           "note": "A negative finding, included because the claim is widespread. Trials in people with normal kidney function show no decline in glomerular filtration at intakes up to 2.8 g/kg/day. The concern is real and important in existing chronic kidney disease, and does not generalise to healthy kidneys."
         }
       ],
-
       "deficiency": {
         "clinicalName": "protein-energy malnutrition",
         "prevalence": "Rare in high-income countries at the level of frank deficiency. Marginal intake is common in older adults, in people eating very low energy diets, and in some hospitalised populations.",
@@ -931,7 +1037,6 @@
           "people with malabsorptive conditions"
         ]
       },
-
       "excess": {
         "fromFood": "No upper limit has been set. Intakes well above the RDA are not associated with harm in people with normal kidney and liver function, though very high intakes displace other foods and can crowd out fibre and phytonutrients.",
         "fromSupplements": [
@@ -942,7 +1047,6 @@
         "clinicalName": null,
         "severeRisk": "In existing chronic kidney disease, high protein intake accelerates decline in glomerular filtration and intake should be set with a clinician. There is no equivalent risk in healthy kidneys."
       },
-
       "absorption": {
         "typicalRate": "Over 90% of protein from animal sources; roughly 70–90% from plant sources",
         "enhancers": [
@@ -959,7 +1063,6 @@
         ],
         "notes": "Digestibility and amino acid pattern both matter, which is why DIAAS is a better guide than raw grams for plant-based diets. Lysine is the limiting amino acid in cereals and methionine in legumes, so the two complement each other — but they do not need to be eaten in the same meal, only across the day. Leucine is the principal trigger for muscle protein synthesis, and a threshold of roughly 2.5 g of leucine per meal is where the response reliably saturates in younger adults."
       },
-
       "interactions": [
         {
           "with": "calcium",
@@ -977,16 +1080,44 @@
           "effect": "B6 is the cofactor for transamination and other amino acid metabolism, so B6 requirement rises with protein intake."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Chicken breast, grilled", "per100g": 31, "typicalServing": "150 g" },
-        { "fdcId": null, "name": "Tofu, firm", "per100g": 17.3, "typicalServing": "126 g (1/2 cup)" },
-        { "fdcId": null, "name": "Greek yogurt, plain, nonfat", "per100g": 10.2, "typicalServing": "170 g" },
-        { "fdcId": null, "name": "Lentils, cooked", "per100g": 9.0, "typicalServing": "198 g (1 cup)" },
-        { "fdcId": null, "name": "Egg, whole", "per100g": 12.6, "typicalServing": "50 g (1 large)" },
-        { "fdcId": null, "name": "Almonds", "per100g": 21.2, "typicalServing": "28 g" }
+        {
+          "fdcId": null,
+          "name": "Chicken breast, grilled",
+          "per100g": 31,
+          "typicalServing": "150 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Tofu, firm",
+          "per100g": 17.3,
+          "typicalServing": "126 g (1/2 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Greek yogurt, plain, nonfat",
+          "per100g": 10.2,
+          "typicalServing": "170 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Lentils, cooked",
+          "per100g": 9.0,
+          "typicalServing": "198 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Egg, whole",
+          "per100g": 12.6,
+          "typicalServing": "50 g (1 large)"
+        },
+        {
+          "fdcId": null,
+          "name": "Almonds",
+          "per100g": 21.2,
+          "typicalServing": "28 g"
+        }
       ],
-
       "reference": {
         "ear": {
           "child_1_3": 11,
@@ -1016,7 +1147,6 @@
           "note": "Percent of total energy. The lower bound is close to the RDA for most adults; the upper bound is where the evidence for safety and adequacy stops, not a point at which harm begins."
         }
       },
-
       "citations": [
         {
           "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
@@ -1029,9 +1159,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "carbohydrate",
+      "depth": "full",
       "name": "Total carbohydrate",
       "symbol": null,
       "unit": "g",
@@ -1042,10 +1172,8 @@
       "essentiality": "essential",
       "storage": "none",
       "antioxidantRole": false,
-
       "oneLiner": "The body's most readily used fuel, and the brain's preferred one.",
       "simpleExplanation": "Carbohydrate is the fuel your body reaches for first, and the brain runs on glucose almost exclusively. The 130 g daily figure is the amount that covers the brain without the body having to make glucose from protein or fat — it is a floor, not a goal, and most people eat well above it. What matters far more than the total is the form: the same 40 g behaves very differently coming from lentils than from a soft drink.",
-
       "summary": "Primary oxidative substrate and the only fuel the brain uses in appreciable quantity under normal feeding. The 130 g/day RDA is derived from mean cerebral glucose utilisation and represents the intake below which gluconeogenesis from amino acids and glycerol must supply the deficit — a physiological floor, not an optimum. Glycemic response depends on food matrix, fibre content, processing and co-ingested fat and protein far more than on total grams, which is why glycemic load is tracked per meal rather than inferred from carbohydrate mass.",
       "whatItDoes": [
         "Supplies glucose, effectively the sole fuel of the brain under normal feeding conditions",
@@ -1076,7 +1204,6 @@
           "note": "A negative finding worth stating plainly. Head-to-head trials of low-carbohydrate against low-fat diets matched for energy and protein find little difference beyond twelve months. Adherence predicts the outcome, not macronutrient ratio."
         }
       ],
-
       "deficiency": {
         "clinicalName": null,
         "prevalence": "There is no deficiency disease. Sustained intake below roughly 50 g/day induces nutritional ketosis, which is an adaptation rather than a pathology.",
@@ -1097,7 +1224,6 @@
           "people with type 1 diabetes, where carbohydrate intake and insulin must be matched"
         ]
       },
-
       "excess": {
         "fromFood": "No upper limit has been set for total carbohydrate. The DRI committee did set a limit on added sugars — under 25% of total energy — on the grounds that above that they displace nutrient-dense foods, and most public health bodies since have recommended considerably less.",
         "fromSupplements": [
@@ -1108,7 +1234,6 @@
         "clinicalName": null,
         "severeRisk": null
       },
-
       "absorption": {
         "typicalRate": "Near-complete for digestible carbohydrate; fibre and resistant starch pass to the colon undigested",
         "enhancers": [
@@ -1124,7 +1249,6 @@
         ],
         "notes": "The same grams of carbohydrate produce very different glucose curves depending on form. Whole intact grains produce a markedly lower response than flour made from the same grain, and legumes lower still. This is why the app tracks glycemic load per meal — computed from the food's own glycemic index and its available carbohydrate — rather than inferring anything from total carbohydrate alone."
       },
-
       "interactions": [
         {
           "with": "fiber",
@@ -1142,16 +1266,44 @@
           "effect": "Chromium contributes to insulin signalling, and high intakes of refined carbohydrate increase its urinary loss."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Oats, rolled, dry", "per100g": 66.3, "typicalServing": "40 g (1/2 cup)" },
-        { "fdcId": null, "name": "Rice, white, cooked", "per100g": 28.2, "typicalServing": "158 g (1 cup)" },
-        { "fdcId": null, "name": "Bread, whole wheat", "per100g": 43.1, "typicalServing": "28 g (1 slice)" },
-        { "fdcId": null, "name": "Potato, baked, with skin", "per100g": 21.2, "typicalServing": "173 g (1 medium)" },
-        { "fdcId": null, "name": "Lentils, cooked", "per100g": 20.1, "typicalServing": "198 g (1 cup)" },
-        { "fdcId": null, "name": "Banana, raw", "per100g": 22.8, "typicalServing": "118 g (1 medium)" }
+        {
+          "fdcId": null,
+          "name": "Oats, rolled, dry",
+          "per100g": 66.3,
+          "typicalServing": "40 g (1/2 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Rice, white, cooked",
+          "per100g": 28.2,
+          "typicalServing": "158 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Bread, whole wheat",
+          "per100g": 43.1,
+          "typicalServing": "28 g (1 slice)"
+        },
+        {
+          "fdcId": null,
+          "name": "Potato, baked, with skin",
+          "per100g": 21.2,
+          "typicalServing": "173 g (1 medium)"
+        },
+        {
+          "fdcId": null,
+          "name": "Lentils, cooked",
+          "per100g": 20.1,
+          "typicalServing": "198 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Banana, raw",
+          "per100g": 22.8,
+          "typicalServing": "118 g (1 medium)"
+        }
       ],
-
       "reference": {
         "ear": {
           "child_1_3": 100,
@@ -1181,7 +1333,6 @@
           "note": "Percent of total energy. Well-conducted diets sit outside this band in both directions without evident harm; the band reflects the range the DRI committee could support, not a boundary of safety."
         }
       },
-
       "citations": [
         {
           "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
@@ -1194,9 +1345,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "fat-total",
+      "depth": "full",
       "name": "Total fat",
       "symbol": null,
       "unit": "g",
@@ -1207,10 +1358,8 @@
       "essentiality": "essential",
       "storage": "none",
       "antioxidantRole": false,
-
       "oneLiner": "Carries the fat-soluble vitamins and supplies the two fats you must eat.",
       "simpleExplanation": "Fat is the densest source of energy, and it is also the vehicle: vitamins A, D, E and K and the carotenoids are barely absorbed without it. Two fatty acids — linoleic and alpha-linolenic — cannot be made by the body at all. There is no recommended daily amount for fat as a whole, only a sensible range of 20–35% of your calories, because which fats you eat matters far more than how much.",
-
       "summary": "Energy-dense substrate at 9 kcal/g, structural component of every cell membrane, and the obligatory carrier for fat-soluble micronutrients and carotenoids. Total fat carries no EAR, RDA or adult AI — only an AMDR of 20–35% of energy — because outcome data track fatty acid composition rather than total quantity. The two indispensable fatty acids, linoleic (n-6) and alpha-linolenic (n-3), each carry their own AI and are tracked separately in this app.",
       "whatItDoes": [
         "Supplies linoleic and alpha-linolenic acid, the two fatty acids humans cannot synthesise",
@@ -1241,7 +1390,6 @@
           "note": "A negative finding, kept because the belief persists. The response varies substantially between individuals and is small on average; the 300 mg/day limit was dropped from the US Dietary Guidelines in 2015. Saturated and trans fat intake matter considerably more."
         }
       ],
-
       "deficiency": {
         "clinicalName": "essential fatty acid deficiency",
         "prevalence": "Very rare from ordinary diets. Seen historically in patients on fat-free parenteral nutrition and in severe fat malabsorption.",
@@ -1264,7 +1412,6 @@
           "patients on long-term fat-free parenteral nutrition"
         ]
       },
-
       "excess": {
         "fromFood": "No upper limit has been set for total fat. Limits exist for the components that carry the risk: saturated fat under 10% of energy in most guidelines, and trans fat as low as achievable.",
         "fromSupplements": [
@@ -1274,7 +1421,6 @@
         "clinicalName": null,
         "severeRisk": "Industrially produced trans fat raises LDL and lowers HDL simultaneously and has no safe intake. It is a component of total fat and is tracked separately in this app."
       },
-
       "absorption": {
         "typicalRate": "Around 95% of dietary fat in healthy adults",
         "enhancers": [
@@ -1291,7 +1437,6 @@
         ],
         "notes": "Fat absorption is efficient enough that the interesting question is composition, not quantity. Because fat is the carrier for carotenoids and the fat-soluble vitamins, a meal's fat content changes how much micronutrient you actually get from it — which is why a fat-free dressing on a salad is a false economy."
       },
-
       "interactions": [
         {
           "with": "vitamin-d",
@@ -1314,16 +1459,44 @@
           "effect": "Carotenoid absorption is poor to negligible without fat in the same meal. A few grams of oil is enough to change the outcome substantially."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Olive oil, extra virgin", "per100g": 100, "typicalServing": "13.5 g (1 tbsp)" },
-        { "fdcId": null, "name": "Almonds", "per100g": 49.9, "typicalServing": "28 g" },
-        { "fdcId": null, "name": "Avocado, raw", "per100g": 14.7, "typicalServing": "150 g (1 medium)" },
-        { "fdcId": null, "name": "Salmon, Atlantic, farmed", "per100g": 12.3, "typicalServing": "140 g fillet" },
-        { "fdcId": null, "name": "Cheddar cheese", "per100g": 33.1, "typicalServing": "28 g" },
-        { "fdcId": null, "name": "Peanut butter", "per100g": 50.4, "typicalServing": "32 g (2 tbsp)" }
+        {
+          "fdcId": null,
+          "name": "Olive oil, extra virgin",
+          "per100g": 100,
+          "typicalServing": "13.5 g (1 tbsp)"
+        },
+        {
+          "fdcId": null,
+          "name": "Almonds",
+          "per100g": 49.9,
+          "typicalServing": "28 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Avocado, raw",
+          "per100g": 14.7,
+          "typicalServing": "150 g (1 medium)"
+        },
+        {
+          "fdcId": null,
+          "name": "Salmon, Atlantic, farmed",
+          "per100g": 12.3,
+          "typicalServing": "140 g fillet"
+        },
+        {
+          "fdcId": null,
+          "name": "Cheddar cheese",
+          "per100g": 33.1,
+          "typicalServing": "28 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Peanut butter",
+          "per100g": 50.4,
+          "typicalServing": "32 g (2 tbsp)"
+        }
       ],
-
       "reference": {
         "ear": null,
         "rda": null,
@@ -1335,7 +1508,6 @@
           "note": "Percent of total energy. Total fat has no RDA and no adult AI — this band is the only reference intake published for it, because health outcomes track which fats you eat rather than how much fat in total."
         }
       },
-
       "citations": [
         {
           "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
@@ -1348,9 +1520,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "fiber",
+      "depth": "full",
       "name": "Fiber, total",
       "symbol": null,
       "unit": "g",
@@ -1361,10 +1533,8 @@
       "essentiality": "non-essential",
       "storage": "none",
       "antioxidantRole": false,
-
       "oneLiner": "Feeds your gut bacteria and is the single most under-eaten thing in the diet.",
       "simpleExplanation": "Fibre is the part of plant food you don't digest, so it reaches the colon intact and feeds the bacteria living there. Roughly 95% of people fall short of the recommended amount, which makes it the largest gap in most diets. You cannot get a deficiency disease from lacking it — which is exactly why it gets ignored — but intake tracks strongly with lower rates of heart disease, type 2 diabetes and bowel cancer. Increase it gradually and drink more water, or the first week will be uncomfortable.",
-
       "summary": "Non-digestible carbohydrate polymers reaching the colon intact. Soluble, viscous and fermentable fractions lower LDL and blunt glycemic response; insoluble fractions increase stool bulk and reduce transit time. Colonic fermentation yields short-chain fatty acids, principally butyrate, which is the preferred fuel of the colonocyte and a mediator of much of fibre's systemic effect. The AI of 14 g per 1000 kcal derives from the intake associated with the lowest coronary heart disease risk in observational cohorts — a risk-reduction figure, not a requirement, since no deficiency state exists.",
       "whatItDoes": [
         "Supplies fermentable substrate to the colonic microbiota, producing butyrate, propionate and acetate",
@@ -1400,7 +1570,6 @@
           "note": "Depends entirely on the type. Soluble fibre such as psyllium helps some people; insoluble wheat bran commonly makes IBS symptoms worse. A blanket recommendation to eat more fibre is poor advice here."
         }
       ],
-
       "deficiency": {
         "clinicalName": null,
         "prevalence": "Around 95% of US adults consume less than the Adequate Intake (NHANES). There is no deficiency disease, which is a large part of why the shortfall persists.",
@@ -1421,7 +1590,6 @@
           "older adults with low food intake overall"
         ]
       },
-
       "excess": {
         "fromFood": "No upper limit has been set. Very high intakes reached suddenly cause bloating, wind and cramping, and can reduce absorption of minerals — but this is a ramp-rate problem far more than a ceiling problem.",
         "fromSupplements": [
@@ -1432,7 +1600,6 @@
         "clinicalName": null,
         "severeRisk": "Bulk-forming supplements taken without adequate fluid can cause obstruction. This is the one genuine acute risk and it is entirely avoidable."
       },
-
       "absorption": {
         "typicalRate": "Not absorbed by design — fermented in the colon, yielding roughly 2 kcal/g from short-chain fatty acids",
         "enhancers": [
@@ -1448,7 +1615,6 @@
         ],
         "notes": "Fibre is not one substance and the fractions do different jobs, which is why this app tracks soluble and insoluble separately where the data exists. Oat beta-glucan and psyllium lower LDL; wheat bran does not, but moves the bowel far more effectively. Getting fibre from a range of whole plant foods rather than one supplement is what the cohort evidence actually describes."
       },
-
       "interactions": [
         {
           "with": "magnesium",
@@ -1471,16 +1637,44 @@
           "effect": "Bulking fibre draws water into the stool. Increasing fibre without increasing fluid makes constipation worse rather than better."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Chia seeds", "per100g": 34.4, "typicalServing": "28 g" },
-        { "fdcId": null, "name": "Black beans, cooked", "per100g": 8.7, "typicalServing": "172 g (1 cup)" },
-        { "fdcId": null, "name": "Lentils, cooked", "per100g": 7.9, "typicalServing": "198 g (1 cup)" },
-        { "fdcId": null, "name": "Almonds", "per100g": 12.5, "typicalServing": "28 g" },
-        { "fdcId": null, "name": "Oats, rolled, dry", "per100g": 10.6, "typicalServing": "40 g (1/2 cup)" },
-        { "fdcId": null, "name": "Raspberries, raw", "per100g": 6.5, "typicalServing": "123 g (1 cup)" }
+        {
+          "fdcId": null,
+          "name": "Chia seeds",
+          "per100g": 34.4,
+          "typicalServing": "28 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Black beans, cooked",
+          "per100g": 8.7,
+          "typicalServing": "172 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Lentils, cooked",
+          "per100g": 7.9,
+          "typicalServing": "198 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Almonds",
+          "per100g": 12.5,
+          "typicalServing": "28 g"
+        },
+        {
+          "fdcId": null,
+          "name": "Oats, rolled, dry",
+          "per100g": 10.6,
+          "typicalServing": "40 g (1/2 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Raspberries, raw",
+          "per100g": 6.5,
+          "typicalServing": "123 g (1 cup)"
+        }
       ],
-
       "reference": {
         "ear": null,
         "rda": null,
@@ -1501,7 +1695,6 @@
         "ul": null,
         "amdr": null
       },
-
       "citations": [
         {
           "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
@@ -1514,9 +1707,9 @@
       ],
       "lastReviewed": "2026-08-11"
     },
-
     {
       "id": "water",
+      "depth": "full",
       "name": "Water",
       "symbol": "H₂O",
       "unit": "mL",
@@ -1527,10 +1720,8 @@
       "essentiality": "essential",
       "storage": "none",
       "antioxidantRole": false,
-
       "oneLiner": "The one nutrient you cannot go more than a few days without.",
       "simpleExplanation": "Water makes up roughly 60% of your body and is the medium every biochemical reaction happens in. The commonly quoted target of about 3.7 L a day for men and 2.7 L for women is total water — around a fifth of it comes from food, so the amount you actually need to drink is meaningfully lower. There is no need to count it precisely: thirst is a reliable guide for healthy adults, and pale yellow urine is a better check than any number.",
-
       "summary": "Solvent and transport medium constituting roughly 60% of body mass in adult men and 50–55% in adult women. Balance is regulated by arginine vasopressin acting on renal collecting-duct aquaporins, with plasma osmolality held within about 1–2% of setpoint. The AI is set from median total water intake in healthy populations rather than from a measured requirement, because requirement varies enormously with climate, activity and diet — a point the DRI committee stated explicitly.",
       "whatItDoes": [
         "Acts as the solvent for essentially all metabolic reactions",
@@ -1561,7 +1752,6 @@
           "note": "A negative finding worth stating, because the figure is everywhere. It has no identifiable scientific origin, ignores the roughly 20% of intake that comes from food, and ignores that requirement varies with body size, climate and activity. Thirst regulates intake adequately in healthy adults."
         }
       ],
-
       "deficiency": {
         "clinicalName": "dehydration",
         "prevalence": "Common and usually mild. Clinically meaningful dehydration is frequent in older adults, in whom the thirst response is blunted.",
@@ -1587,7 +1777,6 @@
           "people with poorly controlled diabetes"
         ]
       },
-
       "excess": {
         "fromFood": "No upper limit has been set, because the healthy kidney excretes a surplus readily — up to roughly 0.8–1.0 L per hour.",
         "fromSupplements": [
@@ -1597,7 +1786,6 @@
         "clinicalName": "hyponatraemia",
         "severeRisk": "Drinking far beyond renal clearance dilutes plasma sodium and can cause cerebral oedema, seizures and death. This is rare but real, and is documented in endurance events and in water-drinking contests. Sustained intake above roughly 1 L/hour is where the risk begins."
       },
-
       "absorption": {
         "typicalRate": "Essentially complete, mostly in the small intestine",
         "enhancers": [
@@ -1612,7 +1800,6 @@
         ],
         "notes": "Roughly 20% of total water intake comes from food, which is why the AI figures look higher than the amount anyone drinks. Fruit and vegetables are 80–95% water. Caffeinated drinks count toward intake — the diuretic effect is modest and does not offset the fluid they carry, contrary to long-standing advice."
       },
-
       "interactions": [
         {
           "with": "sodium",
@@ -1630,16 +1817,44 @@
           "effect": "Fibre draws water into the stool to soften and bulk it. Raising fibre without raising fluid makes constipation worse."
         }
       ],
-
       "topSources": [
-        { "fdcId": null, "name": "Cucumber, raw", "per100g": 95.2, "typicalServing": "104 g (1 cup sliced)" },
-        { "fdcId": null, "name": "Tomato, raw", "per100g": 94.5, "typicalServing": "123 g (1 medium)" },
-        { "fdcId": null, "name": "Watermelon, raw", "per100g": 91.5, "typicalServing": "152 g (1 cup)" },
-        { "fdcId": null, "name": "Milk, 2% fat", "per100g": 89.2, "typicalServing": "244 g (1 cup)" },
-        { "fdcId": null, "name": "Orange, raw", "per100g": 86.8, "typicalServing": "131 g (1 medium)" },
-        { "fdcId": null, "name": "Greek yogurt, plain, nonfat", "per100g": 85.1, "typicalServing": "170 g" }
+        {
+          "fdcId": null,
+          "name": "Cucumber, raw",
+          "per100g": 95.2,
+          "typicalServing": "104 g (1 cup sliced)"
+        },
+        {
+          "fdcId": null,
+          "name": "Tomato, raw",
+          "per100g": 94.5,
+          "typicalServing": "123 g (1 medium)"
+        },
+        {
+          "fdcId": null,
+          "name": "Watermelon, raw",
+          "per100g": 91.5,
+          "typicalServing": "152 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Milk, 2% fat",
+          "per100g": 89.2,
+          "typicalServing": "244 g (1 cup)"
+        },
+        {
+          "fdcId": null,
+          "name": "Orange, raw",
+          "per100g": 86.8,
+          "typicalServing": "131 g (1 medium)"
+        },
+        {
+          "fdcId": null,
+          "name": "Greek yogurt, plain, nonfat",
+          "per100g": 85.1,
+          "typicalServing": "170 g"
+        }
       ],
-
       "reference": {
         "ear": null,
         "rda": null,
@@ -1658,7 +1873,6 @@
         "ul": null,
         "amdr": null
       },
-
       "citations": [
         {
           "label": "NASEM — Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate",
@@ -1667,6 +1881,1689 @@
         {
           "label": "Valtin — \"Drink at least eight glasses of water a day.\" Really? (Am J Physiol 2002)",
           "url": "https://journals.physiology.org/doi/full/10.1152/ajpregu.00365.2002"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "vitamin-a",
+      "depth": "brief",
+      "name": "Vitamin A",
+      "symbol": null,
+      "unit": "mcg",
+      "category": "vitamin",
+      "subcategory": "fat-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "Runs low-light vision, and keeps skin and immune barriers intact.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 625,
+          "female_19_plus": 500
+        },
+        "rda": {
+          "child_1_3": 300,
+          "child_4_8": 400,
+          "child_9_13": 600,
+          "male_14_18": 900,
+          "male_19_plus": 900,
+          "female_14_18": 700,
+          "female_19_plus": 700,
+          "pregnancy_14_18": 750,
+          "pregnancy_19_50": 770,
+          "lactation_14_18": 1200,
+          "lactation_19_50": 1300
+        },
+        "ai": null,
+        "ul": {
+          "value": 3000,
+          "appliesTo": "fortified-and-supplemental",
+          "note": "Applies to PREFORMED vitamin A (retinol) only. Beta-carotene and the other provitamin A carotenoids have no upper limit — the body regulates their conversion. Since this app tracks vitamin A as RAE, which includes that conversion, applying the limit to the total would flag a carrot as a hazard. It is not applied to intake from food.",
+          "byLifeStage": {
+            "child_1_3": 600,
+            "child_4_8": 900,
+            "child_9_13": 1700,
+            "male_14_18": 2800,
+            "female_14_18": 2800,
+            "male_19_plus": 3000,
+            "female_19_plus": 3000
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin A",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "vitamin-e",
+      "depth": "brief",
+      "name": "Vitamin E",
+      "symbol": null,
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "fat-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": true,
+      "oneLiner": "Protects cell membranes from oxidation, especially the fats in them.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 12,
+          "female_19_plus": 12
+        },
+        "rda": {
+          "child_1_3": 6,
+          "child_4_8": 7,
+          "child_9_13": 11,
+          "male_14_18": 15,
+          "male_19_plus": 15,
+          "female_14_18": 15,
+          "female_19_plus": 15,
+          "pregnancy_14_50": 15,
+          "lactation_14_50": 19
+        },
+        "ai": null,
+        "ul": {
+          "value": 1000,
+          "appliesTo": "supplemental",
+          "note": "Applies to supplemental alpha-tocopherol in any form. There is no upper limit for vitamin E from food.",
+          "byLifeStage": {
+            "child_1_3": 200,
+            "child_4_8": 300,
+            "child_9_13": 600,
+            "male_14_18": 800,
+            "female_14_18": 800,
+            "male_19_plus": 1000,
+            "female_19_plus": 1000
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin E",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "vitamin-k",
+      "depth": "brief",
+      "name": "Vitamin K",
+      "symbol": null,
+      "unit": "mcg",
+      "category": "vitamin",
+      "subcategory": "fat-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": false,
+      "oneLiner": "Switches on the proteins that clot blood and bind calcium into bone.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 30,
+          "child_4_8": 55,
+          "child_9_13": 60,
+          "male_14_18": 75,
+          "male_19_plus": 120,
+          "female_14_18": 75,
+          "female_19_plus": 90,
+          "pregnancy_14_18": 75,
+          "pregnancy_19_50": 90,
+          "lactation_14_18": 75,
+          "lactation_19_50": 90
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin K",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "thiamin",
+      "depth": "brief",
+      "name": "Thiamin (B1)",
+      "symbol": "B1",
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Turns carbohydrate into usable energy; the need rises as you eat more of it.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 1.0,
+          "female_19_plus": 0.9
+        },
+        "rda": {
+          "child_1_3": 0.5,
+          "child_4_8": 0.6,
+          "child_9_13": 0.9,
+          "male_14_18": 1.2,
+          "male_19_plus": 1.2,
+          "female_14_18": 1.0,
+          "female_19_plus": 1.1,
+          "pregnancy_14_50": 1.4,
+          "lactation_14_50": 1.4
+        },
+        "ai": null,
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Thiamin",
+          "url": "https://ods.od.nih.gov/factsheets/Thiamin-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "riboflavin",
+      "depth": "brief",
+      "name": "Riboflavin (B2)",
+      "symbol": "B2",
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Carries electrons through energy metabolism, and recycles other B vitamins.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 1.1,
+          "female_19_plus": 0.9
+        },
+        "rda": {
+          "child_1_3": 0.5,
+          "child_4_8": 0.6,
+          "child_9_13": 0.9,
+          "male_14_18": 1.3,
+          "male_19_plus": 1.3,
+          "female_14_18": 1.0,
+          "female_19_plus": 1.1,
+          "pregnancy_14_50": 1.4,
+          "lactation_14_50": 1.6
+        },
+        "ai": null,
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Riboflavin",
+          "url": "https://ods.od.nih.gov/factsheets/Riboflavin-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "niacin",
+      "depth": "brief",
+      "name": "Niacin (B3)",
+      "symbol": "B3",
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Builds NAD, the cofactor behind several hundred metabolic reactions.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 12,
+          "female_19_plus": 11
+        },
+        "rda": {
+          "child_1_3": 6,
+          "child_4_8": 8,
+          "child_9_13": 12,
+          "male_14_18": 16,
+          "male_19_plus": 16,
+          "female_14_18": 14,
+          "female_19_plus": 14,
+          "pregnancy_14_50": 18,
+          "lactation_14_50": 17
+        },
+        "ai": null,
+        "ul": {
+          "value": 35,
+          "appliesTo": "fortified-and-supplemental",
+          "note": "Applies to synthetic nicotinic acid from supplements and fortified foods, where the flushing reaction occurs. Niacin naturally present in food has no upper limit.",
+          "byLifeStage": {
+            "child_1_3": 10,
+            "child_4_8": 15,
+            "child_9_13": 20,
+            "male_14_18": 30,
+            "female_14_18": 30,
+            "male_19_plus": 35,
+            "female_19_plus": 35
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Niacin",
+          "url": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "pantothenic-acid",
+      "depth": "brief",
+      "name": "Pantothenic acid (B5)",
+      "symbol": "B5",
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Forms coenzyme A, without which neither fat nor carbohydrate can be burned.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 2,
+          "child_4_8": 3,
+          "child_9_13": 4,
+          "male_14_18": 5,
+          "male_19_plus": 5,
+          "female_14_18": 5,
+          "female_19_plus": 5,
+          "pregnancy_14_50": 6,
+          "lactation_14_50": 7
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Pantothenic Acid",
+          "url": "https://ods.od.nih.gov/factsheets/PantothenicAcid-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "vitamin-b6",
+      "depth": "brief",
+      "name": "Vitamin B6",
+      "symbol": "B6",
+      "unit": "mg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "The cofactor for amino acid metabolism, so the need rises with protein intake.",
+      "reference": {
+        "ear": {
+          "male_19_50": 1.1,
+          "male_51_plus": 1.4,
+          "female_19_50": 1.1,
+          "female_51_plus": 1.3
+        },
+        "rda": {
+          "child_1_3": 0.5,
+          "child_4_8": 0.6,
+          "child_9_13": 1.0,
+          "male_14_18": 1.3,
+          "male_19_50": 1.3,
+          "male_51_plus": 1.7,
+          "female_14_18": 1.2,
+          "female_19_50": 1.3,
+          "female_51_plus": 1.5,
+          "pregnancy_14_50": 1.9,
+          "lactation_14_50": 2.0
+        },
+        "ai": null,
+        "ul": {
+          "value": 100,
+          "appliesTo": "total",
+          "note": "Sustained high-dose supplementation causes sensory neuropathy, which is sometimes irreversible. Reached only through supplements in practice.",
+          "byLifeStage": {
+            "child_1_3": 30,
+            "child_4_8": 40,
+            "child_9_13": 60,
+            "male_14_18": 80,
+            "female_14_18": 80,
+            "male_19_plus": 100,
+            "female_19_plus": 100
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Vitamin B6",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "biotin",
+      "depth": "brief",
+      "name": "Biotin (B7)",
+      "symbol": "B7",
+      "unit": "mcg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Carries carbon dioxide in fat and glucose synthesis. Deficiency is rare.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 8,
+          "child_4_8": 12,
+          "child_9_13": 20,
+          "male_14_18": 25,
+          "male_19_plus": 30,
+          "female_14_18": 25,
+          "female_19_plus": 30,
+          "pregnancy_14_50": 30,
+          "lactation_14_50": 35
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Biotin",
+          "url": "https://ods.od.nih.gov/factsheets/Biotin-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "folate",
+      "depth": "brief",
+      "name": "Folate (B9)",
+      "symbol": "B9",
+      "unit": "mcg",
+      "category": "vitamin",
+      "subcategory": "water-soluble",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": false,
+      "oneLiner": "Builds DNA and divides cells; the one nutrient that must be adequate before conception.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 320,
+          "female_19_plus": 320
+        },
+        "rda": {
+          "child_1_3": 150,
+          "child_4_8": 200,
+          "child_9_13": 300,
+          "male_14_18": 400,
+          "male_19_plus": 400,
+          "female_14_18": 400,
+          "female_19_plus": 400,
+          "pregnancy_14_50": 600,
+          "lactation_14_50": 500
+        },
+        "ai": null,
+        "ul": {
+          "value": 1000,
+          "appliesTo": "fortified-and-supplemental",
+          "note": "Applies to folic acid from supplements and fortified foods only. Folate naturally present in food has no upper limit. The concern is that high folic acid intake can correct the anaemia of B12 deficiency while the neurological damage continues unnoticed.",
+          "byLifeStage": {
+            "child_1_3": 300,
+            "child_4_8": 400,
+            "child_9_13": 600,
+            "male_14_18": 800,
+            "female_14_18": 800,
+            "male_19_plus": 1000,
+            "female_19_plus": 1000
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Folate",
+          "url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "calcium",
+      "depth": "brief",
+      "name": "Calcium",
+      "symbol": "Ca",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "major-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "Builds the skeleton, and runs muscle contraction and nerve signalling.",
+      "reference": {
+        "ear": {
+          "child_1_3": 500,
+          "child_4_8": 800,
+          "child_9_13": 1100,
+          "male_14_18": 1100,
+          "male_19_50": 800,
+          "male_51_70": 800,
+          "male_71_plus": 1000,
+          "female_14_18": 1100,
+          "female_19_50": 800,
+          "female_51_plus": 1000
+        },
+        "rda": {
+          "child_1_3": 700,
+          "child_4_8": 1000,
+          "child_9_13": 1300,
+          "male_14_18": 1300,
+          "male_19_50": 1000,
+          "male_51_70": 1000,
+          "male_71_plus": 1200,
+          "female_14_18": 1300,
+          "female_19_50": 1000,
+          "female_51_plus": 1200,
+          "pregnancy_14_18": 1300,
+          "pregnancy_19_50": 1000,
+          "lactation_14_18": 1300,
+          "lactation_19_50": 1000
+        },
+        "ai": null,
+        "ul": {
+          "value": 2500,
+          "appliesTo": "total",
+          "note": "Excess is associated with kidney stones and, from supplements specifically, with vascular calcification. Calcium from food carries neither association as clearly.",
+          "byLifeStage": {
+            "child_1_3": 2500,
+            "child_4_8": 2500,
+            "child_9_13": 3000,
+            "male_14_18": 3000,
+            "female_14_18": 3000,
+            "male_19_50": 2500,
+            "male_51_plus": 2000,
+            "female_19_50": 2500,
+            "female_51_plus": 2000
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Calcium",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "phosphorus",
+      "depth": "brief",
+      "name": "Phosphorus",
+      "symbol": "P",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "major-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "In every ATP molecule, every cell membrane, and most of your bone.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 580,
+          "female_19_plus": 580
+        },
+        "rda": {
+          "child_1_3": 460,
+          "child_4_8": 500,
+          "child_9_13": 1250,
+          "male_14_18": 1250,
+          "male_19_plus": 700,
+          "female_14_18": 1250,
+          "female_19_plus": 700,
+          "pregnancy_14_18": 1250,
+          "pregnancy_19_50": 700,
+          "lactation_14_18": 1250,
+          "lactation_19_50": 700
+        },
+        "ai": null,
+        "ul": {
+          "value": 4000,
+          "appliesTo": "total",
+          "note": "Deficiency is essentially unknown from diet — phosphorus is in almost everything, and phosphate additives push intake higher still.",
+          "byLifeStage": {
+            "child_1_3": 3000,
+            "child_4_8": 3000,
+            "child_9_13": 4000,
+            "male_14_18": 4000,
+            "female_14_18": 4000,
+            "male_19_70": 4000,
+            "female_19_70": 4000,
+            "male_71_plus": 3000,
+            "female_71_plus": 3000
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Phosphorus",
+          "url": "https://ods.od.nih.gov/factsheets/Phosphorus-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "sodium",
+      "depth": "brief",
+      "name": "Sodium",
+      "symbol": "Na",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "major-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Essential in small amounts, and over-supplied in nearly every processed diet.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 800,
+          "child_4_8": 1000,
+          "child_9_13": 1200,
+          "male_14_18": 1500,
+          "male_19_plus": 1500,
+          "female_14_18": 1500,
+          "female_19_plus": 1500,
+          "pregnancy_14_50": 1500,
+          "lactation_14_50": 1500
+        },
+        "ul": {
+          "value": 2300,
+          "appliesTo": "total",
+          "note": "This is a Chronic Disease Risk Reduction intake, not a classical Tolerable Upper Intake Level. The 2019 DRI update withdrew sodium's UL because no threshold for acute toxicity could be identified, and replaced it with an intake above which reducing sodium is expected to lower cardiovascular risk. It means 'worth reducing', not 'dangerous'."
+        },
+        "primaryGuide": "limit"
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Sodium",
+          "url": "https://ods.od.nih.gov/factsheets/Sodium-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "potassium",
+      "depth": "brief",
+      "name": "Potassium",
+      "symbol": "K",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "major-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Sodium's counterweight; the ratio between them matters more than either alone.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 2000,
+          "child_4_8": 2300,
+          "male_9_13": 2500,
+          "female_9_13": 2300,
+          "male_14_18": 3000,
+          "female_14_18": 2300,
+          "male_19_plus": 3400,
+          "female_19_plus": 2600,
+          "pregnancy_14_50": 2900,
+          "lactation_14_50": 2800
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Potassium",
+          "url": "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "chloride",
+      "depth": "brief",
+      "name": "Chloride",
+      "symbol": "Cl",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "major-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Arrives with sodium as salt, and makes stomach acid.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 1500,
+          "child_4_8": 1900,
+          "child_9_13": 2300,
+          "male_14_18": 2300,
+          "male_19_50": 2300,
+          "male_51_70": 2000,
+          "male_71_plus": 1800,
+          "female_14_18": 2300,
+          "female_19_50": 2300,
+          "female_51_70": 2000,
+          "female_71_plus": 1800,
+          "pregnancy_14_50": 2300,
+          "lactation_14_50": 2300
+        },
+        "ul": {
+          "value": 3600,
+          "appliesTo": "total",
+          "note": "Set alongside sodium's, since the two arrive together as salt. Reaching it from anything other than a very high-salt diet is unlikely."
+        }
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Water, Potassium, Sodium, Chloride, and Sulfate",
+          "url": "https://nap.nationalacademies.org/catalog/10925/dietary-reference-intakes-for-water-potassium-sodium-chloride-and-sulfate"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "iron",
+      "depth": "brief",
+      "name": "Iron",
+      "symbol": "Fe",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "Carries oxygen in blood. The most common deficiency in the world.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 6,
+          "female_19_50": 8.1,
+          "female_51_plus": 5
+        },
+        "rda": {
+          "child_1_3": 7,
+          "child_4_8": 10,
+          "child_9_13": 8,
+          "male_14_18": 11,
+          "male_19_plus": 8,
+          "female_14_18": 15,
+          "female_19_50": 18,
+          "female_51_plus": 8,
+          "pregnancy_14_50": 27,
+          "lactation_14_18": 10,
+          "lactation_19_50": 9
+        },
+        "ai": null,
+        "ul": {
+          "value": 45,
+          "appliesTo": "total",
+          "note": "Acute overdose is a leading cause of poisoning death in young children. In adults the concern is chronic accumulation, particularly in undiagnosed haemochromatosis — the body has no route to excrete iron.",
+          "byLifeStage": {
+            "child_1_3": 40,
+            "child_4_8": 40,
+            "child_9_13": 40,
+            "male_14_18": 45,
+            "female_14_18": 45,
+            "male_19_plus": 45,
+            "female_19_plus": 45
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Iron",
+          "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "zinc",
+      "depth": "brief",
+      "name": "Zinc",
+      "symbol": "Zn",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": true,
+      "oneLiner": "Runs immune function, wound healing, taste and hundreds of enzymes.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 9.4,
+          "female_19_plus": 6.8
+        },
+        "rda": {
+          "child_1_3": 3,
+          "child_4_8": 5,
+          "child_9_13": 8,
+          "male_14_18": 11,
+          "male_19_plus": 11,
+          "female_14_18": 9,
+          "female_19_plus": 8,
+          "pregnancy_14_50": 11,
+          "lactation_14_50": 12
+        },
+        "ai": null,
+        "ul": {
+          "value": 40,
+          "appliesTo": "total",
+          "note": "Chronic excess induces copper deficiency by competing for the same intestinal transporter — the usual way people harm themselves with zinc lozenges.",
+          "byLifeStage": {
+            "child_1_3": 7,
+            "child_4_8": 12,
+            "child_9_13": 23,
+            "male_14_18": 34,
+            "female_14_18": 34,
+            "male_19_plus": 40,
+            "female_19_plus": 40
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Zinc",
+          "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "copper",
+      "depth": "brief",
+      "name": "Copper",
+      "symbol": "Cu",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": true,
+      "oneLiner": "Needed to use iron, build connective tissue, and run antioxidant enzymes.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 0.7,
+          "female_19_plus": 0.7
+        },
+        "rda": {
+          "child_1_3": 0.34,
+          "child_4_8": 0.44,
+          "child_9_13": 0.7,
+          "male_14_18": 0.89,
+          "male_19_plus": 0.9,
+          "female_14_18": 0.89,
+          "female_19_plus": 0.9,
+          "pregnancy_14_50": 1.0,
+          "lactation_14_50": 1.3
+        },
+        "ai": null,
+        "ul": {
+          "value": 10,
+          "appliesTo": "total",
+          "note": "Liver damage at sustained high intakes. Far more often the problem runs the other way — high-dose zinc supplementation causing copper deficiency.",
+          "byLifeStage": {
+            "child_1_3": 1,
+            "child_4_8": 3,
+            "child_9_13": 5,
+            "male_14_18": 8,
+            "female_14_18": 8,
+            "male_19_plus": 10,
+            "female_19_plus": 10
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Copper",
+          "url": "https://ods.od.nih.gov/factsheets/Copper-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "manganese",
+      "depth": "brief",
+      "name": "Manganese",
+      "symbol": "Mn",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": true,
+      "oneLiner": "Cofactor for bone formation and the mitochondrial antioxidant enzyme.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 1.2,
+          "child_4_8": 1.5,
+          "male_9_13": 1.9,
+          "female_9_13": 1.6,
+          "male_14_18": 2.2,
+          "female_14_18": 1.6,
+          "male_19_plus": 2.3,
+          "female_19_plus": 1.8,
+          "pregnancy_14_50": 2.0,
+          "lactation_14_50": 2.6
+        },
+        "ul": {
+          "value": 11,
+          "appliesTo": "total",
+          "note": "Neurological effects at high intakes, seen mainly from inhalation in occupational exposure rather than from food.",
+          "byLifeStage": {
+            "child_1_3": 2,
+            "child_4_8": 3,
+            "child_9_13": 6,
+            "male_14_18": 9,
+            "female_14_18": 9,
+            "male_19_plus": 11,
+            "female_19_plus": 11
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Manganese",
+          "url": "https://ods.od.nih.gov/factsheets/Manganese-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "selenium",
+      "depth": "brief",
+      "name": "Selenium",
+      "symbol": "Se",
+      "unit": "mcg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": true,
+      "oneLiner": "Builds the enzymes that recycle antioxidants and activate thyroid hormone.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 45,
+          "female_19_plus": 45
+        },
+        "rda": {
+          "child_1_3": 20,
+          "child_4_8": 30,
+          "child_9_13": 40,
+          "male_14_18": 55,
+          "male_19_plus": 55,
+          "female_14_18": 55,
+          "female_19_plus": 55,
+          "pregnancy_14_50": 60,
+          "lactation_14_50": 70
+        },
+        "ai": null,
+        "ul": {
+          "value": 400,
+          "appliesTo": "total",
+          "note": "One of the narrowest margins between requirement and excess of any nutrient: the RDA is 55 mcg and the limit is 400. A few Brazil nuts a day can reach it, since a single nut carries 68 to 91 mcg.",
+          "byLifeStage": {
+            "child_1_3": 90,
+            "child_4_8": 150,
+            "child_9_13": 280,
+            "male_14_18": 400,
+            "female_14_18": 400,
+            "male_19_plus": 400,
+            "female_19_plus": 400
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Selenium",
+          "url": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "iodine",
+      "depth": "brief",
+      "name": "Iodine",
+      "symbol": "I",
+      "unit": "mcg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "The thyroid cannot make its hormones without it, and there is no substitute.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 95,
+          "female_19_plus": 95
+        },
+        "rda": {
+          "child_1_3": 90,
+          "child_4_8": 90,
+          "child_9_13": 120,
+          "male_14_18": 150,
+          "male_19_plus": 150,
+          "female_14_18": 150,
+          "female_19_plus": 150,
+          "pregnancy_14_50": 220,
+          "lactation_14_50": 290
+        },
+        "ai": null,
+        "ul": {
+          "value": 1100,
+          "appliesTo": "total",
+          "note": "Both too little and too much cause thyroid dysfunction, which is unusual — for most nutrients only one end of the range is a problem.",
+          "byLifeStage": {
+            "child_1_3": 200,
+            "child_4_8": 300,
+            "child_9_13": 600,
+            "male_14_18": 900,
+            "female_14_18": 900,
+            "male_19_plus": 1100,
+            "female_19_plus": 1100
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Iodine",
+          "url": "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "chromium",
+      "depth": "brief",
+      "name": "Chromium",
+      "symbol": "Cr",
+      "unit": "mcg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": false,
+      "oneLiner": "Contributes to insulin signalling. Its essentiality is genuinely debated.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 11,
+          "child_4_8": 15,
+          "male_9_13": 25,
+          "female_9_13": 21,
+          "male_14_18": 35,
+          "female_14_18": 24,
+          "male_19_50": 35,
+          "male_51_plus": 30,
+          "female_19_50": 25,
+          "female_51_plus": 20,
+          "pregnancy_14_50": 30,
+          "lactation_14_50": 45
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Chromium",
+          "url": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "molybdenum",
+      "depth": "brief",
+      "name": "Molybdenum",
+      "symbol": "Mo",
+      "unit": "mcg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Cofactor for four enzymes that clear sulphite and break down purines.",
+      "reference": {
+        "ear": {
+          "male_19_plus": 34,
+          "female_19_plus": 34
+        },
+        "rda": {
+          "child_1_3": 17,
+          "child_4_8": 22,
+          "child_9_13": 34,
+          "male_14_18": 43,
+          "male_19_plus": 45,
+          "female_14_18": 43,
+          "female_19_plus": 45,
+          "pregnancy_14_50": 50,
+          "lactation_14_50": 50
+        },
+        "ai": null,
+        "ul": {
+          "value": 2000,
+          "appliesTo": "total",
+          "note": "Deficiency has never been observed in healthy people eating ordinary food.",
+          "byLifeStage": {
+            "child_1_3": 300,
+            "child_4_8": 600,
+            "child_9_13": 1100,
+            "male_14_18": 1700,
+            "female_14_18": 1700,
+            "male_19_plus": 2000,
+            "female_19_plus": 2000
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Molybdenum",
+          "url": "https://ods.od.nih.gov/factsheets/Molybdenum-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fluoride",
+      "depth": "brief",
+      "name": "Fluoride",
+      "symbol": "F",
+      "unit": "mg",
+      "category": "mineral",
+      "subcategory": "trace-mineral",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "Hardens tooth enamel against decay. Beneficial rather than strictly essential.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 0.7,
+          "child_4_8": 1,
+          "child_9_13": 2,
+          "male_14_18": 3,
+          "male_19_plus": 4,
+          "female_14_18": 3,
+          "female_19_plus": 3,
+          "pregnancy_14_50": 3,
+          "lactation_14_50": 3
+        },
+        "ul": {
+          "value": 10,
+          "appliesTo": "total",
+          "note": "Excess during tooth development causes dental fluorosis — mottling of the enamel. The limit is much lower for young children for that reason.",
+          "byLifeStage": {
+            "child_1_3": 1.3,
+            "child_4_8": 2.2,
+            "child_9_13": 10,
+            "male_14_18": 10,
+            "female_14_18": 10,
+            "male_19_plus": 10,
+            "female_19_plus": 10
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Calcium, Phosphorus, Magnesium, Vitamin D, and Fluoride",
+          "url": "https://nap.nationalacademies.org/catalog/5776/dietary-reference-intakes-for-calcium-phosphorus-magnesium-vitamin-d-and-fluoride"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "choline",
+      "depth": "brief",
+      "name": "Choline",
+      "symbol": null,
+      "unit": "mg",
+      "category": "other",
+      "subcategory": "essential-nutrient",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": false,
+      "oneLiner": "Builds cell membranes and acetylcholine; most people fall short of the AI.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 200,
+          "child_4_8": 250,
+          "child_9_13": 375,
+          "male_14_18": 550,
+          "male_19_plus": 550,
+          "female_14_18": 400,
+          "female_19_plus": 425,
+          "pregnancy_14_50": 450,
+          "lactation_14_50": 550
+        },
+        "ul": {
+          "value": 3500,
+          "appliesTo": "total",
+          "note": "Very high intakes cause a fishy body odour, sweating and low blood pressure. Reached only through supplements.",
+          "byLifeStage": {
+            "child_1_3": 1000,
+            "child_4_8": 1000,
+            "child_9_13": 2000,
+            "male_14_18": 3000,
+            "female_14_18": 3000,
+            "male_19_plus": 3500,
+            "female_19_plus": 3500
+          }
+        }
+      },
+      "citations": [
+        {
+          "label": "NIH Office of Dietary Supplements — Choline",
+          "url": "https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "omega-3-ala",
+      "depth": "brief",
+      "name": "Omega-3 ALA",
+      "symbol": "ALA",
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fatty-acid",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "moderate",
+      "antioxidantRole": false,
+      "oneLiner": "An essential fat you must eat; the body converts only a little of it to EPA and DHA.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 0.7,
+          "child_4_8": 0.9,
+          "male_9_13": 1.2,
+          "female_9_13": 1.0,
+          "male_14_18": 1.6,
+          "female_14_18": 1.1,
+          "male_19_plus": 1.6,
+          "female_19_plus": 1.1,
+          "pregnancy_14_50": 1.4,
+          "lactation_14_50": 1.3
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "omega-6-linoleic",
+      "depth": "brief",
+      "name": "Omega-6 linoleic acid",
+      "symbol": "LA",
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fatty-acid",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "The other essential fat. Plentiful in seed oils, so shortfall is rare.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 7,
+          "child_4_8": 10,
+          "male_9_13": 12,
+          "female_9_13": 10,
+          "male_14_18": 16,
+          "female_14_18": 11,
+          "male_19_50": 17,
+          "male_51_plus": 14,
+          "female_19_50": 12,
+          "female_51_plus": 11,
+          "pregnancy_14_50": 13,
+          "lactation_14_50": 13
+        },
+        "ul": null
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "sugars-added",
+      "depth": "brief",
+      "name": "Added sugars",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "carbohydrate",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Sugar put into food rather than occurring in it. The clearest thing to cut.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": null,
+        "ul": null,
+        "amdr": {
+          "lowPct": 0,
+          "highPct": 10,
+          "note": "A ceiling, not a range — there is no requirement for added sugar, so the lower bound is zero. The 10% of energy figure is the Dietary Guidelines and WHO limit; WHO adds a conditional recommendation of under 5% for further benefit. The DRI committee's own figure was a much looser 25%, set on nutrient displacement rather than disease."
+        }
+      },
+      "citations": [
+        {
+          "label": "Dietary Guidelines for Americans 2020–2025",
+          "url": "https://www.dietaryguidelines.gov/sites/default/files/2021-03/Dietary_Guidelines_for_Americans-2020-2025.pdf"
+        },
+        {
+          "label": "WHO — Guideline: Sugars intake for adults and children (2015)",
+          "url": "https://www.who.int/publications/i/item/9789241549028"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fat-saturated",
+      "depth": "brief",
+      "name": "Saturated fat",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fat",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Raises LDL. What you replace it with decides whether that matters.",
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": null,
+        "ul": null,
+        "amdr": {
+          "lowPct": 0,
+          "highPct": 10,
+          "note": "A ceiling, not a range. The DRI report set no numeric limit, saying only that intake should be as low as possible within a nutritionally adequate diet; the 10% of energy figure is the Dietary Guidelines recommendation. Replacement matters more than the number: swapping saturated fat for polyunsaturated fat lowers cardiovascular risk, while swapping it for refined carbohydrate does not."
+        }
+      },
+      "citations": [
+        {
+          "label": "Dietary Guidelines for Americans 2020–2025",
+          "url": "https://www.dietaryguidelines.gov/sites/default/files/2021-03/Dietary_Guidelines_for_Americans-2020-2025.pdf"
+        },
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "sugars-total",
+      "depth": "brief",
+      "name": "Total sugars",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "carbohydrate",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Added and naturally occurring sugars together — a number of limited use on its own.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 107,
+          "unit": "g/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": null,
+        "framing": "No reference intake exists for total sugars, and deliberately so: the sugar in an apple and the sugar in a soft drink are chemically similar but behave quite differently, because one arrives with fibre and a cell wall and the other does not. Added sugars is the number worth watching."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fat-monounsaturated",
+      "depth": "brief",
+      "name": "Monounsaturated fat",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fat",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "The main fat in olive oil, avocado and most nuts.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 32,
+          "unit": "g/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": null,
+        "framing": "No reference intake exists. Monounsaturated fat has no requirement and no established limit — it is the fat left over once the essential ones and the saturated ceiling are accounted for."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fat-polyunsaturated",
+      "depth": "brief",
+      "name": "Polyunsaturated fat",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fat",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "Contains the two essential fats, which are tracked individually.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 20,
+          "unit": "g/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": null,
+        "framing": "No reference intake exists for polyunsaturated fat as a whole. Its two essential components — linoleic acid and alpha-linolenic acid — each carry their own Adequate Intake and are tracked separately here."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "omega-3-epa-dha",
+      "depth": "brief",
+      "name": "Omega-3 EPA+DHA",
+      "symbol": null,
+      "unit": "mg",
+      "category": "macronutrient",
+      "subcategory": "fatty-acid",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "high",
+      "antioxidantRole": false,
+      "oneLiner": "The marine omega-3s. No official requirement, but good evidence behind them.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 110,
+          "unit": "mg/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": {
+          "low": 250,
+          "high": 500,
+          "unit": "mg/day",
+          "note": "Most national and professional bodies converge on 250–500 mg/day of combined EPA and DHA, usually framed as two portions of fish a week with one of them oily. The evidence is strongest for cardiovascular endpoints and weaker for everything else it gets sold for."
+        },
+        "framing": "The United States sets no DRI for EPA and DHA — only for their precursor, alpha-linolenic acid. Conversion from ALA is poor, typically under 10% to EPA and lower again to DHA, which is why intake of the marine forms is tracked separately. These figures are context, not a target."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        },
+        {
+          "label": "American Heart Association — Fish and Omega-3 Fatty Acids",
+          "url": "https://www.heart.org/en/healthy-living/healthy-eating/eat-smart/fats/fish-and-omega-3-fatty-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fat-trans",
+      "depth": "brief",
+      "name": "Trans fat",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fat",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "The one fat with no safe intake. Largely removed from the food supply.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 1.3,
+          "unit": "g/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": null,
+        "framing": "No reference intake exists, and no safe level has been identified. The DRI report recommended intake be as low as possible; WHO has pushed for elimination of industrially produced trans fat outright, and much of the supply has now been reformulated. Small amounts occur naturally in dairy and beef and are not thought to carry the same risk."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        },
+        {
+          "label": "WHO — Countdown to 2023: report on global trans fat elimination",
+          "url": "https://www.who.int/publications/i/item/9789240078840"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "cholesterol",
+      "depth": "brief",
+      "name": "Cholesterol",
+      "symbol": null,
+      "unit": "mg",
+      "category": "macronutrient",
+      "subcategory": "lipid",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "The 300 mg limit was withdrawn in 2015. This app is not bringing it back.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 270,
+          "unit": "mg/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": null,
+        "framing": "No reference intake exists. The long-standing 300 mg/day limit was dropped from the US Dietary Guidelines in 2015, after the evidence review concluded that dietary cholesterol is not a nutrient of concern for overconsumption. Individual response varies widely, and saturated fat intake affects blood cholesterol considerably more. Shown here as an amount, with no target."
+      },
+      "citations": [
+        {
+          "label": "Dietary Guidelines for Americans 2020–2025",
+          "url": "https://www.dietaryguidelines.gov/sites/default/files/2021-03/Dietary_Guidelines_for_Americans-2020-2025.pdf"
+        },
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fiber-soluble",
+      "depth": "brief",
+      "name": "Fiber, soluble",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fiber",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "The viscous fraction — the one that lowers LDL and slows glucose.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 5,
+          "unit": "g/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": {
+          "low": 3,
+          "high": 10,
+          "unit": "g/day",
+          "note": "Around 3 g/day of oat beta-glucan or 7–10 g/day of psyllium lowers LDL by roughly 5–7% in randomised trials."
+        },
+        "framing": "Total fibre has an Adequate Intake; the soluble and insoluble fractions do not, because the analytical split is not consistent enough between laboratories to set one on. Tracked separately anyway, since the two fractions do genuinely different jobs."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+    {
+      "id": "fiber-insoluble",
+      "depth": "brief",
+      "name": "Fiber, insoluble",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fiber",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": false,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+      "oneLiner": "The bulking fraction — what actually moves the bowel.",
+      "reference": null,
+      "intakeContext": {
+        "populationMedian": {
+          "value": 11,
+          "unit": "g/day",
+          "source": "NHANES, US adults — approximate, pending verification against the source tables"
+        },
+        "studiedRange": null,
+        "framing": "No separate reference intake exists; only total fibre carries one. Worth knowing which fraction you are getting, though: insoluble wheat bran is effective for constipation and commonly makes IBS symptoms worse, while soluble fibre tends to do the opposite."
+      },
+      "citations": [
+        {
+          "label": "NASEM — DRIs for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
         }
       ],
       "lastReviewed": "2026-08-11"

@@ -89,10 +89,26 @@ describe("missing is not zero", () => {
 
 describe("nutrients without a written reference panel", () => {
   it("shows the amount but no target, and says why", () => {
-    const { container } = renderRow("calcium", 583);
-    expect(container.textContent).toContain("583 mg");
+    const { container } = renderRow("energy", 1721);
+    expect(container.textContent).toContain("1721 kcal");
     expect(container.textContent).toContain("no reference yet");
     expect(screen.queryByRole("meter")).toBeNull();
+  });
+});
+
+describe("brief entries", () => {
+  it("render a real target, exactly like a full entry", () => {
+    // Calcium is depth: brief — a cited RDA with the prose still to come.
+    // 583 mg against a 1000 mg RDA is 58%.
+    const { container } = renderRow("calcium", 583);
+    expect(screen.getByRole("meter")).toBeTruthy();
+    expect(container.textContent).toMatch(/58%/);
+    expect(container.textContent).toContain("583 mg");
+  });
+
+  it("show their one-liner, since that is the prose they have", () => {
+    const { container } = renderRow("calcium", 583);
+    expect(container.textContent).toContain("Builds the skeleton");
   });
 });
 

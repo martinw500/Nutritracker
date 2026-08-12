@@ -2,7 +2,8 @@
   "version": "0.1.0",
   "notes": [
     "DEMO DATA standing in for the users row. Nothing outside lib/demo may import this file.",
-    "sex + birthDate resolve to a life-stage key, which is what selects the RDA/AI/UL column out of nutrients.json. Changing them on the settings screen visibly re-personalises every target."
+    "sex + birthDate resolve to a life-stage key, which is what selects the RDA/AI/UL column out of nutrients.json. Changing them on the settings screen visibly re-personalises every target.",
+    "activeGoalModes is a list. The modes are mostly orthogonal — wanting more protein says nothing about wanting a lower glycemic load — so forcing a single choice was a modelling error rather than a simplification. Modes only ever re-weight what is emphasised; none of them hides data, so combining them cannot hide anything either."
   ],
 
   "profile": {
@@ -15,7 +16,7 @@
     "activityLevel": "moderate",
     "pregnancyStatus": "none",
     "detailLevel": "simple",
-    "activeGoalMode": "general-health"
+    "activeGoalModes": ["general-health", "high-protein"]
   },
 
   "goalModes": [

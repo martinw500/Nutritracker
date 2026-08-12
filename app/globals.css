@@ -68,15 +68,18 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
+    /* Lifted from the first dark pass: borders and muted ink both sat too
+       close to the surface, so dashed "no data" outlines were nearly
+       invisible and card edges disappeared. */
     --bg: #141310;
     --surface: #201e1a;
     --surface-sunken: #1a1815;
-    --border: #302d27;
-    --border-strong: #443f37;
+    --border: #3a362f;
+    --border-strong: #55503f;
 
-    --ink: #f5f2ec;
-    --ink-muted: #b8b2a6;
-    --ink-faint: #857f72;
+    --ink: #f7f4ee;
+    --ink-muted: #c6c0b3;
+    --ink-faint: #97907f;
 
     --accent: #9085e9;
     --accent-hover: #a49bef;
@@ -97,10 +100,10 @@
     --over: #d03b3b;
     --over-soft: #331919;
 
-    --nodata: #6b665c;
+    --nodata: #8a8375;
 
-    --grid: #2a2723;
-    --axis: #443f37;
+    --grid: #302c27;
+    --axis: #55503f;
 
     --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
   }

@@ -3,18 +3,20 @@
 import Link from "next/link";
 import { CoverageMeter } from "@/components/coverage-meter";
 import { ExpertOnly } from "@/components/detail-level";
+import { FoodFlagsCard } from "@/components/food-flags";
 import { EnergyRing } from "@/components/energy-ring";
 import { MacroBars } from "@/components/macro-bars";
 import { MealStrip } from "@/components/meal-strip";
 import { PageHeader } from "@/components/page-header";
 import { StatTile } from "@/components/stat-tile";
-import { StatusGrid, type NutrientSection } from "@/components/status-grid";
+import { NutrientTable, type NutrientSection } from "@/components/nutrient-table";
 import { DayColumns, TrendChart } from "@/components/trend-chart";
 import { Badge, Card, CardHeader, DefinitionList, Note } from "@/components/ui";
 import { WaterWidget } from "@/components/water-widget";
 import { WeightCard } from "@/components/weight-card";
 import {
-  getActiveGoalMode,
+  getActiveGoalModes,
+  getDayAttributes,
   getDayDate,
   getDayRollup,
   getEntriesByMeal,
@@ -34,7 +36,7 @@ export default function TodayPage() {
   const rollup = getDayRollup();
   const person = getPerson();
   const estimate = getEnergyEstimate();
-  const goalMode = getActiveGoalMode();
+  const goalModes = getActiveGoalModes();
   const tracked = getAllTracked();
   const written = referenceCoverage();
 
@@ -64,7 +66,7 @@ export default function TodayPage() {
     {
       title: "Phytonutrients",
       nutrients: tracked.filter((t) => t.meta.tier === 3),
-      note: "None of these are coloured by status, because none of them have a target to be measured against.",
+      note: "No reference intake exists for any of these, so they show an amount and a trend and never a percentage.",
     },
   ];
 
@@ -89,15 +91,18 @@ export default function TodayPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Today"
-        subtitle={date}
-        aside={
-          <Link href="/settings">
-            <Badge tone="accent">{goalMode.name}</Badge>
-          </Link>
-        }
-      />
+      {/* The date lives in the top bar now, so this row carries only what the
+          top bar cannot: which goal modes are shaping what you see. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-lg font-semibold tracking-tight text-ink">{date}</h1>
+        <Link href="/settings" className="flex flex-wrap gap-1.5">
+          {goalModes.map((mode) => (
+            <Badge key={mode.id} tone="accent">
+              {mode.name}
+            </Badge>
+          ))}
+        </Link>
+      </div>
 
       <EnergyRing consumed={energy} estimate={estimate} />
 
@@ -109,7 +114,7 @@ export default function TodayPage() {
         person={person}
       />
 
-      <StatusGrid
+      <NutrientTable
         sections={sections}
         rollup={rollup}
         person={person}
@@ -153,6 +158,8 @@ export default function TodayPage() {
           note={`${rollup.phytoCoveredCount} of ${rollup.entryCount} foods have data`}
         />
       </div>
+
+      <FoodFlagsCard tallies={getDayAttributes()} />
 
       <MealStrip
         meals={getEntriesByMeal()}
