@@ -17,6 +17,11 @@ import photoDraftFile from "@/data/demo/photo-draft.json";
 import { rollUpDay, type DailyValue, type DayRollup, type LoggedItem } from "@/lib/nutrition/rollup";
 import { scaleVector, type NutrientVector } from "@/lib/nutrition/scale";
 import { ageFromBirthDate, type Person, type PregnancyStatus, type Sex } from "@/lib/nutrition/personalize";
+import {
+  estimateEnergyNeed,
+  type ActivityLevel,
+  type EnergyEstimate,
+} from "@/lib/nutrition/energy";
 
 export const IS_DEMO_DATA = true;
 
@@ -202,6 +207,32 @@ export function getDayRollup(): DayRollup {
     meal: entry.meal,
   }));
   return rollUpDay(items);
+}
+
+/**
+ * The day's estimated energy need. Not a reference intake — there isn't one for
+ * energy — so it comes from the equation in lib/nutrition/energy.ts and is
+ * labelled an estimate everywhere it appears.
+ */
+export function getEnergyEstimate(): EnergyEstimate {
+  const profile = getProfile();
+  const person = getPerson();
+  return estimateEnergyNeed({
+    sex: profile.sex,
+    ageYears: person.ageYears,
+    weightKg: profile.weightKg,
+    heightCm: profile.heightCm,
+    activityLevel: profile.activityLevel as ActivityLevel,
+  });
+}
+
+export interface WeightReading {
+  date: string;
+  kg: number;
+}
+
+export function getWeightSeries(): WeightReading[] {
+  return (historyFile as unknown as { weights: WeightReading[] }).weights;
 }
 
 export function getPerson(): Person {

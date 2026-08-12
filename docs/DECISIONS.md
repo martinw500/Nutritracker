@@ -139,6 +139,43 @@ The UI was built before the database and the FoodData Central mirror, against fa
 
 ---
 
+### D13 — The energy equation lives in code, not in the data file
+**Status:** settled
+
+Every other target is read from `data/nutrients.json`. The energy target is computed in `lib/nutrition/energy.ts` from Mifflin-St Jeor plus an activity factor.
+
+**Why:** there is no reference intake for calories and there cannot be one — the requirement depends on body size, composition, age and activity, so the DRI framework publishes an equation rather than a table. There is nothing to look up. CLAUDE.md rule 1 bans hardcoded *nutrient values*; a published metabolic equation is not a composition value.
+
+**Consequences, and they are binding:**
+- It is labelled "estimated need" everywhere, never "RDA" or "target".
+- The ±10% band is shown alongside it, because the equation is wrong by more than 10% for roughly one person in five.
+- Expert mode names the equation and the activity factor used.
+- This is the *only* number in the app allowed to originate in code. If a second one appears, that is the point to reopen this.
+
+---
+
+### D14 — Macronutrients are judged on their AMDR, against energy eaten
+**Status:** settled
+
+The schema gained an optional `amdr` block, and macronutrient status is assessed against that band rather than against the RDA where both exist.
+
+**Why:** total fat has no EAR, RDA or adult AI at all — an AMDR is its only published reference. And the AMDR describes the *composition* of a diet, so its denominator is the energy actually consumed, not the estimated need. Computing the band against estimated need turns a composition question into an adequacy one, and put two different verdicts about the same number on one screen (the status tile said "met" while the bar beside it said "below the range").
+
+**Consequence:** a macronutrient renders a shaded range band, never a point target. The RDA, where one exists, is still marked as a floor.
+
+---
+
+### D15 — A missing source is not a shortfall
+**Status:** settled
+
+Values the log genuinely cannot assess are marked as such and carry no status, instead of being judged on partial data. Water is the case that forced it: its AI is *total* water including drinks, drinks are not logged as foods, so judging it on the ~1 L that arrives in food reported "low" to a perfectly well-hydrated user.
+
+**Why:** the same reasoning as D6. A false alarm costs more than a missing signal, because it teaches people to ignore the alerts that matter.
+
+**Consequence:** `resolveTile` takes an `unassessable` map of id → reason, and the reason appears on screen in place of a status. Every use is a deliberate, named exception rather than a silent suppression.
+
+---
+
 ## Still open
 
 These have **not** been decided. Don't assume an answer.

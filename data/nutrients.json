@@ -2,7 +2,9 @@
   "version": "0.1.0",
   "lastUpdated": "2026-08-11",
   "notes": [
-    "Seed file: 5 of ~45 planned entries. These five were chosen to exercise every branch of the schema — storage classes none/moderate/high, vitamin/mineral/phytonutrient categories, Tier 2 vs Tier 3, and ULs that are total / supplemental-only / absent entirely.",
+    "10 of the 59 entries in data/roster.json. The first five were chosen to exercise every branch of the schema — storage classes none/moderate/high, vitamin/mineral/phytonutrient categories, Tier 2 vs Tier 3, and ULs that are total / supplemental-only / absent entirely.",
+    "The five macronutrients (protein, carbohydrate, total fat, fiber, water) were written next because they drive the headline figures on every screen. Total fat has no EAR, RDA or adult AI — only an AMDR — which is why the schema gained an optional `amdr` block and why a macronutrient renders as an acceptable range band rather than a point target.",
+    "Energy is deliberately absent from this file. It has no reference intake to look up: an Estimated Energy Requirement is computed per person from a published equation, which lives in lib/nutrition/energy.ts and is labelled an estimate wherever it appears. See docs/DECISIONS.md (D13).",
     "topSources[].fdcId is null throughout. IDs are resolved by the Phase 0 FoodData Central importer — hand-written IDs silently link to the wrong food, which is worse than no link at all.",
     "topSources[].per100g values are approximate, authored from published composition data. The Phase 0 importer overwrites them with exact FDC figures.",
     "Reference intakes are transcribed from the NIH Office of Dietary Supplements Health Professional fact sheets, which restate the IOM/NASEM Dietary Reference Intakes. Verify against the linked citation before shipping.",
@@ -847,6 +849,824 @@
         {
           "label": "Linus Pauling Institute — Carotenoids",
           "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/carotenoids"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "protein",
+      "name": "Protein",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "macro",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+
+      "oneLiner": "Supplies the amino acids your body cannot make for itself.",
+      "simpleExplanation": "Protein is broken down into amino acids and rebuilt into muscle, enzymes, antibodies and hormones. Nine of those amino acids can't be made by the body at all, so they have to come from food. The official minimum is lower than most people expect — around 56 g a day for an adult man — but that figure is the amount needed to avoid losing tissue, not the amount that is best for building or keeping muscle. Spreading intake across meals works better than eating most of it at dinner.",
+
+      "summary": "Nitrogen source and the sole dietary supply of the nine indispensable amino acids. The RDA of 0.8 g/kg/day derives from nitrogen-balance studies and represents the intake at which most adults avoid net protein loss — an avoidance-of-deficiency figure, not an optimum. Muscle protein synthesis is stimulated in a saturable, per-meal manner with leucine as the principal trigger, which is why distribution across meals matters independently of total intake.",
+      "whatItDoes": [
+        "Supplies the nine indispensable amino acids, which cannot be synthesised endogenously",
+        "Provides the substrate for muscle, connective tissue, enzymes, transport proteins and immunoglobulins",
+        "Contributes to satiety more per calorie than carbohydrate or fat",
+        "Serves as a gluconeogenic substrate when carbohydrate intake is low",
+        "Carries the highest thermic effect of the three macronutrients, at roughly 20–30% of its energy"
+      ],
+      "benefits": [
+        {
+          "claim": "Preserves lean mass during weight loss",
+          "evidence": "strong",
+          "note": "Consistently reproduced across randomised trials. Higher protein intake during an energy deficit reduces the share of weight lost as lean tissue, with the effect largest when combined with resistance training."
+        },
+        {
+          "claim": "Increases muscle mass and strength gains from resistance training",
+          "evidence": "strong",
+          "note": "Meta-analyses find added benefit up to roughly 1.6 g/kg/day, with a plateau beyond that. Trials above 2.2 g/kg have not shown further gain."
+        },
+        {
+          "claim": "Improves satiety and reduces spontaneous energy intake",
+          "evidence": "moderate",
+          "note": "Reliable within single meals and short trials; the effect on long-term body weight is smaller and more variable than short-term appetite data suggest."
+        },
+        {
+          "claim": "Slows age-related muscle loss in older adults",
+          "evidence": "moderate",
+          "note": "Older adults show anabolic resistance and appear to need more protein per meal to trigger the same synthetic response. Observational and short-trial support is good; long-term outcome trials are limited."
+        },
+        {
+          "claim": "High intake damages healthy kidneys",
+          "evidence": "limited",
+          "note": "A negative finding, included because the claim is widespread. Trials in people with normal kidney function show no decline in glomerular filtration at intakes up to 2.8 g/kg/day. The concern is real and important in existing chronic kidney disease, and does not generalise to healthy kidneys."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "protein-energy malnutrition",
+        "prevalence": "Rare in high-income countries at the level of frank deficiency. Marginal intake is common in older adults, in people eating very low energy diets, and in some hospitalised populations.",
+        "earlySigns": [
+          "loss of muscle mass and strength",
+          "slow wound healing",
+          "hair thinning and brittle nails",
+          "frequent infections",
+          "persistent fatigue"
+        ],
+        "advancedSigns": [
+          "oedema (kwashiorkor)",
+          "severe muscle wasting (marasmus)",
+          "fatty liver",
+          "impaired immune function",
+          "growth failure in children"
+        ],
+        "riskGroups": [
+          "older adults, who need more per meal to trigger the same response",
+          "people in a sustained energy deficit",
+          "people recovering from surgery, burns or serious illness",
+          "poorly planned vegan diets with little legume or soy intake",
+          "people with malabsorptive conditions"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No upper limit has been set. Intakes well above the RDA are not associated with harm in people with normal kidney and liver function, though very high intakes displace other foods and can crowd out fibre and phytonutrients.",
+        "fromSupplements": [
+          "gastrointestinal discomfort from large single doses",
+          "displacement of other foods, reducing dietary variety",
+          "meaningful risk only where kidney or liver function is already impaired"
+        ],
+        "clinicalName": null,
+        "severeRisk": "In existing chronic kidney disease, high protein intake accelerates decline in glomerular filtration and intake should be set with a clinician. There is no equivalent risk in healthy kidneys."
+      },
+
+      "absorption": {
+        "typicalRate": "Over 90% of protein from animal sources; roughly 70–90% from plant sources",
+        "enhancers": [
+          "cooking, which denatures protein and improves digestibility",
+          "combining plant sources across the day to cover all indispensable amino acids",
+          "spreading intake across three or four meals rather than one large one",
+          "resistance exercise, which raises the synthetic response to a given dose"
+        ],
+        "inhibitors": [
+          "trypsin inhibitors in raw legumes",
+          "tannins and phytates in some whole plant foods",
+          "very large single doses, where the per-meal synthetic response saturates",
+          "advanced age, through anabolic resistance"
+        ],
+        "notes": "Digestibility and amino acid pattern both matter, which is why DIAAS is a better guide than raw grams for plant-based diets. Lysine is the limiting amino acid in cereals and methionine in legumes, so the two complement each other — but they do not need to be eaten in the same meal, only across the day. Leucine is the principal trigger for muscle protein synthesis, and a threshold of roughly 2.5 g of leucine per meal is where the response reliably saturates in younger adults."
+      },
+
+      "interactions": [
+        {
+          "with": "calcium",
+          "direction": "synergy",
+          "effect": "Higher protein intake raises urinary calcium but also increases intestinal calcium absorption. Net effect on bone is neutral to positive when calcium intake is adequate — the old 'protein leaches calcium from bone' claim does not hold at normal intakes."
+        },
+        {
+          "with": "iron",
+          "direction": "synergy",
+          "effect": "Meat, fish and poultry contain a factor that substantially improves absorption of non-heme iron eaten in the same meal, on top of supplying heme iron directly."
+        },
+        {
+          "with": "vitamin-b6",
+          "direction": "requires",
+          "effect": "B6 is the cofactor for transamination and other amino acid metabolism, so B6 requirement rises with protein intake."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Chicken breast, grilled", "per100g": 31, "typicalServing": "150 g" },
+        { "fdcId": null, "name": "Tofu, firm", "per100g": 17.3, "typicalServing": "126 g (1/2 cup)" },
+        { "fdcId": null, "name": "Greek yogurt, plain, nonfat", "per100g": 10.2, "typicalServing": "170 g" },
+        { "fdcId": null, "name": "Lentils, cooked", "per100g": 9.0, "typicalServing": "198 g (1 cup)" },
+        { "fdcId": null, "name": "Egg, whole", "per100g": 12.6, "typicalServing": "50 g (1 large)" },
+        { "fdcId": null, "name": "Almonds", "per100g": 21.2, "typicalServing": "28 g" }
+      ],
+
+      "reference": {
+        "ear": {
+          "child_1_3": 11,
+          "child_4_8": 15,
+          "child_9_13": 27,
+          "male_14_18": 44,
+          "male_19_plus": 46,
+          "female_14_18": 38,
+          "female_19_plus": 38
+        },
+        "rda": {
+          "child_1_3": 13,
+          "child_4_8": 19,
+          "child_9_13": 34,
+          "male_14_18": 52,
+          "male_19_plus": 56,
+          "female_14_18": 46,
+          "female_19_plus": 46,
+          "pregnancy_14_50": 71,
+          "lactation_14_50": 71
+        },
+        "ai": null,
+        "ul": null,
+        "amdr": {
+          "lowPct": 10,
+          "highPct": 35,
+          "note": "Percent of total energy. The lower bound is close to the RDA for most adults; the upper bound is where the evidence for safety and adequacy stops, not a point at which harm begins."
+        }
+      },
+
+      "citations": [
+        {
+          "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        },
+        {
+          "label": "Morton et al. — Systematic review and meta-analysis of protein supplementation on resistance-training gains (BJSM 2018)",
+          "url": "https://bjsm.bmj.com/content/52/6/376"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "carbohydrate",
+      "name": "Total carbohydrate",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "macro",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+
+      "oneLiner": "The body's most readily used fuel, and the brain's preferred one.",
+      "simpleExplanation": "Carbohydrate is the fuel your body reaches for first, and the brain runs on glucose almost exclusively. The 130 g daily figure is the amount that covers the brain without the body having to make glucose from protein or fat — it is a floor, not a goal, and most people eat well above it. What matters far more than the total is the form: the same 40 g behaves very differently coming from lentils than from a soft drink.",
+
+      "summary": "Primary oxidative substrate and the only fuel the brain uses in appreciable quantity under normal feeding. The 130 g/day RDA is derived from mean cerebral glucose utilisation and represents the intake below which gluconeogenesis from amino acids and glycerol must supply the deficit — a physiological floor, not an optimum. Glycemic response depends on food matrix, fibre content, processing and co-ingested fat and protein far more than on total grams, which is why glycemic load is tracked per meal rather than inferred from carbohydrate mass.",
+      "whatItDoes": [
+        "Supplies glucose, effectively the sole fuel of the brain under normal feeding conditions",
+        "Replenishes muscle and liver glycogen, which determines capacity for high-intensity work",
+        "Spares protein from being catabolised for gluconeogenesis",
+        "Provides the fermentable substrate that feeds colonic bacteria, via its fibre and resistant starch fractions",
+        "Determines the postprandial glucose and insulin response, in a form-dependent way"
+      ],
+      "benefits": [
+        {
+          "claim": "Adequate intake supports high-intensity and endurance exercise performance",
+          "evidence": "strong",
+          "note": "Among the best-replicated findings in sports nutrition. Glycogen availability is limiting for sustained work above roughly 70% of VO2max."
+        },
+        {
+          "claim": "Lower-glycemic-load diets improve glycemic control in type 2 diabetes",
+          "evidence": "moderate",
+          "note": "Meta-analyses find modest but consistent reductions in HbA1c, on the order of 0.3–0.5 percentage points. Real, and smaller than commonly claimed."
+        },
+        {
+          "claim": "Lower-glycemic-load diets reduce acne severity",
+          "evidence": "limited",
+          "note": "A small number of randomised trials show improvement, supported by consistent observational data. Associated, not established — the trials are small and hard to blind."
+        },
+        {
+          "claim": "Carbohydrate restriction is superior for long-term weight loss",
+          "evidence": "limited",
+          "note": "A negative finding worth stating plainly. Head-to-head trials of low-carbohydrate against low-fat diets matched for energy and protein find little difference beyond twelve months. Adherence predicts the outcome, not macronutrient ratio."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": null,
+        "prevalence": "There is no deficiency disease. Sustained intake below roughly 50 g/day induces nutritional ketosis, which is an adaptation rather than a pathology.",
+        "earlySigns": [
+          "fatigue and reduced capacity for high-intensity exercise",
+          "headache and difficulty concentrating during adaptation",
+          "irritability",
+          "constipation, where fibre falls with the carbohydrate"
+        ],
+        "advancedSigns": [
+          "ketosis with characteristic breath",
+          "loss of lean mass where protein intake is not raised to compensate",
+          "menstrual disturbance at very low intakes combined with an energy deficit"
+        ],
+        "riskGroups": [
+          "athletes in high-volume training on restricted intakes",
+          "people on very-low-carbohydrate diets without clinical supervision",
+          "people with type 1 diabetes, where carbohydrate intake and insulin must be matched"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No upper limit has been set for total carbohydrate. The DRI committee did set a limit on added sugars — under 25% of total energy — on the grounds that above that they displace nutrient-dense foods, and most public health bodies since have recommended considerably less.",
+        "fromSupplements": [
+          "gastrointestinal distress from concentrated sports carbohydrate above roughly 60–90 g/hour",
+          "dental caries from frequent free-sugar exposure",
+          "displacement of nutrient-dense foods where intake comes largely from refined sources"
+        ],
+        "clinicalName": null,
+        "severeRisk": null
+      },
+
+      "absorption": {
+        "typicalRate": "Near-complete for digestible carbohydrate; fibre and resistant starch pass to the colon undigested",
+        "enhancers": [
+          "cooking and processing, which gelatinise starch and speed digestion",
+          "finer particle size, as in flour against intact grain"
+        ],
+        "inhibitors": [
+          "intact cell walls in whole grains and legumes",
+          "viscous soluble fibre, which slows gastric emptying",
+          "fat and protein eaten in the same meal",
+          "acidity, including vinegar and sourdough fermentation",
+          "cooling of cooked starch, which forms resistant starch"
+        ],
+        "notes": "The same grams of carbohydrate produce very different glucose curves depending on form. Whole intact grains produce a markedly lower response than flour made from the same grain, and legumes lower still. This is why the app tracks glycemic load per meal — computed from the food's own glycemic index and its available carbohydrate — rather than inferring anything from total carbohydrate alone."
+      },
+
+      "interactions": [
+        {
+          "with": "fiber",
+          "direction": "synergy",
+          "effect": "Fibre is a carbohydrate fraction that is not digested, and it substantially blunts the glucose response of the digestible fraction eaten alongside it. Available carbohydrate — total minus fibre — is what drives glycemic load."
+        },
+        {
+          "with": "thiamin",
+          "direction": "requires",
+          "effect": "Thiamin is the cofactor for pyruvate dehydrogenase, so the requirement scales with carbohydrate oxidation. Diets high in refined carbohydrate supply the demand without the thiamin that whole grains would have carried."
+        },
+        {
+          "with": "chromium",
+          "direction": "synergy",
+          "effect": "Chromium contributes to insulin signalling, and high intakes of refined carbohydrate increase its urinary loss."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Oats, rolled, dry", "per100g": 66.3, "typicalServing": "40 g (1/2 cup)" },
+        { "fdcId": null, "name": "Rice, white, cooked", "per100g": 28.2, "typicalServing": "158 g (1 cup)" },
+        { "fdcId": null, "name": "Bread, whole wheat", "per100g": 43.1, "typicalServing": "28 g (1 slice)" },
+        { "fdcId": null, "name": "Potato, baked, with skin", "per100g": 21.2, "typicalServing": "173 g (1 medium)" },
+        { "fdcId": null, "name": "Lentils, cooked", "per100g": 20.1, "typicalServing": "198 g (1 cup)" },
+        { "fdcId": null, "name": "Banana, raw", "per100g": 22.8, "typicalServing": "118 g (1 medium)" }
+      ],
+
+      "reference": {
+        "ear": {
+          "child_1_3": 100,
+          "child_4_8": 100,
+          "child_9_13": 100,
+          "male_14_18": 100,
+          "male_19_plus": 100,
+          "female_14_18": 100,
+          "female_19_plus": 100
+        },
+        "rda": {
+          "child_1_3": 130,
+          "child_4_8": 130,
+          "child_9_13": 130,
+          "male_14_18": 130,
+          "male_19_plus": 130,
+          "female_14_18": 130,
+          "female_19_plus": 130,
+          "pregnancy_14_50": 175,
+          "lactation_14_50": 210
+        },
+        "ai": null,
+        "ul": null,
+        "amdr": {
+          "lowPct": 45,
+          "highPct": 65,
+          "note": "Percent of total energy. Well-conducted diets sit outside this band in both directions without evident harm; the band reflects the range the DRI committee could support, not a boundary of safety."
+        }
+      },
+
+      "citations": [
+        {
+          "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        },
+        {
+          "label": "Atkinson, Brand-Miller et al. — International Tables of Glycemic Index and Glycemic Load Values 2021",
+          "url": "https://academic.oup.com/ajcn/article/114/5/1625/6320814"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "fat-total",
+      "name": "Total fat",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "macro",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+
+      "oneLiner": "Carries the fat-soluble vitamins and supplies the two fats you must eat.",
+      "simpleExplanation": "Fat is the densest source of energy, and it is also the vehicle: vitamins A, D, E and K and the carotenoids are barely absorbed without it. Two fatty acids — linoleic and alpha-linolenic — cannot be made by the body at all. There is no recommended daily amount for fat as a whole, only a sensible range of 20–35% of your calories, because which fats you eat matters far more than how much.",
+
+      "summary": "Energy-dense substrate at 9 kcal/g, structural component of every cell membrane, and the obligatory carrier for fat-soluble micronutrients and carotenoids. Total fat carries no EAR, RDA or adult AI — only an AMDR of 20–35% of energy — because outcome data track fatty acid composition rather than total quantity. The two indispensable fatty acids, linoleic (n-6) and alpha-linolenic (n-3), each carry their own AI and are tracked separately in this app.",
+      "whatItDoes": [
+        "Supplies linoleic and alpha-linolenic acid, the two fatty acids humans cannot synthesise",
+        "Enables absorption of vitamins A, D, E and K and of the carotenoids",
+        "Forms the phospholipid bilayer of every cell membrane, with composition affecting membrane fluidity",
+        "Provides the substrate for eicosanoid and steroid hormone synthesis",
+        "Slows gastric emptying, blunting the glycemic response of a meal"
+      ],
+      "benefits": [
+        {
+          "claim": "Replacing saturated fat with polyunsaturated fat lowers cardiovascular risk",
+          "evidence": "strong",
+          "note": "Among the most robust findings in nutrition, supported by randomised controlled trials, prospective cohorts and a clear mechanism. Note the finding is about substitution — replacing saturated fat with refined carbohydrate shows no benefit."
+        },
+        {
+          "claim": "Dietary fat is required for absorption of fat-soluble vitamins and carotenoids",
+          "evidence": "strong",
+          "note": "Established physiology. A fat-free dressing measurably reduces carotenoid uptake from the same salad."
+        },
+        {
+          "claim": "Mediterranean-pattern diets high in monounsaturated fat reduce cardiovascular events",
+          "evidence": "moderate",
+          "note": "PREDIMED found a reduction in major cardiovascular events with added olive oil or nuts. The trial was retracted and republished after randomisation irregularities were found at some sites; the reanalysis reached similar conclusions, but with the effect estimated less precisely than the original headline."
+        },
+        {
+          "claim": "Dietary cholesterol meaningfully raises blood cholesterol in most people",
+          "evidence": "limited",
+          "note": "A negative finding, kept because the belief persists. The response varies substantially between individuals and is small on average; the 300 mg/day limit was dropped from the US Dietary Guidelines in 2015. Saturated and trans fat intake matter considerably more."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "essential fatty acid deficiency",
+        "prevalence": "Very rare from ordinary diets. Seen historically in patients on fat-free parenteral nutrition and in severe fat malabsorption.",
+        "earlySigns": [
+          "dry, scaly skin",
+          "hair loss",
+          "poor wound healing",
+          "reduced absorption of fat-soluble vitamins"
+        ],
+        "advancedSigns": [
+          "growth failure in children",
+          "immune impairment",
+          "hepatic steatosis",
+          "clinical signs of vitamin A, D, E or K deficiency"
+        ],
+        "riskGroups": [
+          "people with cystic fibrosis, pancreatic insufficiency or cholestatic liver disease",
+          "people after bariatric surgery",
+          "people on very-low-fat diets sustained over long periods",
+          "patients on long-term fat-free parenteral nutrition"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No upper limit has been set for total fat. Limits exist for the components that carry the risk: saturated fat under 10% of energy in most guidelines, and trans fat as low as achievable.",
+        "fromSupplements": [
+          "gastrointestinal discomfort and loose stools from large doses of oils",
+          "displacement of other foods, given the energy density"
+        ],
+        "clinicalName": null,
+        "severeRisk": "Industrially produced trans fat raises LDL and lowers HDL simultaneously and has no safe intake. It is a component of total fat and is tracked separately in this app."
+      },
+
+      "absorption": {
+        "typicalRate": "Around 95% of dietary fat in healthy adults",
+        "enhancers": [
+          "bile acid secretion, triggered by fat entering the duodenum",
+          "pancreatic lipase and colipase",
+          "emulsification through cooking or blending",
+          "medium-chain triglycerides, which bypass the usual micellar route"
+        ],
+        "inhibitors": [
+          "pancreatic insufficiency or cholestasis",
+          "orlistat and other lipase inhibitors",
+          "plant sterol supplements at high doses",
+          "very high fibre intakes, marginally"
+        ],
+        "notes": "Fat absorption is efficient enough that the interesting question is composition, not quantity. Because fat is the carrier for carotenoids and the fat-soluble vitamins, a meal's fat content changes how much micronutrient you actually get from it — which is why a fat-free dressing on a salad is a false economy."
+      },
+
+      "interactions": [
+        {
+          "with": "vitamin-d",
+          "direction": "requires",
+          "effect": "Fat-soluble. Absorption is substantially reduced when taken with a low-fat meal, which matters for both dietary and supplemental vitamin D."
+        },
+        {
+          "with": "vitamin-e",
+          "direction": "requires",
+          "effect": "Absorbed through the same micellar pathway. Vitamin E requirement also rises with polyunsaturated fat intake, since it protects those fatty acids from peroxidation."
+        },
+        {
+          "with": "vitamin-k",
+          "direction": "requires",
+          "effect": "Fat-soluble; uptake from leafy greens is markedly better when the meal contains fat."
+        },
+        {
+          "with": "lutein-zeaxanthin",
+          "direction": "requires",
+          "effect": "Carotenoid absorption is poor to negligible without fat in the same meal. A few grams of oil is enough to change the outcome substantially."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Olive oil, extra virgin", "per100g": 100, "typicalServing": "13.5 g (1 tbsp)" },
+        { "fdcId": null, "name": "Almonds", "per100g": 49.9, "typicalServing": "28 g" },
+        { "fdcId": null, "name": "Avocado, raw", "per100g": 14.7, "typicalServing": "150 g (1 medium)" },
+        { "fdcId": null, "name": "Salmon, Atlantic, farmed", "per100g": 12.3, "typicalServing": "140 g fillet" },
+        { "fdcId": null, "name": "Cheddar cheese", "per100g": 33.1, "typicalServing": "28 g" },
+        { "fdcId": null, "name": "Peanut butter", "per100g": 50.4, "typicalServing": "32 g (2 tbsp)" }
+      ],
+
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": null,
+        "ul": null,
+        "amdr": {
+          "lowPct": 20,
+          "highPct": 35,
+          "note": "Percent of total energy. Total fat has no RDA and no adult AI — this band is the only reference intake published for it, because health outcomes track which fats you eat rather than how much fat in total."
+        }
+      },
+
+      "citations": [
+        {
+          "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        },
+        {
+          "label": "Cochrane Review — Reduction in saturated fat intake for cardiovascular disease",
+          "url": "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD011737.pub3/full"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "fiber",
+      "name": "Fiber, total",
+      "symbol": null,
+      "unit": "g",
+      "category": "macronutrient",
+      "subcategory": "fiber",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "non-essential",
+      "storage": "none",
+      "antioxidantRole": false,
+
+      "oneLiner": "Feeds your gut bacteria and is the single most under-eaten thing in the diet.",
+      "simpleExplanation": "Fibre is the part of plant food you don't digest, so it reaches the colon intact and feeds the bacteria living there. Roughly 95% of people fall short of the recommended amount, which makes it the largest gap in most diets. You cannot get a deficiency disease from lacking it — which is exactly why it gets ignored — but intake tracks strongly with lower rates of heart disease, type 2 diabetes and bowel cancer. Increase it gradually and drink more water, or the first week will be uncomfortable.",
+
+      "summary": "Non-digestible carbohydrate polymers reaching the colon intact. Soluble, viscous and fermentable fractions lower LDL and blunt glycemic response; insoluble fractions increase stool bulk and reduce transit time. Colonic fermentation yields short-chain fatty acids, principally butyrate, which is the preferred fuel of the colonocyte and a mediator of much of fibre's systemic effect. The AI of 14 g per 1000 kcal derives from the intake associated with the lowest coronary heart disease risk in observational cohorts — a risk-reduction figure, not a requirement, since no deficiency state exists.",
+      "whatItDoes": [
+        "Supplies fermentable substrate to the colonic microbiota, producing butyrate, propionate and acetate",
+        "Increases stool bulk and reduces transit time via its insoluble fraction",
+        "Binds bile acids, forcing hepatic cholesterol into replacement synthesis and lowering LDL",
+        "Slows gastric emptying and glucose absorption through viscosity",
+        "Increases satiety per calorie, both mechanically and hormonally"
+      ],
+      "benefits": [
+        {
+          "claim": "Reduces cardiovascular disease risk",
+          "evidence": "strong",
+          "note": "A dose-response meta-analysis commissioned by the WHO across 185 prospective studies and 58 trials found a 15–30% reduction in cardiovascular mortality comparing highest to lowest intakes, with benefit continuing up to at least 25–29 g/day."
+        },
+        {
+          "claim": "Lowers LDL cholesterol",
+          "evidence": "strong",
+          "note": "Consistent randomised trial evidence for viscous soluble fibres specifically — oat beta-glucan, psyllium, pectin. Around 3 g/day of beta-glucan lowers LDL by roughly 5–7%."
+        },
+        {
+          "claim": "Reduces risk of colorectal cancer",
+          "evidence": "moderate",
+          "note": "Graded 'probable' by the World Cancer Research Fund. Consistent across cohorts, with a plausible butyrate mechanism; randomised trials of fibre supplements on adenoma recurrence have been null, which is why this is not rated strong."
+        },
+        {
+          "claim": "Improves glycemic control and reduces type 2 diabetes incidence",
+          "evidence": "moderate",
+          "note": "Strong and consistent cohort data; trial effects on HbA1c are real but modest. Cereal fibre shows the association more clearly than fruit fibre."
+        },
+        {
+          "claim": "Relieves symptoms in irritable bowel syndrome",
+          "evidence": "limited",
+          "note": "Depends entirely on the type. Soluble fibre such as psyllium helps some people; insoluble wheat bran commonly makes IBS symptoms worse. A blanket recommendation to eat more fibre is poor advice here."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": null,
+        "prevalence": "Around 95% of US adults consume less than the Adequate Intake (NHANES). There is no deficiency disease, which is a large part of why the shortfall persists.",
+        "earlySigns": [
+          "constipation and straining",
+          "hunger returning soon after meals",
+          "erratic blood glucose after meals"
+        ],
+        "advancedSigns": [
+          "diverticular disease",
+          "haemorrhoids",
+          "reduced microbial diversity in the colon"
+        ],
+        "riskGroups": [
+          "people eating mostly refined grains and few vegetables",
+          "people on low-carbohydrate diets that were not planned around fibre",
+          "people following a strict low-FODMAP diet beyond the elimination phase",
+          "older adults with low food intake overall"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No upper limit has been set. Very high intakes reached suddenly cause bloating, wind and cramping, and can reduce absorption of minerals — but this is a ramp-rate problem far more than a ceiling problem.",
+        "fromSupplements": [
+          "bloating, wind and abdominal cramping, especially when intake rises quickly",
+          "reduced absorption of iron, zinc and calcium at very high intakes",
+          "oesophageal or intestinal obstruction from bulking agents taken with too little water"
+        ],
+        "clinicalName": null,
+        "severeRisk": "Bulk-forming supplements taken without adequate fluid can cause obstruction. This is the one genuine acute risk and it is entirely avoidable."
+      },
+
+      "absorption": {
+        "typicalRate": "Not absorbed by design — fermented in the colon, yielding roughly 2 kcal/g from short-chain fatty acids",
+        "enhancers": [
+          "adequate fluid intake, without which the bulking effect backfires",
+          "increasing intake gradually over two to four weeks",
+          "variety across fibre types, since different fractions feed different bacteria",
+          "resistant starch formed by cooking and then cooling starchy foods"
+        ],
+        "inhibitors": [
+          "raising intake abruptly, which produces symptoms that lead people to stop",
+          "low fluid intake",
+          "antibiotic use, which disrupts the fermenting community"
+        ],
+        "notes": "Fibre is not one substance and the fractions do different jobs, which is why this app tracks soluble and insoluble separately where the data exists. Oat beta-glucan and psyllium lower LDL; wheat bran does not, but moves the bowel far more effectively. Getting fibre from a range of whole plant foods rather than one supplement is what the cohort evidence actually describes."
+      },
+
+      "interactions": [
+        {
+          "with": "magnesium",
+          "direction": "synergy",
+          "effect": "Fermentable fibre and inulin increase colonic magnesium absorption, partly offsetting the phytate that usually accompanies high-fibre foods."
+        },
+        {
+          "with": "iron",
+          "direction": "competes",
+          "effect": "Phytate in high-fibre plant foods binds non-heme iron and reduces its absorption. Soaking, sprouting and fermenting reduce phytate substantially."
+        },
+        {
+          "with": "zinc",
+          "direction": "competes",
+          "effect": "Same phytate mechanism as iron. Relevant at habitually high fibre intakes with marginal zinc, not at ordinary intakes."
+        },
+        {
+          "with": "water",
+          "direction": "requires",
+          "effect": "Bulking fibre draws water into the stool. Increasing fibre without increasing fluid makes constipation worse rather than better."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Chia seeds", "per100g": 34.4, "typicalServing": "28 g" },
+        { "fdcId": null, "name": "Black beans, cooked", "per100g": 8.7, "typicalServing": "172 g (1 cup)" },
+        { "fdcId": null, "name": "Lentils, cooked", "per100g": 7.9, "typicalServing": "198 g (1 cup)" },
+        { "fdcId": null, "name": "Almonds", "per100g": 12.5, "typicalServing": "28 g" },
+        { "fdcId": null, "name": "Oats, rolled, dry", "per100g": 10.6, "typicalServing": "40 g (1/2 cup)" },
+        { "fdcId": null, "name": "Raspberries, raw", "per100g": 6.5, "typicalServing": "123 g (1 cup)" }
+      ],
+
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 19,
+          "child_4_8": 25,
+          "male_9_13": 31,
+          "female_9_13": 26,
+          "male_14_18": 38,
+          "male_19_50": 38,
+          "male_51_plus": 30,
+          "female_14_18": 26,
+          "female_19_50": 25,
+          "female_51_plus": 21,
+          "pregnancy_14_50": 28,
+          "lactation_14_50": 29
+        },
+        "ul": null,
+        "amdr": null
+      },
+
+      "citations": [
+        {
+          "label": "NASEM — Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://nap.nationalacademies.org/catalog/10490/dietary-reference-intakes-for-energy-carbohydrate-fiber-fat-fatty-acids-cholesterol-protein-and-amino-acids"
+        },
+        {
+          "label": "Reynolds et al. — Carbohydrate quality and human health: a series of systematic reviews and meta-analyses (The Lancet 2019)",
+          "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31809-9/fulltext"
+        }
+      ],
+      "lastReviewed": "2026-08-11"
+    },
+
+    {
+      "id": "water",
+      "name": "Water",
+      "symbol": "H₂O",
+      "unit": "mL",
+      "category": "macronutrient",
+      "subcategory": "other",
+      "fdcNutrientId": null,
+      "hasReferenceIntake": true,
+      "essentiality": "essential",
+      "storage": "none",
+      "antioxidantRole": false,
+
+      "oneLiner": "The one nutrient you cannot go more than a few days without.",
+      "simpleExplanation": "Water makes up roughly 60% of your body and is the medium every biochemical reaction happens in. The commonly quoted target of about 3.7 L a day for men and 2.7 L for women is total water — around a fifth of it comes from food, so the amount you actually need to drink is meaningfully lower. There is no need to count it precisely: thirst is a reliable guide for healthy adults, and pale yellow urine is a better check than any number.",
+
+      "summary": "Solvent and transport medium constituting roughly 60% of body mass in adult men and 50–55% in adult women. Balance is regulated by arginine vasopressin acting on renal collecting-duct aquaporins, with plasma osmolality held within about 1–2% of setpoint. The AI is set from median total water intake in healthy populations rather than from a measured requirement, because requirement varies enormously with climate, activity and diet — a point the DRI committee stated explicitly.",
+      "whatItDoes": [
+        "Acts as the solvent for essentially all metabolic reactions",
+        "Transports nutrients, oxygen and metabolic waste through blood and lymph",
+        "Regulates core temperature through sweat evaporation",
+        "Provides hydrostatic pressure for glomerular filtration and lubricates joints and serous surfaces",
+        "Maintains plasma volume, and so cardiovascular function during exertion"
+      ],
+      "benefits": [
+        {
+          "claim": "Prevents dehydration and maintains cardiovascular and thermoregulatory function",
+          "evidence": "strong",
+          "note": "Established physiology. Performance and cognition both decline measurably at fluid deficits of roughly 2% of body mass."
+        },
+        {
+          "claim": "Reduces recurrence of kidney stones",
+          "evidence": "strong",
+          "note": "Randomised trial evidence: raising urine output above 2 L/day roughly halves recurrence in people who have already formed a stone."
+        },
+        {
+          "claim": "Aids weight loss when drunk before meals",
+          "evidence": "limited",
+          "note": "A handful of small trials show a modest effect, mostly in older adults where gastric emptying is slower. Frequently overstated."
+        },
+        {
+          "claim": "Everyone needs eight glasses of water a day",
+          "evidence": "preliminary",
+          "note": "A negative finding worth stating, because the figure is everywhere. It has no identifiable scientific origin, ignores the roughly 20% of intake that comes from food, and ignores that requirement varies with body size, climate and activity. Thirst regulates intake adequately in healthy adults."
+        }
+      ],
+
+      "deficiency": {
+        "clinicalName": "dehydration",
+        "prevalence": "Common and usually mild. Clinically meaningful dehydration is frequent in older adults, in whom the thirst response is blunted.",
+        "earlySigns": [
+          "thirst",
+          "dark yellow urine and reduced output",
+          "dry mouth",
+          "headache",
+          "fatigue and reduced concentration"
+        ],
+        "advancedSigns": [
+          "dizziness and postural hypotension",
+          "rapid heart rate",
+          "confusion",
+          "reduced skin turgor",
+          "acute kidney injury in severe cases"
+        ],
+        "riskGroups": [
+          "older adults, whose thirst response declines with age",
+          "endurance athletes and outdoor workers in heat",
+          "people with vomiting, diarrhoea or fever",
+          "people on diuretics",
+          "people with poorly controlled diabetes"
+        ]
+      },
+
+      "excess": {
+        "fromFood": "No upper limit has been set, because the healthy kidney excretes a surplus readily — up to roughly 0.8–1.0 L per hour.",
+        "fromSupplements": [
+          "frequent urination and disturbed sleep",
+          "dilutional hyponatraemia when intake exceeds renal clearance"
+        ],
+        "clinicalName": "hyponatraemia",
+        "severeRisk": "Drinking far beyond renal clearance dilutes plasma sodium and can cause cerebral oedema, seizures and death. This is rare but real, and is documented in endurance events and in water-drinking contests. Sustained intake above roughly 1 L/hour is where the risk begins."
+      },
+
+      "absorption": {
+        "typicalRate": "Essentially complete, mostly in the small intestine",
+        "enhancers": [
+          "small amounts of sodium and glucose, which drive co-transport",
+          "drinking steadily rather than in large single volumes",
+          "high-water foods, which arrive with electrolytes and are absorbed steadily"
+        ],
+        "inhibitors": [
+          "very high osmolality drinks, which can draw water into the gut",
+          "alcohol, which suppresses vasopressin and increases urinary loss",
+          "large single volumes, much of which are simply excreted"
+        ],
+        "notes": "Roughly 20% of total water intake comes from food, which is why the AI figures look higher than the amount anyone drinks. Fruit and vegetables are 80–95% water. Caffeinated drinks count toward intake — the diuretic effect is modest and does not offset the fluid they carry, contrary to long-standing advice."
+      },
+
+      "interactions": [
+        {
+          "with": "sodium",
+          "direction": "synergy",
+          "effect": "Sodium is the principal determinant of extracellular fluid volume, and small amounts aid intestinal water absorption through co-transport. Rehydrating with plain water after heavy sweat loss can worsen hyponatraemia."
+        },
+        {
+          "with": "potassium",
+          "direction": "synergy",
+          "effect": "Potassium governs intracellular fluid volume, complementing sodium's role outside the cell."
+        },
+        {
+          "with": "fiber",
+          "direction": "requires",
+          "effect": "Fibre draws water into the stool to soften and bulk it. Raising fibre without raising fluid makes constipation worse."
+        }
+      ],
+
+      "topSources": [
+        { "fdcId": null, "name": "Cucumber, raw", "per100g": 95.2, "typicalServing": "104 g (1 cup sliced)" },
+        { "fdcId": null, "name": "Tomato, raw", "per100g": 94.5, "typicalServing": "123 g (1 medium)" },
+        { "fdcId": null, "name": "Watermelon, raw", "per100g": 91.5, "typicalServing": "152 g (1 cup)" },
+        { "fdcId": null, "name": "Milk, 2% fat", "per100g": 89.2, "typicalServing": "244 g (1 cup)" },
+        { "fdcId": null, "name": "Orange, raw", "per100g": 86.8, "typicalServing": "131 g (1 medium)" },
+        { "fdcId": null, "name": "Greek yogurt, plain, nonfat", "per100g": 85.1, "typicalServing": "170 g" }
+      ],
+
+      "reference": {
+        "ear": null,
+        "rda": null,
+        "ai": {
+          "child_1_3": 1300,
+          "child_4_8": 1700,
+          "male_9_13": 2400,
+          "female_9_13": 2100,
+          "male_14_18": 3300,
+          "male_19_plus": 3700,
+          "female_14_18": 2300,
+          "female_19_plus": 2700,
+          "pregnancy_14_50": 3000,
+          "lactation_14_50": 3800
+        },
+        "ul": null,
+        "amdr": null
+      },
+
+      "citations": [
+        {
+          "label": "NASEM — Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate",
+          "url": "https://nap.nationalacademies.org/catalog/10925/dietary-reference-intakes-for-water-potassium-sodium-chloride-and-sulfate"
+        },
+        {
+          "label": "Valtin — \"Drink at least eight glasses of water a day.\" Really? (Am J Physiol 2002)",
+          "url": "https://journals.physiology.org/doi/full/10.1152/ajpregu.00365.2002"
         }
       ],
       "lastReviewed": "2026-08-11"

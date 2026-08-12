@@ -28,7 +28,7 @@
     { "id": "omega-6-linoleic", "name": "Omega-6 linoleic acid", "symbol": "LA", "unit": "g", "tier": 1, "category": "macronutrient", "subcategory": "fatty-acid", "storage": "high", "antioxidantRole": false, "fdcNutrientId": null, "headline": false },
     { "id": "fat-trans", "name": "Trans fat", "symbol": null, "unit": "g", "tier": 1, "category": "macronutrient", "subcategory": "fat", "storage": "none", "antioxidantRole": false, "fdcNutrientId": null, "headline": false },
     { "id": "cholesterol", "name": "Cholesterol", "symbol": null, "unit": "mg", "tier": 1, "category": "macronutrient", "subcategory": "lipid", "storage": "none", "antioxidantRole": false, "fdcNutrientId": null, "headline": false },
-    { "id": "water", "name": "Water", "symbol": "H₂O", "unit": "ml", "tier": 1, "category": "macronutrient", "subcategory": "other", "storage": "none", "antioxidantRole": false, "fdcNutrientId": null, "headline": true },
+    { "id": "water", "name": "Water", "symbol": "H₂O", "unit": "mL", "tier": 1, "category": "macronutrient", "subcategory": "other", "storage": "none", "antioxidantRole": false, "fdcNutrientId": null, "headline": true },
 
     { "id": "vitamin-a", "name": "Vitamin A", "symbol": null, "unit": "mcg", "tier": 2, "category": "vitamin", "subcategory": "fat-soluble", "storage": "high", "antioxidantRole": false, "fdcNutrientId": null, "headline": true },
     { "id": "vitamin-d", "name": "Vitamin D", "symbol": null, "unit": "mcg", "tier": 2, "category": "vitamin", "subcategory": "fat-soluble", "storage": "high", "antioxidantRole": false, "fdcNutrientId": 1114, "headline": true },

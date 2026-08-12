@@ -160,6 +160,18 @@
       }
     },
 
+    "acceptableRange": {
+      "description": "Acceptable Macronutrient Distribution Range — a band expressed as a percentage of total energy, not an absolute amount. The macronutrients are the only values published this way, and total fat has NO RDA and NO AI, so without this it could not carry a reference at all. Rendered as a shaded band behind the bar rather than a point target, because a range is what the evidence actually supports.",
+      "type": "object",
+      "required": ["lowPct", "highPct", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "lowPct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "highPct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+
     "referenceIntakes": {
       "type": "object",
       "required": ["ear", "rda", "ai", "ul"],
@@ -168,11 +180,13 @@
         "ear": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
         "rda": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
         "ai": { "oneOf": [{ "$ref": "#/definitions/referenceTable" }, { "type": "null" }] },
-        "ul": { "oneOf": [{ "$ref": "#/definitions/upperLimit" }, { "type": "null" }] }
+        "ul": { "oneOf": [{ "$ref": "#/definitions/upperLimit" }, { "type": "null" }] },
+        "amdr": { "oneOf": [{ "$ref": "#/definitions/acceptableRange" }, { "type": "null" }] }
       },
       "anyOf": [
         { "properties": { "rda": { "$ref": "#/definitions/referenceTable" } }, "required": ["rda"] },
-        { "properties": { "ai": { "$ref": "#/definitions/referenceTable" } }, "required": ["ai"] }
+        { "properties": { "ai": { "$ref": "#/definitions/referenceTable" } }, "required": ["ai"] },
+        { "properties": { "amdr": { "$ref": "#/definitions/acceptableRange" } }, "required": ["amdr"] }
       ]
     },
 

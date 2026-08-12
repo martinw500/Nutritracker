@@ -11,7 +11,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-card border border-border bg-surface p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]",
+        "rounded-card border border-border bg-surface p-5 shadow-[var(--shadow-card)]",
         className,
       )}
     >

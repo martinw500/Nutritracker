@@ -62,7 +62,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
           <Link
             href="/log/photo"
-            className="mt-6 flex items-center justify-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-medium text-bg transition-opacity hover:opacity-90"
+            className="mt-6 flex items-center justify-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-medium text-on-accent transition-colors hover:bg-accent-hover"
           >
             <Aperture className="size-4" strokeWidth={2} />
             Log a photo

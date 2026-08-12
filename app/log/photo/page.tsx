@@ -135,7 +135,7 @@ export default function PhotoDraftPage() {
         <button
           disabled
           title="Not wired up — there is no database to write to yet."
-          className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-bg opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-on-accent opacity-60"
         >
           <Check className="size-4" strokeWidth={2.5} />
           Confirm {active.length} item{active.length === 1 ? "" : "s"}

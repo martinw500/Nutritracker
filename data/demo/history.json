@@ -4,7 +4,27 @@
     "DEMO DATA standing in for the daily_totals table. Nothing outside lib/demo may import this file.",
     "Covers the 29 days BEFORE the demo day. Today's row is not stored here — lib/demo computes it from day.json and foods.json and appends it, so the dashboard and the trend charts can never disagree.",
     "Composed to exercise all three storage-class alert windows at once: vitamin C (storage 'none', 3-day window) dips below 70% of the RDA for the last three days and fires; magnesium (storage 'moderate', 7-day window) stays adequate throughout and does not fire; vitamin D (storage 'high', 30-day window) never looks alarming on any single day but averages around half the RDA across the month, which is exactly the pattern a daily alert would miss.",
-    "coverage is the fraction of that day's entries that had any phytonutrient data. It hovers around a third, which is realistic — USDA's flavonoid databases cover ~500 foods against FoodData Central's 600,000."
+    "coverage is the fraction of that day's entries that had any phytonutrient data. It hovers around a third, which is realistic — USDA's flavonoid databases cover ~500 foods against FoodData Central's 600,000.",
+    "weights are deliberately noisy. Day-to-day bodyweight swings by a kilo or more on water alone, so a weight card that reacts to a single reading is reading noise. The trend line is the signal, and the UI says so."
+  ],
+
+  "weights": [
+    { "date": "2026-07-13", "kg": 75.4 },
+    { "date": "2026-07-15", "kg": 75.7 },
+    { "date": "2026-07-17", "kg": 75.1 },
+    { "date": "2026-07-19", "kg": 75.3 },
+    { "date": "2026-07-21", "kg": 74.8 },
+    { "date": "2026-07-23", "kg": 75.2 },
+    { "date": "2026-07-25", "kg": 74.9 },
+    { "date": "2026-07-27", "kg": 74.6 },
+    { "date": "2026-07-29", "kg": 74.9 },
+    { "date": "2026-07-31", "kg": 74.4 },
+    { "date": "2026-08-02", "kg": 74.7 },
+    { "date": "2026-08-04", "kg": 74.3 },
+    { "date": "2026-08-06", "kg": 74.5 },
+    { "date": "2026-08-08", "kg": 74.1 },
+    { "date": "2026-08-10", "kg": 74.3 },
+    { "date": "2026-08-11", "kg": 74.0 }
   ],
 
   "days": [

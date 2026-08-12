@@ -76,7 +76,7 @@ export default function AiSettingsPage() {
           <button
             disabled
             title="Not wired up yet — Phase 2."
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-bg opacity-60"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-on-accent opacity-60"
           >
             <Zap className="size-4" strokeWidth={2.5} />
             Authorise with OpenRouter

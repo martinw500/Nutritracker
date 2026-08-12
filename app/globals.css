@@ -1,63 +1,108 @@
 @import "tailwindcss";
 
 /*
- * Status colours carry meaning, so they are named for the meaning and not for
- * the hue. There is deliberately NO colour token for a phytonutrient amount:
- * Tier 3 has no target, so it has no good/bad, so it gets neutral ink.
+ * Colour is assigned by the job it does, and the data colours are not invented
+ * — they come from a validated palette and were re-checked with the dataviz
+ * skill's validator against the exact surfaces below.
+ *
+ *   chrome      violet. Interactive only: buttons, links, active nav, the
+ *               energy ring. Deliberately not a series hue and not a status
+ *               hue, so it can never impersonate one.
+ *   series      blue / orange / aqua for protein / carbohydrate / fat.
+ *               Identity, not magnitude. Fixed order, never cycled.
+ *   status      good / warning / serious / critical. Reserved — never reused
+ *               as "series 4".
+ *
+ * Status colours are NOT safe alone: red against green measures ΔE 4.1 under
+ * deuteranopia. Every status mark in this app therefore carries a second
+ * channel — a distinct glyph shape, plus the state in words in its tooltip and
+ * in the "needs attention" line. Colour never carries the meaning by itself.
+ *
+ * Tier 3 has no status, because it has no target. It gets neutral ink.
  */
 :root {
-  --bg: oklch(99% 0.004 95);
-  --surface: oklch(100% 0 0);
-  --surface-sunken: oklch(97% 0.005 95);
-  --border: oklch(91% 0.006 95);
-  --border-strong: oklch(84% 0.008 95);
+  color-scheme: light;
 
-  --ink: oklch(24% 0.012 80);
-  --ink-muted: oklch(52% 0.012 80);
-  --ink-faint: oklch(66% 0.01 80);
+  --bg: #fcfbf8;
+  --surface: #ffffff;
+  --surface-sunken: #f5f3ee;
+  --border: #e8e4db;
+  --border-strong: #d6d0c3;
 
-  --accent: oklch(52% 0.13 162);
-  --accent-soft: oklch(94% 0.04 162);
+  --ink: #1a1917;
+  --ink-muted: #55524b;
+  --ink-faint: #85807a;
 
-  --met: oklch(58% 0.13 155);
-  --met-soft: oklch(93% 0.05 155);
-  --below: oklch(60% 0.02 80);
-  --below-soft: oklch(93% 0.008 80);
-  --low: oklch(66% 0.15 62);
-  --low-soft: oklch(95% 0.05 70);
-  --over: oklch(56% 0.19 25);
-  --over-soft: oklch(94% 0.04 25);
+  --accent: #4a3aa7;
+  --accent-hover: #3d2f8c;
+  --accent-soft: #ece9fa;
+  --on-accent: #ffffff;
 
-  --nodata: oklch(72% 0.008 80);
+  /* Macro series — validated: worst all-pairs CVD ΔE 9.2, normal-vision 24.0 */
+  --series-protein: #2a78d6;
+  --series-carb: #eb6834;
+  --series-fat: #1baf7a;
 
-  --radius: 0.75rem;
+  /* Status. Names map to the four bands in lib/nutrition/status.ts. */
+  --met: #0ca30c;
+  --met-soft: #e4f6e4;
+  --below: #fab219;
+  --below-soft: #fdf1d8;
+  --low: #ec835a;
+  --low-soft: #fdeade;
+  --over: #d03b3b;
+  --over-soft: #fbe6e6;
+
+  /* Absence of data. Never a status, never a zero. */
+  --nodata: #a8a297;
+
+  --grid: #ece8df;
+  --axis: #d6d0c3;
+
+  --radius: 1rem;
+  --radius-sm: 0.625rem;
+  --shadow-card: 0 1px 2px rgba(26, 25, 23, 0.04), 0 4px 12px rgba(26, 25, 23, 0.03);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: oklch(17% 0.008 80);
-    --surface: oklch(21% 0.009 80);
-    --surface-sunken: oklch(19% 0.008 80);
-    --border: oklch(28% 0.01 80);
-    --border-strong: oklch(36% 0.012 80);
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
 
-    --ink: oklch(94% 0.006 80);
-    --ink-muted: oklch(72% 0.01 80);
-    --ink-faint: oklch(56% 0.01 80);
+    --bg: #141310;
+    --surface: #201e1a;
+    --surface-sunken: #1a1815;
+    --border: #302d27;
+    --border-strong: #443f37;
 
-    --accent: oklch(72% 0.13 162);
-    --accent-soft: oklch(28% 0.05 162);
+    --ink: #f5f2ec;
+    --ink-muted: #b8b2a6;
+    --ink-faint: #857f72;
 
-    --met: oklch(72% 0.14 155);
-    --met-soft: oklch(28% 0.05 155);
-    --below: oklch(62% 0.015 80);
-    --below-soft: oklch(27% 0.008 80);
-    --low: oklch(76% 0.14 68);
-    --low-soft: oklch(30% 0.05 68);
-    --over: oklch(70% 0.16 25);
-    --over-soft: oklch(29% 0.06 25);
+    --accent: #9085e9;
+    --accent-hover: #a49bef;
+    --accent-soft: #2a2545;
+    --on-accent: #141310;
 
-    --nodata: oklch(46% 0.008 80);
+    /* The same three hues, stepped for the dark surface — not flipped. */
+    --series-protein: #3987e5;
+    --series-carb: #d95926;
+    --series-fat: #199e70;
+
+    --met: #0ca30c;
+    --met-soft: #16301a;
+    --below: #fab219;
+    --below-soft: #33290f;
+    --low: #ec835a;
+    --low-soft: #33211a;
+    --over: #d03b3b;
+    --over-soft: #331919;
+
+    --nodata: #6b665c;
+
+    --grid: #2a2723;
+    --axis: #443f37;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -67,11 +112,20 @@
   --color-sunken: var(--surface-sunken);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+
   --color-ink: var(--ink);
   --color-muted: var(--ink-muted);
   --color-faint: var(--ink-faint);
+
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+
+  --color-protein: var(--series-protein);
+  --color-carb: var(--series-carb);
+  --color-fat: var(--series-fat);
+
   --color-met: var(--met);
   --color-met-soft: var(--met-soft);
   --color-below: var(--below);
@@ -81,7 +135,9 @@
   --color-over: var(--over);
   --color-over-soft: var(--over-soft);
   --color-nodata: var(--nodata);
+
   --radius-card: var(--radius);
+  --radius-tile: var(--radius-sm);
 }
 
 * {
@@ -95,18 +151,47 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Amounts read as data, not prose. Tabular figures stop columns jittering. */
+/*
+ * Tabular figures for columns that must align vertically — table rows, axis
+ * ticks, stacked amounts. Deliberately NOT applied to the hero figure, where
+ * equal-width digits make a large number look loose.
+ */
 .numeric {
-  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
 }
 
+.hero-figure {
+  font-variant-numeric: proportional-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Recharts chrome: solid hairlines, one shade off the surface. Never dashed —
+   a dashed grid reads as a threshold when it is only a grid. */
 .recharts-cartesian-axis-tick text {
   fill: var(--ink-faint);
   font-size: 11px;
+  font-variant-numeric: tabular-nums;
 }
 
 .recharts-cartesian-grid line {
-  stroke: var(--border);
+  stroke: var(--grid);
+}
+
+.recharts-cartesian-axis line {
+  stroke: var(--axis);
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

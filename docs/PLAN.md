@@ -114,7 +114,7 @@ Full detail, licenses, and caveats in [RESEARCH.md](RESEARCH.md).
 
 ## The nutrient reference layer
 
-Lives in [`data/nutrients.json`](../data/nutrients.json), typed by [`lib/nutrition/types.ts`](../lib/nutrition/types.ts) and validated against [`data/nutrients.schema.json`](../data/nutrients.schema.json). One entry per tracked value — 59 when complete; **5 written so far.**
+Lives in [`data/nutrients.json`](../data/nutrients.json), typed by [`lib/nutrition/types.ts`](../lib/nutrition/types.ts) and validated against [`data/nutrients.schema.json`](../data/nutrients.schema.json). One entry per tracked value — 59 when complete; **10 written so far.**
 
 Values in [`data/roster.json`](../data/roster.json) with no entry here are tracked and totalled, but render an explicit "no reference yet" state rather than a blank or a target. Writing the entry lights the row and its detail page up with no code change.
 
@@ -306,8 +306,8 @@ Day-to-day state, current issues, and what changed most recently live in [STATUS
 - [x] Scaffold Next.js + TypeScript + Tailwind
 - [x] `npm run validate:data` — schema plus cross-file agreement
 - [ ] Postgres + Drizzle; schema migrations
-- [ ] Run `validate:data` in CI
-- [ ] Remaining 54 reference entries
+- [x] Run `validate:data` in CI
+- [ ] Remaining 49 reference entries
 - [ ] FDC client + local mirror of Foundation Foods and SR Legacy; resolve `topSources[].fdcId`
 - [ ] Import USDA flavonoid / isoflavone / proanthocyanidin DBs; import GI tables
 

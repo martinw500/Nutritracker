@@ -48,8 +48,18 @@ for (const nutrient of database.nutrients) {
   }
 
   if (nutrient.hasReferenceIntake) {
-    const hasTarget = nutrient.reference?.rda || nutrient.reference?.ai;
-    if (!hasTarget) fail(`${where} is Tier 2 but has neither an RDA nor an AI`);
+    const reference = nutrient.reference ?? {};
+    // Total fat has no RDA and no AI — an AMDR band is its only reference.
+    const hasTarget = reference.rda || reference.ai || reference.amdr;
+    if (!hasTarget) {
+      fail(`${where} has a reference intake but no RDA, AI or AMDR to render against`);
+    }
+    if (reference.amdr && reference.amdr.lowPct >= reference.amdr.highPct) {
+      fail(`${where} has an AMDR whose low bound is not below its high bound`);
+    }
+    if (reference.amdr && nutrient.category !== "macronutrient") {
+      fail(`${where} carries an AMDR but is not a macronutrient`);
+    }
   } else {
     if (nutrient.reference !== null) {
       fail(`${where} is a phytonutrient but carries a reference intake (CLAUDE.md rule 3)`);

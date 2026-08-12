@@ -154,6 +154,22 @@ export interface UpperLimit {
   byLifeStage?: ReferenceTable;
 }
 
+/**
+ * Acceptable Macronutrient Distribution Range — a band given as a percentage of
+ * total energy rather than an absolute amount.
+ *
+ * Only the macronutrients are published this way. It matters because total fat
+ * has no RDA and no AI at all: without this it could carry no reference, and
+ * the only honest alternative would be to show no target for a third of the
+ * energy on the plate. Rendered as a shaded band behind the bar, never as a
+ * point target — the range is what the evidence supports.
+ */
+export interface AcceptableRange {
+  lowPct: number;
+  highPct: number;
+  note: string;
+}
+
 export interface ReferenceIntakes {
   /** Estimated Average Requirement — meets 50% of the group. Expert mode only. */
   ear: ReferenceTable | null;
@@ -163,6 +179,8 @@ export interface ReferenceIntakes {
   ai: ReferenceTable | null;
   /** Tolerable Upper Intake Level. Drives excess alerts. */
   ul: UpperLimit | null;
+  /** Percent-of-energy band. Macronutrients only; absent elsewhere. */
+  amdr?: AcceptableRange | null;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
