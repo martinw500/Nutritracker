@@ -36,6 +36,7 @@ Manual logging works fully without any AI configured, so the app is useful befor
 |---|---|
 | [CLAUDE.md](CLAUDE.md) | Data-integrity rules that bind implementation. Read before changing anything. |
 | [docs/PLAN.md](docs/PLAN.md) | Architecture, nutrient roster, data model, feature specs, build phases |
+| [docs/DECISIONS.md](docs/DECISIONS.md) | What's settled and why, plus what's still open |
 | [docs/RESEARCH.md](docs/RESEARCH.md) | Data sources, licenses, AI provider auth findings, accuracy research |
 
 ## Data layer
@@ -59,3 +60,19 @@ The schema makes the important rules structural rather than advisory: a benefit 
 - [ ] FoodData Central mirror
 
 See [docs/PLAN.md](docs/PLAN.md) for the full sequence.
+
+## Start here
+
+Nothing is scaffolded yet, so a fresh clone needs no install step — there's no `package.json` to run against.
+
+```bash
+git clone https://github.com/martinw500/Nutritracker
+cd Nutritracker
+cp .env.example .env.local     # nothing to fill in yet; see the file for what's coming
+```
+
+**Read in this order:** [CLAUDE.md](CLAUDE.md) → [docs/DECISIONS.md](docs/DECISIONS.md) → [docs/PLAN.md](docs/PLAN.md). The first tells you what you may not break, the second why, the third what to build.
+
+**The next task** is the first unchecked box above: scaffold Next.js + Postgres + Drizzle, then wire `data/nutrients.schema.json` validation into CI so the remaining ~40 nutrient entries are checked as they're written.
+
+You'll need a free [FoodData Central API key](https://fdc.nal.usda.gov/api-key-signup.html) and a Postgres database (Supabase and Neon both have free tiers) before Phase 0 finishes — see [.env.example](.env.example) for everything and where it comes from.
