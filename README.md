@@ -55,7 +55,11 @@ The schema makes the important rules structural rather than advisory: a benefit 
 
 ## Status
 
-**Phase 0, part-built.** The UI is complete and runnable against fixtures; there's no database and no AI yet. Current state, next steps and known issues: [docs/STATUS.md](docs/STATUS.md).
+**Phase 0/1, part-built.** The UI is runnable against fixtures, and the
+Postgres/Drizzle account foundation is implemented but still needs a hosted
+database connection. Nutrition logging remains fixture-backed; there is no AI
+integration yet. Current state, next steps and known issues:
+[docs/STATUS.md](docs/STATUS.md).
 
 ## Start here
 
@@ -67,6 +71,30 @@ npm run dev            # http://localhost:3000
 ```
 
 No `.env.local` and no database needed — every screen runs off `data/demo/`, and a banner says so on every page.
+
+### Turn on accounts and persistence
+
+The database/auth foundation is optional until it is configured. Create a Neon
+or Supabase Postgres database, copy `.env.example` to `.env.local`, then set:
+
+```bash
+DATABASE_URL="postgresql://..."
+BETTER_AUTH_SECRET="a long random value"
+BETTER_AUTH_URL="http://localhost:3000"
+```
+
+Install dependencies and apply the checked-in migration:
+
+```bash
+npm install
+npm run db:migrate
+npm run dev
+```
+
+`/account` then provides email/password sign-up, sessions, and a persisted
+health profile. The nutrition dashboard deliberately stays on labelled demo
+fixtures until manual food logging is wired to the new `foods`, `log_entries`,
+and `daily_totals` tables.
 
 ```bash
 npm run validate:data  # data layer

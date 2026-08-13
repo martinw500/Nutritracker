@@ -4,7 +4,9 @@ The living file. What is being worked on, what is next, what is broken, what cha
 
 Updated at the end of **every** change — see [../CLAUDE.md](../CLAUDE.md), "Closing the loop". Kept under ~120 lines by deleting, not archiving.
 
-**Phase 0/1**, part-built. Reference layer largely written; UI runs against fixtures; no database, no AI.
+**Phase 0/1**, part-built. Reference layer largely written; database and account
+foundation are implemented but need a hosted Postgres connection; nutrition UI
+still runs against fixtures; no AI.
 
 ---
 
@@ -16,12 +18,12 @@ Nothing in flight.
 
 ## Next up
 
-1. **Drizzle schema + migrations.** The data model in [PLAN.md](PLAN.md#data-model) is designed but not built. Until it exists nothing persists and date navigation cannot work.
-2. **FoodData Central client + local mirror.** Replaces `data/demo/foods.json` and resolves `topSources[].fdcId`.
-3. **Unit conversion** (ml / cup / tbsp / piece → g). Blocks realistic manual logging.
-4. **Upgrade brief entries to full.** 37 are brief — target and citation present, prose pending. Highest value first: calcium, iron, zinc, folate, vitamin A.
-5. **The 11 remaining Tier 3 phytonutrients**, which need `intakeContext` rather than targets.
-6. **Log drinks as entries**, so water can be assessed instead of marked unassessable.
+1. **Connect hosted Postgres.** Set `DATABASE_URL`, `BETTER_AUTH_SECRET`, and `BETTER_AUTH_URL`, then run `npm run db:migrate`. Account and profile persistence are already wired and retain a demo fallback when unconfigured.
+2. **Persistent manual logging.** Point the existing log UI at `foods`, `log_entries`, and `daily_totals`; this is what enables date navigation.
+3. **FoodData Central client + local mirror.** Replaces `data/demo/foods.json` and resolves `topSources[].fdcId`.
+4. **Unit conversion** (ml / cup / tbsp / piece → g). Blocks realistic manual logging.
+5. **Upgrade brief entries to full.** 37 are brief — target and citation present, prose pending. Highest value first: calcium, iron, zinc, folate, vitamin A.
+6. **The 11 remaining Tier 3 phytonutrients**, which need `intakeContext` rather than targets.
 7. **Goal modes should re-weight**, not just be selectable.
 
 ---
@@ -30,7 +32,7 @@ Nothing in flight.
 
 | Issue | Where | Severity |
 |---|---|---|
-| Nothing persists. Every control is local state; date navigation is present but disabled for the same reason. | all screens | expected — no DB yet |
+| Account and health-profile persistence require a configured Postgres database and migration. The nutrition screens still use fixtures; date navigation remains disabled. | all nutrition screens | expected — persistent logging is next |
 | Quantities are grams only. `ml`, `cup`, `tbsp`, `piece` are accepted but not converted. | `lib/nutrition/scale.ts` | medium |
 | 37 entries are brief: real cited target, no prose. Detail pages say so rather than showing empty sections. | `data/nutrients.json` | expected — see D16 |
 | A deficiency alert on a brief entry can name the shortfall but not the foods that fix it, since `topSources` is part of the prose. | Insights | medium |
@@ -44,6 +46,7 @@ Nothing in flight.
 
 ## Recently changed
 
+- **2026-08-12** — Added the Postgres/Drizzle foundation and initial migration for Better Auth accounts, profiles, foods, aliases, immutable log-entry nutrient snapshots, daily totals, streaks, goal modes, and encrypted AI-credential envelopes. `/account` now supports email/password sessions and persisted health profiles whenever database environment variables are present; without them, the labelled demo continues to build and run.
 - **2026-08-11** — Fixed a hydration error: `FlagChip` rendered a `<button>` and sat inside the expander `<button>` in `FoodFlagsCard`. Nested interactive elements are invalid HTML — the browser closes the outer one early, the trees diverge, and React discards the subtree. Chips are now spans; whatever wraps one owns the interaction. Guarded by a test that walks the rendered DOM for interactive nesting.
 - **2026-08-11** — Filled the data layer. 47 of 59 entries now written (10 full, 37 brief) against 10 before, so every vitamin and mineral on the dashboard has a real, personalised, cited target. Introduced `depth: brief | full` (D16).
 - **2026-08-11** — Replaced the dot grid with a dense labelled table. The grid borrowed a contribution-graph layout, where a tile's *position* is its label; here position labelled nothing, so every mark was anonymous and a legend could not fix it. Every row is now named, with its own bar, number and status in words.
@@ -61,6 +64,7 @@ Nothing in flight.
 npm run validate:data   # schema, cross-file agreement, every flag cited
 npm test                # 128 unit and render tests
 npm run typecheck
+npm run db:migrate      # when DATABASE_URL is configured
 npm run dev             # every route works with no .env.local
 ```
 

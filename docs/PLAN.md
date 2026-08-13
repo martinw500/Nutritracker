@@ -185,8 +185,10 @@ Researchers additionally get logging-completeness warnings ("3 of 21 meals unlog
 ## Data model
 
 ```
-users            id, email, sex, birth_date, weight_kg, height_cm,
-                 activity_level, active_goal_mode, detail_level(simple|expert),
+user             id, name, email, email_verified, image, created_at, updated_at
+session/account  Better Auth-owned sessions and login credentials
+user_profiles    user_id, sex, birth_date, weight_kg, height_cm,
+                 activity_level, active_goal_modes, detail_level(simple|expert),
                  pregnancy_status
 
 ai_credentials   user_id, provider, encrypted_key, key_source(oauth|manual),
@@ -305,7 +307,7 @@ Day-to-day state, current issues, and what changed most recently live in [STATUS
 - [x] `data/roster.json` — the 59-value index
 - [x] Scaffold Next.js + TypeScript + Tailwind
 - [x] `npm run validate:data` — schema plus cross-file agreement
-- [ ] Postgres + Drizzle; schema migrations
+- [ ] Postgres + Drizzle; schema and initial migration are built, hosted database still needs connecting
 - [x] Run `validate:data` in CI
 - [ ] Upgrade the 37 brief entries to full; write the 11 remaining Tier 3 phytonutrients
 - [ ] FDC client + local mirror of Foundation Foods and SR Legacy; resolve `topSources[].fdcId`
@@ -314,7 +316,7 @@ Day-to-day state, current issues, and what changed most recently live in [STATUS
 ### Phase 1 — Manual logging + dashboard *(useful with zero AI)*
 - [x] Dashboard + nutrient detail panels *(against fixtures)*
 - [x] Simple/expert toggle
-- [ ] Auth; profile (sex/age/weight → personalized RDA)
+- [ ] Auth + persisted profile are built; dashboard still needs to consume the signed-in profile
 - [ ] Food search + manual entry; daily totals rollup *(UI built, nothing persists)*
 - [ ] Unit conversion — ml / cup / tbsp / piece → g
 

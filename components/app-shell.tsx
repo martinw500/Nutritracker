@@ -12,6 +12,7 @@ import {
   Settings,
   Sparkles,
   UtensilsCrossed,
+  UserRound,
 } from "lucide-react";
 import { DetailLevelToggle } from "@/components/detail-level";
 import { getDayDate } from "@/lib/demo";
@@ -161,7 +162,15 @@ function TopBar() {
           </button>
         </div>
 
-        <div className="shrink-0">
+        <div className="flex shrink-0 items-center gap-1">
+          <Link
+            href="/account"
+            aria-label="Account"
+            title="Account"
+            className="flex size-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-sunken hover:text-ink"
+          >
+            <UserRound className="size-4" />
+          </Link>
           <DetailLevelToggle />
         </div>
       </div>
@@ -177,9 +186,9 @@ function TopBar() {
 function DemoNote() {
   return (
     <p className="mt-6 rounded-lg bg-sunken p-3 text-[11px] leading-relaxed text-muted">
-      <span className="font-medium text-ink">Demo data.</span> No database, no AI. Foods
-      and log entries come from <code className="text-faint">data/demo/</code>. Reference
-      intakes, evidence tiers and flags are real and cited.
+      <span className="font-medium text-ink">Nutrition demo.</span> Foods and log entries
+      still come from <code className="text-faint">data/demo/</code>, even when account
+      storage is connected. Reference intakes, evidence tiers and flags are real and cited.
     </p>
   );
 }
